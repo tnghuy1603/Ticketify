@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,21 +46,15 @@ public class AuthService {
     }
 
     public SignInResponse signIn(SignInRequest request) {
-        log.info("In authService1");
-        log.info(request.getEmail());
-        log.info(request.getPassword());
-
         Authentication authToken = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        log.info("Testing");
         UserDetails userDetails = (UserDetails) authToken.getPrincipal();
-
+        SecurityContextHolder.getContext().setAuthentication(authToken);
 
         String accessToken = jwtUtils.generateToken(userDetails);
         String refreshToken = refreshTokenService.generateToken((User)userDetails).getToken();
         return SignInResponse.builder()
-                .message("Sign in successfully")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -77,6 +72,9 @@ public class AuthService {
                             .build();
                 })
                 .orElseThrow(()-> new RefreshTokenException("No such refresh token in database"));
+    }
+    public boolean validateToken(String accessToken, User user){
+        return jwtUtils.validateToken(accessToken, user);
     }
 
 

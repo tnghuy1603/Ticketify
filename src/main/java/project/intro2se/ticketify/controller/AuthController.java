@@ -3,7 +3,9 @@ package project.intro2se.ticketify.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import project.intro2se.ticketify.domain.User;
 import project.intro2se.ticketify.dto.*;
 import project.intro2se.ticketify.service.AuthService;
 
@@ -24,6 +26,11 @@ public class AuthController {
     @PostMapping("/renew-access-token")
     public ResponseEntity<RenewAccessTokenResponse> renewAccessToken(@RequestBody RenewAccessTokenRequest request){
         return ResponseEntity.ok(authService.renewAccessToken(request));
+    }
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateToken(@RequestParam(name = "token") String accessToken, @AuthenticationPrincipal User user){
+        log.info(accessToken);
+        return ResponseEntity.ok(authService.validateToken(accessToken, user));
     }
 
 }

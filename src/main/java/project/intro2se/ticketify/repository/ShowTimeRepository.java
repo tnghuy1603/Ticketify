@@ -17,8 +17,8 @@ public interface ShowTimeRepository extends JpaRepository<ShowTime, Long> {
     @Query("SELECT st FROM ShowTime st JOIN st.room r" +
             " WHERE r.theater.id = :theaterId AND st.startAt > CURRENT TIMESTAMP")
     List<ShowTime> findAvailableByTheater(@Param("theaterId") Long theaterId);
-    @Query("SELECT st FROM ShowTime st JOIN st.room r WHERE r.theater.id = :theateId AND DATE(st.startAt) =: date")
-    List<ShowTime> findByTheaterAndDay(@Param("theaterId") Long theaterId, LocalDate date);
+    @Query("SELECT st FROM ShowTime st JOIN st.room r WHERE r.theater.id = :theaterId AND DATE(st.startAt) = :date")
+    List<ShowTime> findByTheaterAndDay(@Param("theaterId") Long theaterId, @Param("date")LocalDate date);
     @Query("SELECT st FROM ShowTime st JOIN st.room r WHERE r.theater.id = :theaterId" +
             " AND st.startAt > CURRENT TIMESTAMP AND st.movie.id = :movieId")
     List<ShowTime> findAvailableByTheaterAndMovie(@Param("theaterId") Long theaterId, @Param("movieId") Long movieId);
@@ -28,7 +28,7 @@ public interface ShowTimeRepository extends JpaRepository<ShowTime, Long> {
     List<ShowTime> findShowTimeTodayByRoom(Long roomId);
 
     List<ShowTime> findByRoom_Id(Long roomId);
-    @Query("SELECT st FROM ShowTime st JOIN st.room r WHERE r.theater.id = :theateId")
+    @Query("SELECT st FROM ShowTime st JOIN st.room r WHERE r.theater.id = :theaterId")
     List<ShowTime> findByTheater(@Param("theaterId") Long theaterId);
 
 }
