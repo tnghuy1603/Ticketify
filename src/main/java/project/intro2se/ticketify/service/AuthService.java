@@ -76,6 +76,21 @@ public class AuthService {
     public boolean validateToken(String accessToken, User user){
         return jwtUtils.validateToken(accessToken, user);
     }
-
-
+    public String forgotPassword(ForgotPasswordRequest forgotPasswordRequest){
+        User user = userRepository.findByEmail(forgotPasswordRequest.getEmail()).orElseThrow();
+        if(!passwordEncoder.matches(forgotPasswordRequest.getOldPassword(), user.getPassword())){
+            throw new IllegalArgumentException("Incorrect old password");
+        }
+        user.setPassword(passwordEncoder.encode(forgotPasswordRequest.getNewPassword()));
+        userRepository.save(user);
+        return "Change password successfully";
+    }
+    public String changePassword(ChangePasswordRequest changePasswordRequest, User user){
+        if(!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())){
+            throw new IllegalArgumentException("Incorrect old password");
+        }
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        userRepository.save(user);
+        return "Successfully change password";
+    }
 }

@@ -10,4 +10,5 @@ import project.intro2se.ticketify.repository.UserRepository;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+
 }

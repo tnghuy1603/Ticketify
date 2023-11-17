@@ -28,9 +28,19 @@ public class AuthController {
         return ResponseEntity.ok(authService.renewAccessToken(request));
     }
     @GetMapping("/validate")
-    public ResponseEntity<?> validateToken(@RequestParam(name = "token") String accessToken, @AuthenticationPrincipal User user){
+    public ResponseEntity<?> validateToken(@RequestParam(name = "token") String accessToken,
+                                           @AuthenticationPrincipal User user){
         log.info(accessToken);
         return ResponseEntity.ok(authService.validateToken(accessToken, user));
+    }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest){
+        return ResponseEntity.ok(authService.forgotPassword(forgotPasswordRequest));
+    }
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
+                                            @AuthenticationPrincipal User user){
+        return ResponseEntity.ok(authService.changePassword(changePasswordRequest, user));
     }
 
 }
