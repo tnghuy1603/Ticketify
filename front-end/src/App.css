@@ -5,6 +5,14 @@
   text-align: center;
 }
 
+.header{
+  max-width: 1200px;
+}
+
+.nav-bar > .nav-item{
+  margin-left: 25px;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
