@@ -18,26 +18,28 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping("")
-    public ResponseEntity<List<Movie>> findMovieByStatus(@RequestParam(name = "status") String status){
-        List<Movie> movies = movieService.findByStatus(status);
-        return ResponseEntity.ok(movies);
+    public ResponseEntity<List<Movie>> findMovies(@RequestParam(name = "status", required = false) String status){
+        if(status != null){
+            return ResponseEntity.ok(movieService.findByStatus(status));
+        } else{
+            return ResponseEntity.ok(movieService.findAll());
+        }
+
     }
-
-
     @PutMapping("")
     public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie){
         return ResponseEntity.ok(movieService.update(movie));
     }
+
 //    @PostMapping("")
 //    public ResponseEntity<Movie> addMovie(@RequestBody Movie movie){
 //        return ResponseEntity.ok(movieService)
 //    }
 
 
-//    @GetMapping("/")
-//    public ResponseEntity<List<Movie>> findAllMovie(){
-//        return ResponseEntity.ok(movieService.findAll());
-//    }
+
+
+
 
 
 }

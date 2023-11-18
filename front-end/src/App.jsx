@@ -10,6 +10,9 @@ import PrivateRoute from './components/PrivateRoute'
 import useAuth from './hooks/useAuth'
 import TicketManagerDashBoard from './components/TicketManagerDashBoard'
 import ReceptionistDashBoard from './components/ReceptionistDashBoard'
+import HomePage from './page/HomePage'
+import ShowTimeOfMovie from './components/ShowTimeOfMovie'
+import ShowTimeOfTheater from './components/ShowTimeOfTheater'
 
 
 function App() {
@@ -39,8 +42,10 @@ function App() {
             </PrivateRoute>
           )
         }/>
+        <Route path='/' element={<HomePage/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
+        <Route path='/schedule' element={<ShowTimeOfTheater/>}/>
       </Routes>
     </BrowserRouter>
       
