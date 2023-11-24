@@ -5,7 +5,7 @@ import MovieList from "./MovieList";
 function Content() {
     return (
         <main className="main">
-           <MovieBanner />
+            <MovieBanner />
             <MovieList />
         </main>
     )

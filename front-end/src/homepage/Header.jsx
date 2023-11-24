@@ -1,19 +1,25 @@
 import React from 'react'
 import SearchButton from './SearchButton'
 import LoginButton from './LoginButton'
+import { Link } from 'react-router-dom';
 
 function HomepageHeader() {
+
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-primary">
             <div className="container-fluid d-flex justify-content-center">
-                <a className="navbar-brand" href="#">Navbar</a>
+                <a className="navbar-brand" href="/">
+                    <img src='/Logo.png' alt='Logo'
+                        style={{ width: '5rem', height: 'auto' }}></img>
+                </a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#">Trang chủ</a>
+                            <a className="nav-link active" aria-current="page" href="/">Trang chủ</a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link" href="#">Phim mới</a>
