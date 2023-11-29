@@ -25,7 +25,7 @@ const SearchButton = () => {
   return (
     <div className="search-container">
       <button className="search-button" onClick={toggleSearch}>
-        <i className="fa-solid fa-magnifying-glass search-icon"></i>
+        <FontAwesomeIcon icon="fa-solid fa-magnifying-glass"/>
       </button>
       {isSearchVisible && (
         <div className="search-bar" ref={searchRef}>

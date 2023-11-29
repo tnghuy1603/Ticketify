@@ -46,7 +46,6 @@ function HomePage() {
     
   return (
     <>
-        <div>Homepage</div>
         {viewUpcoming ?
             <div>
             {upComingMovies.map(movie => <>
