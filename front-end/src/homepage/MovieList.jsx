@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLessThan, faGreaterThan } from "@fortawesome/free-solid-svg-icons";
 
 function MovieList() {
     return (
@@ -121,13 +123,13 @@ function MovieList() {
             <nav aria-label="Page navigation example" className="mt-3">
                 <ul className="pagination justify-content-center">
                     <li className="page-item disabled">
-                        <a className="page-link" href="#" tabindex="-1" aria-disabled="true"><i class="fa-solid fa-less-than"></i></a>
+                        <a className="page-link" href="#" tabindex="-1" aria-disabled="true"><FontAwesomeIcon icon={faLessThan} /></a>
                     </li>
                     <li className="page-item"><a className="page-link" href="#">1</a></li>
                     <li className="page-item"><a className="page-link" href="#">2</a></li>
                     <li className="page-item"><a className="page-link" href="#">3</a></li>
                     <li className="page-item">
-                        <a className="page-link" href="#"><i class="fa-solid fa-greater-than"></i></a>
+                        <a className="page-link" href="#"><FontAwesomeIcon icon={faGreaterThan} /></a>
                     </li>
                 </ul>
             </nav>

@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 
 const SearchButton = () => {
   const [isSearchVisible, setSearchVisible] = useState(false);
@@ -25,7 +27,7 @@ const SearchButton = () => {
   return (
     <div className="search-container">
       <button className="search-button" onClick={toggleSearch}>
-        <FontAwesomeIcon icon="fa-solid fa-magnifying-glass"/>
+      <FontAwesomeIcon icon={faMagnifyingGlass} className='search-icon'/>
       </button>
       {isSearchVisible && (
         <div className="search-bar" ref={searchRef}>
