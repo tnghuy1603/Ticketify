@@ -1,12 +1,13 @@
 package project.intro2se.ticketify.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import project.intro2se.ticketify.domain.Movie;
 import project.intro2se.ticketify.domain.Room;
 import project.intro2se.ticketify.domain.ShowTime;
 import project.intro2se.ticketify.dto.ScheduleByTheaterDto;
-import project.intro2se.ticketify.dto.ScheduleToday;
+import project.intro2se.ticketify.dto.ScheduleTodayDto;
 import project.intro2se.ticketify.dto.UpdateShowTimeRequest;
 import project.intro2se.ticketify.exception.ResourceNotFoundException;
 import project.intro2se.ticketify.repository.MovieRepository;
@@ -14,6 +15,8 @@ import project.intro2se.ticketify.repository.ShowTimeRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +24,78 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ShowTimeService {
     private final ShowTimeRepository showTimeRepository;
     private final MovieRepository movieRepository;
     private final RoomService roomService;
+
+    public List<ShowTime> roundToNearestQuaterHour(){
+        List<ShowTime> showTimes = showTimeRepository.findAll();
+
+        for(ShowTime showTime: showTimes){
+//            LocalDateTime startAt = showTime.getStartAt();
+//            log.info("Movie");
+//            showTime.setStartAt(startAt.truncatedTo(ChronoUnit.HOURS).plusMinutes(15 * (startAt.getMinute() / 15)));
+            Movie movie = showTime.getMovie();
+            int duration = movie.getDuration();
+            showTime.setEndAt(showTime.getStartAt().plusMinutes(duration));
+        }
+        log.info("Initial size: " + showTimes.size());
+
+//        Room room = new Room();
+//        Room room1 = new Room();
+//        Movie movie = new Movie();
+//        LocalDateTime current = LocalDateTime.now();
+//        ShowTime showTime = new ShowTime();
+//        ShowTime showTime1 = new ShowTime();
+//        showTime.setStartAt(current);
+//        showTime.setRoom(room);
+//        showTime.setMovie(movie);
+//        showTime1.setStartAt(current);
+//        showTime1.setRoom(room);
+//        showTime1.setMovie(movie);
+//        log.info("2 showtime is: " +  showTime1.equals(showTime));
+//        Set<ShowTime> showTimeSet = new HashSet<>();
+//        for(ShowTime showTime2: showTimes) {
+//            addDistinct(showTimeSet, showTime2);
+//        }
+//        log.info("Size after remove duplicate" + showTimeSet.size());
+//        showTimeRepository.deleteAll();
+        //Remove invalid showtime
+
+
+//        return showTimes;
+        return showTimeRepository.saveAll(showTimes);
+    }
+    private void addDistinct(Set<ShowTime> showTimeSet, ShowTime showTime){
+        for(ShowTime showTime1: showTimeSet) {
+            if (showTime1.getMovie().getId().equals(showTime.getMovie().getId()) &&
+                    showTime1.getRoom().getId().equals(showTime.getRoom().getId()) &&
+                    showTime1.getStartAt().equals(showTime.getStartAt())) {
+                log.info("Showtime is equal");
+                return;
+            }
+        }
+        showTimeSet.add(showTime);
+        log.info("Size of showtime" + showTimeSet.size());
+    }
+    private boolean isOccupiedRoom(Set<ShowTime> showTimeSet, ShowTime showTime){
+        for(ShowTime showTime1: showTimeSet) {
+//            if((showTime1.getStartAt().isAfter(showTime1.getStartAt()) && showTime1.getStartAt().isBefore(showTime.getEndAt()) )
+//                    || (showTime1.getEndAt().isAfter(startAt) && showTime1.getEndAt().isBefore(endAt)))
+//            {
+//                return false;
+//            }
+        }
+        return false;
+    }
+
+
+
+
+
+
 
     //Schedule of theater viewed by moviegoer or guest
     public ScheduleByTheaterDto findAvailableByTheater(Long theaterId){
@@ -75,10 +146,10 @@ public class ShowTimeService {
         return showTimeRepository.findByTheater(theaterId);
     }
     //Schedule viewed by receptionist
-    public ScheduleToday findByToday(Long theaterId){
+    public ScheduleTodayDto findByToday(Long theaterId){
         List<ShowTime> showTimes = showTimeRepository.findByTheaterAndDay(theaterId, LocalDate.now());
         Set<Movie> movies = new HashSet<>();
-        return new ScheduleToday(movies, showTimes);
+        return new ScheduleTodayDto(movies, showTimes);
     }
     public List<ShowTime> findByMovieId(Long movieId){
         return showTimeRepository.findByMovie_Id(movieId);
@@ -86,9 +157,5 @@ public class ShowTimeService {
     public List<ShowTime> findAvailableByMovie(Long movieId){
         return showTimeRepository.findByMovie_IdAndStartAtAfter(movieId, LocalDateTime.now());
     }
-
-
-
-
 
 }

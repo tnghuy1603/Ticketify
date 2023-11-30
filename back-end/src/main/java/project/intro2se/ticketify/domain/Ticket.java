@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.Check;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Setter
@@ -15,8 +16,8 @@ import java.math.BigDecimal;
 @Builder
 public class Ticket {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private BigDecimal price;
     private boolean booked;
     @ManyToOne
@@ -27,9 +28,10 @@ public class Ticket {
     @JoinColumn(name = "show_time_id", referencedColumnName = "id")
     @JsonManagedReference
     private ShowTime showTime;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "transaction_id", referencedColumnName = "id")
     @JsonManagedReference
     private Transaction transaction;
+
 
 }

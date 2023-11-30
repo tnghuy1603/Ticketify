@@ -19,11 +19,7 @@ public class RoomService {
     public boolean isAvailableRoom(Room room, LocalDateTime startAt, LocalDateTime endAt){
         List<ShowTime> showTimesOfToday = showTimeRepository.findShowTimeTodayByRoom(room.getId());
         for(ShowTime showTime: showTimesOfToday){
-            if((showTime.getStartAt().isAfter(startAt) && showTime.getStartAt().isBefore(endAt) )
-                    || (showTime.getEndAt().isAfter(startAt) && showTime.getEndAt().isBefore(endAt)))
-            {
-                return false;
-            }
+
         }
         return true;
     }

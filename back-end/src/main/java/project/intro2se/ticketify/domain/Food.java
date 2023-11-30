@@ -1,22 +1,22 @@
 package project.intro2se.ticketify.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
+@Getter
 public class Food {
     @Id
     private Long id;
     private String name;
     private BigDecimal price;
     private String image;
-    @ManyToMany
-    @JoinTable(name = "transaction",
-            joinColumns = @JoinColumn(name = "food_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "transaction_id", referencedColumnName = "id")
-    )
-    private List<Transaction> transaction;
+    @OneToMany(mappedBy = "food")
+    @JsonBackReference
+    private List<FoodOrderLine> foodOrderLines;
 
 }

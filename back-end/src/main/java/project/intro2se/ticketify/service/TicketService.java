@@ -45,8 +45,8 @@ public class TicketService {
                     .showTime(showTime)
                     .seat(seat)
                     .build();
-            if(seat.getCategory().equals("Double")){
-                ticket.setPrice(price.multiply(BigDecimal.valueOf(2)));
+            if(seat.getCategory().equals("Couple")){
+                ticket.setPrice(price.multiply(BigDecimal.valueOf(2)).add(BigDecimal.valueOf(10000)));
             } else{
                 ticket.setPrice(price);
             }
@@ -54,6 +54,7 @@ public class TicketService {
         }
         return ticketRepository.saveAll(tickets);
     }
+
 
 
 

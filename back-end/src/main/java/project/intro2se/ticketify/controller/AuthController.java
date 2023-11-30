@@ -9,6 +9,8 @@ import project.intro2se.ticketify.domain.User;
 import project.intro2se.ticketify.dto.*;
 import project.intro2se.ticketify.service.AuthService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -42,5 +44,10 @@ public class AuthController {
                                             @AuthenticationPrincipal User user){
         return ResponseEntity.ok(authService.changePassword(changePasswordRequest, user));
     }
+    @PostMapping("/dump-user")
+    public ResponseEntity<?> dumpUsers(@RequestBody List<SignUpRequest> requests){
+        return ResponseEntity.ok(authService.dumpData(requests));
+    }
+
 
 }

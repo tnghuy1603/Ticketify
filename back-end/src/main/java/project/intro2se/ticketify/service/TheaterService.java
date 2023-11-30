@@ -14,8 +14,6 @@ import java.util.List;
 public class TheaterService {
     private final TheaterRepository theaterRepository;
     public List<Theater> findAll(){
-        List<Theater> theaters =  theaterRepository.findAll();
-        log.info(theaters.get(1).toString());
-        return theaters;
+        return theaterRepository.findAll();
     }
 }

@@ -1,5 +1,8 @@
 package project.intro2se.ticketify.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,11 +25,12 @@ public class User implements UserDetails {
     private Long id;
     private String email;
     private String displayName;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String role;
     @OneToMany(mappedBy = "user")
+    @JsonBackReference
     private Set<Transaction> transactions;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Set.of(new SimpleGrantedAuthority(role));

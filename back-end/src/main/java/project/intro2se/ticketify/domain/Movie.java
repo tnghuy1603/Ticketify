@@ -1,6 +1,8 @@
 package project.intro2se.ticketify.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Check;
@@ -19,7 +21,7 @@ public class Movie {
     private Long id;
     private String title;
     private String genre;
-    @Check(constraints = "status IN ('Upcoming', 'On going', 'Over')")
+    @Check(constraints = "status IN ('Upcoming', 'Ongoing', 'Over')")
     private String status;
     private String language;
     private String director;
@@ -27,7 +29,6 @@ public class Movie {
     private String poster;
     private String rated;
     private int duration;
-    private LocalDate releaseDate;
     private String trailer;
     private LocalDate openingDay;
     @Column(columnDefinition = "TEXT")

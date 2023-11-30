@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
+@EqualsAndHashCode(exclude = {"id", "endAt"})
 public class ShowTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +31,9 @@ public class ShowTime {
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     @JsonManagedReference
     private Room room;
+
+
+
+
 
 }
