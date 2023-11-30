@@ -1,6 +1,7 @@
 #root {
   margin: 0 auto;
   text-align: center;
+  position: relative;
 }
 
 /* Header Section */
@@ -140,16 +141,34 @@
 
 /* Login Signup Section */
 
-.modal{
+.login-modal{
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
+  z-index: 3;
   background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
+}
+
+.login-modal.show{
+  display: flex;
+}
+
+.login-close-btn{
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  background: rgba(0, 77, 77,.9);
+}
+
+.login-modal .login-close-btn:hover{
+  background-color: rgb(191, 191, 191);
+  opacity: 0.9;
+  color:#000;
 }
 
 @keyframes modalFade{

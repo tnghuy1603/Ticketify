@@ -1,15 +1,15 @@
-const modal = document.querySelector('.modal');
-const searchBtn = document.querySelector('.search-button')
+const modal = document.querySelector('.login-modal');
+const loginBtn = document.querySelector('.login-button');
+const closeBtn = document.querySelector('.login-close-btn');
 
 function showLoginForm() {
-    modal.classList.add('open');
+    modal.classList.add('show');
 }
 
 function hideLoginForm() {
-    modal.classList.remove('open');
+    modal.classList.remove('show');
 }
 
+console.log(loginBtn);
 
-searchBtn.onclick((e) => {
-
-})
+loginBtn.addEventListener("click", showLoginForm());

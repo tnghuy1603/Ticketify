@@ -31,31 +31,33 @@ function App() {
   const [roles, setRoles] = useState(getRoles(accessToken));
   return (
     <>
-      <HomepageHeader />
-      <Content />
-      <BrowserRouter>
-        <Routes>
-          <Route path='/dashboard' element={
-            roles.find(role => role === "ROLE_CUSTOMER") ?
-              (
-                <PrivateRoute>
-                  <TicketManagerDashBoard />
-                </PrivateRoute>
-              ) : (
-                <PrivateRoute>
-                  <ReceptionistDashBoard />
-                </PrivateRoute>
-              )
-          } />
-          <Route path='/' element={<HomePage />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/schedule' element={<ShowTimeOfTheater />} />
-        </Routes>
-      </BrowserRouter>
-      <LoginSignup></LoginSignup>
+      <>
+        <HomepageHeader />
+        <Content />
+        <BrowserRouter>
+          <Routes>
+            <Route path='/dashboard' element={
+              roles.find(role => role === "ROLE_CUSTOMER") ?
+                (
+                  <PrivateRoute>
+                    <TicketManagerDashBoard />
+                  </PrivateRoute>
+                ) : (
+                  <PrivateRoute>
+                    <ReceptionistDashBoard />
+                  </PrivateRoute>
+                )
+            } />
+            <Route path='/' element={<HomePage />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/schedule' element={<ShowTimeOfTheater />} />
+          </Routes>
+        </BrowserRouter>
 
-      <Footer></Footer>
+        <Footer></Footer>
+      </>
+        <LoginSignup></LoginSignup>
     </>
   )
 }
