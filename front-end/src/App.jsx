@@ -1,14 +1,10 @@
 import { useState } from 'react'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
-import HomepageHeader from './homepage/header'
-import Register from './component/Register'
-import Content from './homepage/Content'
-import {jwtDecode} from "jwt-decode"
 import Register from './components/Register'
-import { jwtDecode } from "jwt-decode"
 import Login from './components/Login'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode"
+import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute'
 import useAuth from './hooks/useAuth'
 import TicketManagerDashBoard from './components/TicketManagerDashBoard'
@@ -31,29 +27,27 @@ function App() {
   const [roles, setRoles] = useState(getRoles(accessToken));
   return (
     <>
-      <HomepageHeader />
-      <Content />
-    <BrowserRouter>
-      <Routes>
-        <Route path='/dashboard' element={
-          roles.find(role => role === "ROLE_CUSTOMER")? 
-          (
-            <PrivateRoute>
-              <TicketManagerDashBoard/>
-            </PrivateRoute>
-          ) : (
-            <PrivateRoute>
-              <ReceptionistDashBoard/>
-            </PrivateRoute>
-          )
-        }/>
-        <Route path='/' element={<HomePage/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/register' element={<Register/>}/>
-        <Route path='/schedule' element={<ShowTimeOfTheater/>}/>
-      </Routes>
-    </BrowserRouter>
-      
+      <BrowserRouter>
+        <Routes>
+          <Route path='/dashboard' element={
+            roles.find(role => role === "ROLE_CUSTOMER") ?
+              (
+                <PrivateRoute>
+                  <TicketManagerDashBoard />
+                </PrivateRoute>
+              ) : (
+                <PrivateRoute>
+                  <ReceptionistDashBoard />
+                </PrivateRoute>
+              )
+          } />
+          <Route path='/' element={<HomePage />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/schedule' element={<ShowTimeOfTheater />} />
+        </Routes>
+      </BrowserRouter>
+
     </>
   )
 }
