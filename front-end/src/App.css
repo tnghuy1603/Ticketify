@@ -121,6 +121,10 @@
   height: 438px !important;
 }
 
+.page-item{
+  margin-right: 20px;
+}
+
 .movie-item-name{
   font-size: 18px;
   font-weight: 550;

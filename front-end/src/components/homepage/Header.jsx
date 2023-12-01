@@ -2,7 +2,7 @@ import React from 'react'
 import SearchButton from './SearchButton'
 import LoginButton from './LoginButton'
 
-function HomepageHeader() {
+function Header() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-primary">
             <div className="container-fluid d-flex justify-content-center">
@@ -44,4 +44,4 @@ function HomepageHeader() {
     )
 }
 
-export default HomepageHeader
+export default Header

@@ -122,7 +122,7 @@ function MovieList() {
             </div>
             <nav aria-label="Page navigation example" className="mt-3">
                 <ul className="pagination justify-content-center">
-                    <li className="page-item disabled">
+                    <li className="page-item">
                         <a className="page-link" href="#" tabindex="-1" aria-disabled="true"><FontAwesomeIcon icon={faLessThan} /></a>
                     </li>
                     <li className="page-item"><a className="page-link" href="#">1</a></li>
