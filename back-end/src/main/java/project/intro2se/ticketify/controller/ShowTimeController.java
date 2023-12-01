@@ -46,6 +46,11 @@ public class ShowTimeController {
 
 
     }
+    @GetMapping("/round-data")
+    public ResponseEntity<?> roundDateTime(){
+        showTimeService.roundToNearestQuaterHour();
+        return ResponseEntity.ok("Done");
+    }
 
 
 

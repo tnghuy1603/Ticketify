@@ -11,7 +11,9 @@ import java.util.List;
 @Getter
 public class Room {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private int roomNumber;
     @OneToMany(mappedBy = "room")
     @JsonBackReference
     private List<Seat> seats;

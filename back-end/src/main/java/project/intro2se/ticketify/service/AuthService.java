@@ -17,6 +17,8 @@ import project.intro2se.ticketify.exception.RefreshTokenException;
 import project.intro2se.ticketify.repository.UserRepository;
 import project.intro2se.ticketify.utils.JwtUtils;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -92,5 +94,19 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
         userRepository.save(user);
         return "Successfully change password";
+    }
+    public String dumpData(List<SignUpRequest> requests){
+        for(SignUpRequest request: requests){
+            User user = User.builder()
+                    .email(request.getEmail())
+                    .displayName(request.getDisplayName())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role("ROLE_CUSTOMER")
+                    .build();
+
+            log.info(Role.CUSTOMER.toString());
+            userRepository.save(user);
+        }
+        return "Done";
     }
 }

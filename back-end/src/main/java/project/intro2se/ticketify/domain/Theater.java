@@ -16,6 +16,7 @@ public class Theater {
     @Id
     private Long id;
     private String address;
+    private String name;
     private String phoneNumber;
     @OneToMany(mappedBy = "theater")
     @JsonBackReference

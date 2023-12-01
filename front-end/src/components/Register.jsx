@@ -4,11 +4,11 @@ import React, { useRef, useState } from 'react'
 const Register = () => {
     const emailRef = useRef();
     const errRef = useRef();
-    
+
     const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
     const [emailFocus, setEmailFocus] = useState(false);
-    
+
     const [displayName, setDisplayName] = useState('');
     const [validDisplayName, setValidDisplayName] = useState(false);
     const [displayNameFocus, setDisplayNameFocus] = useState(false);
@@ -29,43 +29,49 @@ const Register = () => {
     const handleRegister = async (e) => {
         console.log(email, pwd, displayName);
         e.preventDefault();
-        const res =  await axios.post('/auth/signup', {email, password: pwd, displayName }, {
+        const res = await axios.post('/auth/signup', { email, password: pwd, displayName }, {
             headers: {
                 "Content-Type": "application/json"
             }
         });
         console.log(res.data)
     }
-    
-  return (
-    <>
-        {/* <form onSubmit={handleRegister} className='d-flex flex-column justify-content-center align-items-center gap-2'>
-            <h3>Sign up</h3>
-            <div>
-                <label htmlFor='email' className="form-label lead">Email address</label>
-                <input type="email" className="form-control" id="email" placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)}/>
+
+    return (
+        <>
+            <div style={{ width: '50%', height: "35rem", margin: 'auto' }}>
+                <div className='card m-5 p-3 h-75'>
+                    <div className='card-title fw-bold text-primary-emphasis fs-1'>Sign up</div>
+                    <div className="card-body" >
+                        <form onSubmit={handleRegister}>
+                            <div>
+                                <label htmlFor='email' className="form-label fw-bold d-flex flex-column align-items-start">Email address</label>
+                                <input type="email" className="form-control" id="email" onChange={(e) => setEmail(e.target.value)} />
+                            </div>
+                            <div className='form-group'>
+                                <label htmlFor="displayName" className="form-label fw-bold d-flex flex-column align-items-start">Username</label>
+                                <input type="text" className="form-control" id="displayName" onChange={(e) => setDisplayName(e.target.value)} />
+                            </div>
+                            <div className='form-group'>
+                                <label htmlFor="pwd" className="form-label fw-bold d-flex flex-column align-items-start">Password</label>
+                                <input type='password' className="form-control" id="pwd" onChange={(e) => setPwd(e.target.value)} />
+                            </div>
+                            <div className='form-group'>
+                                <label htmlFor="matchingPwd" className="form-label fw-bold d-flex flex-column align-items-start">Confirm password</label>
+                                <input type="text" className="form-control" id="matchingPwd" />
+                            </div>
+                            <div className='d-flex justify-content-around my-3'>
+                                <button type='submit' className='btn btn-primary'>Sign up</button>
+                                <a className="oauth-container btn darken-4 white black-text" href="/users/google-oauth/" style={{ textTransform: 'none' }}>
+                                    <img alt="Google sign-in" src="https://th.bing.com/th/id/OIP.ivZ1IGarTlwQ07B1ArmlYAHaHg?rs=1&pid=ImgDetMain" style={{ width: '2rem' }} />
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div className='form-group'>
-                <label htmlFor="displayName" class="form-label">Display name</label>
-                <input type="text" class="form-control" id="displayName" placeholder="Enter your display name" onChange={(e) => setDisplayName(e.target.value)}/>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="pwd" className="form-label">Password</label>
-                <input type='password' className="form-control" id="pwd" placeholder="Enter your password" onChange={(e) => setPwd(e.target.value)}/>
-            </div>
-            <div className='form-group'>
-                <label htmlFor="matchingPwd" className="form-label">Confirm password</label>
-                <input type="text" className="form-control" id="matchingPwd" placeholder="Confirm your password"/>
-            </div>
-            <div>
-                <button type='submit' className='btn btn-primary'>Sign up</button>
-            </div>
-            <a className="oauth-container btn darken-4 white black-text" href="/users/google-oauth/" style={{textTransform: 'none'}}>
-            <img alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
-            </a>
-        </form> */}
-    </>
-  )
+        </>
+    )
 }
 
 export default Register

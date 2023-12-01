@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Getter
 @AllArgsConstructor
-public class ScheduleToday {
+public class ScheduleTodayDto {
     private Set<Movie> movies;
     private List<ShowTime> showTime;
 
