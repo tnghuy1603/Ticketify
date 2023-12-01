@@ -1,5 +1,4 @@
-import React from "react";
-import { ReactDOM } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,7 +13,7 @@ function LoginSignup() {
 
                             <FontAwesomeIcon icon={faXmark} />
                         </button>
-                        <div className="login-snip">
+                        <div className="login-snip login-modal-container">
                             <input id="tab-1" type="radio" name="tab" className="sign-in" checked /><label for="tab-1" className="tab">Login</label>
                             <input id="tab-2" type="radio" name="tab" className="sign-up" /><label for="tab-2" className="tab">Sign Up</label>
                             <div className="login-space">
