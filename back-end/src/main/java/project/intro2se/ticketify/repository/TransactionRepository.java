@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import project.intro2se.ticketify.domain.Transaction;
 import project.intro2se.ticketify.domain.User;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +20,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
     List<Transaction> findAllInMonth(@Param("month") YearMonth month);
     @Query("SELECT t FROM Transaction t WHERE t.createdAt = CURRENT_DATE")
     List<Transaction> findByCurrentDate();
+    @Query("SELECT t FROM Transaction t WHERE DATE(t.createdAt) =: date")
+    List<Transaction> findByDate(LocalDate date);
 
 
 }

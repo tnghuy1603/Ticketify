@@ -28,6 +28,7 @@ public class User implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String role;
+    private boolean isLocked;
     @OneToMany(mappedBy = "user")
     @JsonBackReference
     private Set<Transaction> transactions;
@@ -63,6 +64,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !isLocked;
     }
 }

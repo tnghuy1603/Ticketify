@@ -33,7 +33,8 @@ public class SecurityConfig {
         http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
         });
-        http.authorizeHttpRequests().requestMatchers("/auth/**", "/movies/**", "/showtime/**", "/tickets/**", "/theaters/**", "/transactions/**", "payments/**").permitAll();
+        http.authorizeHttpRequests().requestMatchers("/auth/**", "/movies/**", "/showtimes/**", "/tickets/**", "/theaters/**", "/transactions/**", "payments/**").permitAll();
+        http.authorizeHttpRequests().requestMatchers("/users/**").hasRole("ADMIN");
         http.authorizeHttpRequests().anyRequest().authenticated();
         http.authenticationProvider(authenticationProvider).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

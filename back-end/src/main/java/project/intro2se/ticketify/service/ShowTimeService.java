@@ -6,21 +6,16 @@ import org.springframework.stereotype.Service;
 import project.intro2se.ticketify.domain.Movie;
 import project.intro2se.ticketify.domain.Room;
 import project.intro2se.ticketify.domain.ShowTime;
-import project.intro2se.ticketify.dto.ScheduleByTheaterDto;
-import project.intro2se.ticketify.dto.ScheduleTodayDto;
-import project.intro2se.ticketify.dto.UpdateShowTimeRequest;
+import project.intro2se.ticketify.dto.*;
 import project.intro2se.ticketify.exception.ResourceNotFoundException;
 import project.intro2se.ticketify.repository.MovieRepository;
 import project.intro2se.ticketify.repository.ShowTimeRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -90,6 +85,17 @@ public class ShowTimeService {
         }
         return false;
     }
+    public ScheduleByTheaterAndDate getShowTimeByTheaterAndDate(LocalDate date, Long theaterId){
+        log.info("Hit service layer");
+        List<ShowTime> showTimes = showTimeRepository.findByTheaterAndDate(theaterId, date);
+
+        return new ScheduleByTheaterAndDate(date, null, showTimes);
+    }
+    public ScheduleByTheaterAndMovie getScheduleByTheaterAndMovie(Long movieId, Long theaterId){
+        List<ShowTime> showTimes = showTimeRepository.findAvailableByTheaterAndMovie(movieId, theaterId);
+        return new ScheduleByTheaterAndMovie(showTimes);
+    }
+
 
 
 
@@ -106,6 +112,7 @@ public class ShowTimeService {
         }
         return new ScheduleByTheaterDto(movies, showTimes);
     }
+
     //Schedule of individual movie viewed by moviegoer and guest
     public List<ShowTime> findAvailableByTheaterAndMovie(Long theaterId, Long movieId){
         return showTimeRepository.findAvailableByTheaterAndMovie(theaterId, movieId);
@@ -147,7 +154,7 @@ public class ShowTimeService {
     }
     //Schedule viewed by receptionist
     public ScheduleTodayDto findByToday(Long theaterId){
-        List<ShowTime> showTimes = showTimeRepository.findByTheaterAndDay(theaterId, LocalDate.now());
+        List<ShowTime> showTimes = showTimeRepository.findByTheaterAndDate(theaterId, LocalDate.now());
         Set<Movie> movies = new HashSet<>();
         return new ScheduleTodayDto(movies, showTimes);
     }

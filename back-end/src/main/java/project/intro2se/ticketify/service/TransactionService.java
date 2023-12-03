@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import project.intro2se.ticketify.domain.*;
-import project.intro2se.ticketify.dto.BookingRequest;
-import project.intro2se.ticketify.dto.CreateTransactionDto;
-import project.intro2se.ticketify.dto.FoodOrderLineDto;
-import project.intro2se.ticketify.dto.TransactionDto;
+import project.intro2se.ticketify.dto.*;
 import project.intro2se.ticketify.exception.ResourceNotFoundException;
 import project.intro2se.ticketify.repository.FoodOrderLineRepository;
 import project.intro2se.ticketify.repository.FoodRepository;
@@ -20,7 +17,9 @@ import project.intro2se.ticketify.utils.QRCodeGenerator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,6 +101,27 @@ public class TransactionService {
 //        totalPrice = ticketPrice.add(foodPrice);
 //        return paypalService.createTransaction(totalPrice);
 //    }
+    public DailyRevenue calculateDailyRevenue(LocalDate date){
+        List<Transaction> transactions = transactionRepository.findByDate(date);
+        BigDecimal revenueOfDay = BigDecimal.ZERO;
+        for(Transaction transaction: transactions){
+            revenueOfDay = revenueOfDay.add(transaction.getTotal());
+        }
+        return new DailyRevenue(date, revenueOfDay);
+    }
+    public MonthlyRevenue calculateMonthlyRevenue(YearMonth yearMonth){
+        List<DailyRevenue> dailyRevenues = new ArrayList<>();
+        for(int i = 1; i <= yearMonth.lengthOfMonth(); i++){
+            LocalDate date = yearMonth.atDay(i);
+            DailyRevenue dailyRevenue = calculateDailyRevenue(date);
+            dailyRevenues.add(dailyRevenue);
+        }
+        return new MonthlyRevenue(yearMonth, dailyRevenues);
+    }
+    public WeeklyRevenue calculateWeeklyRevenue(){
+        return null;
+    }
+
 
     public Transaction bookTickets(BookingRequest request, User user) throws IOException, WriterException, MessagingException {
         Transaction transaction = new Transaction();
