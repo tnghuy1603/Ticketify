@@ -35,6 +35,7 @@ public class SecurityConfig {
         });
         http.authorizeHttpRequests().requestMatchers("/auth/**", "/movies/**", "/showtimes/**", "/tickets/**", "/theaters/**", "/transactions/**", "payments/**").permitAll();
         http.authorizeHttpRequests().requestMatchers("/users/**").hasRole("ADMIN");
+        http.authorizeHttpRequests().requestMatchers("rooms/**").hasAnyRole("ADMIN", "STAFF", "TICKET_MANAGER");
         http.authorizeHttpRequests().anyRequest().authenticated();
         http.authenticationProvider(authenticationProvider).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

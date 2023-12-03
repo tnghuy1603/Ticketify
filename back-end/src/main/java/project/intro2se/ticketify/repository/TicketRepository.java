@@ -3,6 +3,7 @@ package project.intro2se.ticketify.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import project.intro2se.ticketify.domain.ShowTime;
 import project.intro2se.ticketify.domain.Ticket;
 import project.intro2se.ticketify.domain.Transaction;
 
@@ -16,5 +17,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     int soldTicketByShowTimeId(Long showTimeId);
     List<Ticket> findByTransaction_Id(String transactionId);
     List<Ticket> findByTransaction(Transaction transaction);
+    List<Ticket> findByShowTimeAndBooked(ShowTime showTime, boolean booked);
 
 }

@@ -7,11 +7,12 @@ import project.intro2se.ticketify.domain.ShowTime;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Getter
 public class ScheduleByTheaterAndDate {
     private LocalDate date;
-    private List<Movie> movies;
+    private Set<Movie> movies;
     private List<ShowTime> showTimes;
 }

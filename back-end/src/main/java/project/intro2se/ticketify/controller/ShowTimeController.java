@@ -5,14 +5,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.intro2se.ticketify.domain.ShowTime;
-import project.intro2se.ticketify.dto.ScheduleByTheaterAndDate;
-import project.intro2se.ticketify.dto.ScheduleByTheaterDto;
-import project.intro2se.ticketify.dto.ScheduleTodayDto;
+import project.intro2se.ticketify.dto.AddShowTimeRequest;
 import project.intro2se.ticketify.service.ShowTimeService;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("showtimes")
@@ -32,8 +28,8 @@ public class ShowTimeController {
 //        return ResponseEntity.ok(showTimeService.findAvailableByTheater(theaterId));
 //    }
     @PostMapping
-    public ResponseEntity<Long> addShowTime(@RequestBody ShowTime showTime){
-        return ResponseEntity.ok(showTimeService.addShowTime(showTime).getId());
+    public ResponseEntity<ShowTime> addShowTime(@RequestBody AddShowTimeRequest request){
+        return ResponseEntity.ok(showTimeService.addShowTime(request));
     }
 //    @GetMapping("/")
 //    public ResponseEntity<?> findShowTimes(@RequestParam(name = "theater", required = false) Long theaterId,
@@ -60,18 +56,19 @@ public class ShowTimeController {
 //                                                     @RequestParam("theater") Long theaterId){
 //        return ResponseEntity.ok(showTimeService.findAvailableByTheaterAndMovie(theaterId, movieId));
 //    }
-//    @GetMapping
-//    public ResponseEntity<List<ShowTime>> getByDateAndTheater(@RequestParam("movie") Long movieId,
-//                                                                @RequestParam("theater") Long theaterId){
-//        return ResponseEntity.ok(showTimeService.findAvailableByTheaterAndMovie(theaterId, movieId));
-//
-//    }
-@GetMapping
-public ResponseEntity<ScheduleByTheaterAndDate> getByDateAndTheater(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-                                                          @RequestParam("theater") Long theaterId){
-    return ResponseEntity.ok(showTimeService.getShowTimeByTheaterAndDate(date, theaterId));
+    @GetMapping
+    public ResponseEntity<?> findShowTime(@RequestParam(name = "movie", required = false) Long movieId,
+                                                              @RequestParam("theater") Long theaterId,
+                                                              @RequestParam(name = "date", required = false)
+                                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
+        if(movieId != null){
+            return ResponseEntity.ok(showTimeService.findAvailableByTheaterAndMovie(theaterId, movieId));
+        }
+        return ResponseEntity.ok(showTimeService.findShowTimeByTheaterAndDate(date, theaterId));
+    }
 
-}
+
+
 
 
 
