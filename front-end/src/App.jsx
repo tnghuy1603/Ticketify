@@ -1,19 +1,15 @@
 import { useState } from 'react'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.css'
-import Register from './components/Register'
-import Login from './components/Login'
 import { jwtDecode } from "jwt-decode"
 import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute'
 import useAuth from './hooks/useAuth'
-import TicketManagerDashBoard from './components/TicketManagerDashBoard'
-import ReceptionistDashBoard from './components/ReceptionistDashBoard'
-import HomePage from './page/HomePage'
-import ShowTimeOfMovie from './components/ShowTimeOfMovie'
-import ShowTimeOfTheater from './components/ShowTimeOfTheater'
-
-
+import AdminPage from './page/AdminPage'
+import CustormerPage from './page/CustormerPage'
+import DefaultPage from './page/DefaultPage'
+import TicketManagerPage from './page/TicketManagerPage'
+import ReceptionistPage from './page/ReceptionistPage'
 function App() {
   const getRoles = (accessToken) => {
     if (accessToken) {
@@ -28,23 +24,30 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path='/dashboard' element={
-            roles.find(role => role === "ROLE_CUSTOMER") ?
-              (
+        <Routes>          
+          <Route
+            path='/' element={
+              roles.find(role => role === "ROLE_CUSTOMER") ? (
                 <PrivateRoute>
-                  <TicketManagerDashBoard />
+                  <CustormerPage />
+                </PrivateRoute>
+              ) : roles.find(role => role === "ROLE_RECEPTIONIST") ? (
+                <PrivateRoute>
+                  <ReceptionistPage />
+                </PrivateRoute>
+              ) : roles.find(role => role === "ROLE_ADMIN") ? (
+                <PrivateRoute>
+                  <AdminPage />
+                </PrivateRoute>
+              ) : roles.find(role => role === "ROLE_TICKETMANAGER") ? (
+                <PrivateRoute>
+                  <TicketManagerPage />
                 </PrivateRoute>
               ) : (
-                <PrivateRoute>
-                  <ReceptionistDashBoard />
-                </PrivateRoute>
+                <DefaultPage />
               )
-          } />
-          <Route path='/' element={<HomePage />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/schedule' element={<ShowTimeOfTheater />} />
+            }
+          />
         </Routes>
       </BrowserRouter>
 

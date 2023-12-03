@@ -4,16 +4,16 @@ import LoginButton from './LoginButton'
 
 function HomepageHeader() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-primary">
+        <nav className="navbar navbar-expand-lg navbar-light" style={{backgroundColor: '#FFF1A8'}}>
             <div className="container-fluid d-flex justify-content-center">
-                <a className="navbar-brand" href="#">Navbar</a>
+                <a className="navbar-brand" href="/"><img src="/Logo.png" style={{height: '3rem'}} alt='logo'></img></a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#">Trang chủ</a>
+                            <a className="nav-link active" aria-current="page" href="/">Trang chủ</a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link" href="#">Phim mới</a>
@@ -33,10 +33,6 @@ function HomepageHeader() {
                         </li>
                     </ul>
                 </div>
-                {/* <form className="d-flex">
-                            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                            <button className="btn btn-outline-success" type="submit">Search</button>
-                        </form> */}
                 <SearchButton />
                 <LoginButton />
             </div>

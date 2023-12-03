@@ -14,7 +14,7 @@ const Login = () => {
       }
     })
     auth.setAccessToken(res.data.accessToken);
-    window.location.href = '/dashboard'
+    window.location.href = '/'
   }
 
   return (

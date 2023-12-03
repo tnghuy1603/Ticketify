@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/homepage/header';
-import Content from '../components/homepage/Content'
-import LoginSignup from '../components/homepage/Login';
-import Footer from '../components/homepage/Footer'
+import Header from '../components/defaultPage/Header';
+import Content from '../components/defaultPage/Content'
+import LoginSignup from '../components/defaultPage/Login';
+import Footer from '../components/defaultPage/Footer'
 
 
 function HomePage() {
