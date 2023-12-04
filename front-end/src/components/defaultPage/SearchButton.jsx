@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 const SearchButton = () => {
   const [isSearchVisible, setSearchVisible] = useState(false);
@@ -26,14 +26,12 @@ const SearchButton = () => {
 
   return (
     <div className="search-container">
-      <button className="search-button" onClick={toggleSearch}>
-      <FontAwesomeIcon icon={faMagnifyingGlass} className='search-icon'/>
-      </button>
-      {isSearchVisible && (
-        <div className="search-bar" ref={searchRef}>
-          <input type="text" placeholder="Search..." className='search-input'/>
-        </div>
-      )}
+      <form className="d-flex" role="search">
+        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+        <button className="btn btn-outline-success" type="submit">
+          <FontAwesomeIcon icon={faMagnifyingGlass} className='search-icon' />
+        </button>
+      </form>
     </div>
   );
 };
