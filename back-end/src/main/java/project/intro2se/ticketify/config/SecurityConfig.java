@@ -33,7 +33,23 @@ public class SecurityConfig {
         http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
         });
-        http.authorizeHttpRequests().requestMatchers("/auth/**", "/movies/**", "/showtimes/**", "/tickets/**", "/theaters/**", "/transactions/**", "payments/**").permitAll();
+        http.authorizeHttpRequests().requestMatchers(
+                "/auth/**",
+                "/movies/**",
+                "/showtimes/**",
+                "/tickets/**",
+                "/theaters/**",
+                "/transactions/**",
+                "payments/**",
+                "/swagger-ui/**",
+                "/v3/api-docs",
+                "/v3/api-docs/**",
+                "/swagger-resources",
+                "/swagger-resources/**",
+                "/configuration/ui",
+                "/configuration/security",
+                "/webjars/**",
+                "/swagger-ui.html").permitAll();
         http.authorizeHttpRequests().requestMatchers("/users/**").hasRole("ADMIN");
         http.authorizeHttpRequests().requestMatchers("rooms/**").hasAnyRole("ADMIN", "STAFF", "TICKET_MANAGER");
         http.authorizeHttpRequests().anyRequest().authenticated();
