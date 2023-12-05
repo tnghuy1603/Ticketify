@@ -1,8 +1,16 @@
 import React from 'react'
-
-function ReceptionistDashBoard() {
+import Header from '../components/customerPage/Header'
+import Content from '../components/defaultPage/Content'
+import Footer from '../components/defaultPage/Footer'
+import LogOut from '../components/customerPage/LogOut'
+function ReceptionistDashBoard(username) {
   return (
-    <div>ReceptionistDashBoard</div>
+    <>
+      <Header {...username}></Header>
+      <Content></Content>
+      <LogOut></LogOut>
+      <Footer></Footer>
+    </>
   )
 }
 
