@@ -10,6 +10,7 @@ import CustormerPage from './page/CustormerPage'
 import DefaultPage from './page/DefaultPage'
 import TicketManagerPage from './page/TicketManagerPage'
 import ReceptionistPage from './page/ReceptionistPage'
+import Login from './components/Login';
 function App() {
   const getRoles = (accessToken) => {
     if (accessToken) {
@@ -48,6 +49,7 @@ function App() {
               )
             }
           />
+          <Route path='/login' element={<Login/>}/>
         </Routes>
       </BrowserRouter>
 
