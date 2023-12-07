@@ -21,7 +21,7 @@ function HomePage() {
     //             params: {
     //                 status: 'Upcoming'
     //             }
-                
+
     //         })
     //         setUpcomingMovies(res.data)
     //         console.log(res.data);
@@ -47,15 +47,14 @@ function HomePage() {
     //     navigate(`/${movie.id}`, {state: {movie}})
     // }
 
-    
-    
-  return (
-    <>
-        <Header></Header>
-        <Content></Content>
-        <LoginSignup></LoginSignup>
-        <Footer></Footer>
-        {/* {viewUpcoming ?
+
+    return (
+        <>
+            <Header></Header>
+            <Content></Content>
+            <LoginSignup></LoginSignup>
+            <Footer></Footer>
+            {/* {viewUpcoming ?
             <div>
             {upComingMovies.map(movie => <>
                 <div className='card' key={movie.id}>
@@ -79,9 +78,9 @@ function HomePage() {
             </div>
             
         } */}
-       
-    </>
-  )
+
+        </>
+    )
 }
 
 export default HomePage
