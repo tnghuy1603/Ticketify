@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Setter
 @EqualsAndHashCode(exclude = {"id", "endAt"})
+@Builder
 public class ShowTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

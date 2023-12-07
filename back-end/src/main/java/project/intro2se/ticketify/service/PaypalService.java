@@ -4,6 +4,7 @@ package project.intro2se.ticketify.service;
 import com.paypal.core.PayPalHttpClient;
 import com.paypal.http.HttpResponse;
 import com.paypal.orders.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,10 +26,9 @@ import java.util.NoSuchElementException;
 public class PaypalService {
     private final TransactionService transactionService;
     private final PayPalHttpClient payPalHttpClient;
+    @Transactional
+    public CreateTransactionDto createTransaction(BigDecimal fee) throws IOException {
 
-    public CreateTransactionDto createTransaction(BookingRequest request) throws IOException {
-
-        BigDecimal fee = transactionService.getTotalAmount(request);
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.checkoutPaymentIntent("CAPTURE");
         AmountWithBreakdown amountBreakdown = new AmountWithBreakdown().currencyCode("USD").value(fee.toString());
@@ -49,9 +49,7 @@ public class PaypalService {
                     .orElseThrow(() ->new NoSuchElementException("Something went wrong"))
                     .href();
 
-
-
-            return new CreateTransactionDto("success",  order.id(), redirectUrl);
+            return new CreateTransactionDto("Success",  order.id(), redirectUrl);
         } catch (IOException e) {
             log.error(e.getMessage());
             CreateTransactionDto response =  new CreateTransactionDto();
@@ -59,27 +57,18 @@ public class PaypalService {
             return response;
         }
     }
-    public CompleteTransactionDto completeTransaction(String token ,BookingRequest request,  User user){
+    public Transaction completeTransaction(String token, BookingRequest request, User user){
         OrdersCaptureRequest ordersCaptureRequest = new OrdersCaptureRequest(token);
         try {
             HttpResponse<Order> httpResponse = payPalHttpClient.execute(ordersCaptureRequest);
             if (httpResponse.result().status() != null) {
-                Transaction transaction = new Transaction();
-                transaction.setId(token);
-                transaction.setUser(user);
-                AmountWithBreakdown amount = httpResponse.result().purchaseUnits().get(0).amountWithBreakdown();
-                BigDecimal totalAmount = BigDecimal.valueOf(Long.parseLong(amount.value()));
-                transaction.setTotal(totalAmount);
-                transaction.setCreatedAt(LocalDateTime.now());
-                transactionService.saveOne(transaction);
-
+                return transactionService.saveCompletedTransaction(token, request, user);
             }
         } catch (IOException e) {
             log.error(e.getMessage());
         }
-        CompleteTransactionDto completeTransactionDto = new CompleteTransactionDto();
-        completeTransactionDto.setMessage("error");
-        return completeTransactionDto;
+        return null;
     }
+
 
 }

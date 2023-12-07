@@ -2,16 +2,14 @@ package project.intro2se.ticketify.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class FoodOrderLine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

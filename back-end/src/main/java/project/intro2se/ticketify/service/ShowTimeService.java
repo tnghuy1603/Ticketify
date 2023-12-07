@@ -6,21 +6,19 @@ import org.springframework.stereotype.Service;
 import project.intro2se.ticketify.domain.Movie;
 import project.intro2se.ticketify.domain.Room;
 import project.intro2se.ticketify.domain.ShowTime;
-import project.intro2se.ticketify.dto.ScheduleByTheaterDto;
-import project.intro2se.ticketify.dto.ScheduleTodayDto;
-import project.intro2se.ticketify.dto.UpdateShowTimeRequest;
+import project.intro2se.ticketify.domain.Ticket;
+import project.intro2se.ticketify.dto.*;
 import project.intro2se.ticketify.exception.ResourceNotFoundException;
 import project.intro2se.ticketify.repository.MovieRepository;
+import project.intro2se.ticketify.repository.RoomRepository;
 import project.intro2se.ticketify.repository.ShowTimeRepository;
+import project.intro2se.ticketify.repository.TicketRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +26,8 @@ import java.util.stream.Collectors;
 public class ShowTimeService {
     private final ShowTimeRepository showTimeRepository;
     private final MovieRepository movieRepository;
-    private final RoomService roomService;
+    private final RoomRepository roomRepository;
+    private final TicketRepository ticketRepository;
 
     public List<ShowTime> roundToNearestQuaterHour(){
         List<ShowTime> showTimes = showTimeRepository.findAll();
@@ -91,22 +90,16 @@ public class ShowTimeService {
         return false;
     }
 
-
-
-
-
-
-
-    //Schedule of theater viewed by moviegoer or guest
-    public ScheduleByTheaterDto findAvailableByTheater(Long theaterId){
-        List<ShowTime> showTimes =  showTimeRepository.findAvailableByTheater(theaterId);
+    public ScheduleByTheaterAndDate findShowTimeByTheaterAndDate(LocalDate date, Long theaterId){
+        List<ShowTime> showTimes = showTimeRepository.findByTheaterAndDate(theaterId, date);
         Set<Movie> movies = new HashSet<>();
         for(ShowTime showTime: showTimes){
             movies.add(showTime.getMovie());
         }
-        return new ScheduleByTheaterDto(movies, showTimes);
+        return new ScheduleByTheaterAndDate(date, movies, showTimes);
     }
-    //Schedule of individual movie viewed by moviegoer and guest
+
+
     public List<ShowTime> findAvailableByTheaterAndMovie(Long theaterId, Long movieId){
         return showTimeRepository.findAvailableByTheaterAndMovie(theaterId, movieId);
     }
@@ -114,27 +107,46 @@ public class ShowTimeService {
     public List<ShowTime> findAvailableByRoom(Long roomId){
         return showTimeRepository.findByRoom_IdAndStartAtAfter(roomId, LocalDateTime.now());
     }
-    // Ticket manager must choose room first
+
     public List<ShowTime> findByRoom(Long roomId){
         return showTimeRepository.findByRoom_Id(roomId);
     }
-    public ShowTime addShowTime(ShowTime showTime){
-        //Check if the room is available or not
-        if(!roomService.isAvailableRoom(showTime.getRoom(), showTime.getStartAt(), showTime.getEndAt())){
-            throw new IllegalArgumentException("Room is not available");
-        }
+
+    public List<ShowTime> findByMovieId(Long movieId){
+        return showTimeRepository.findByMovie_Id(movieId);
+    }
+
+    public List<ShowTime> findAvailableByMovie(Long movieId){
+        return showTimeRepository.findByMovie_IdAndStartAtAfter(movieId, LocalDateTime.now());
+    }
+
+    public ShowTime addShowTime(AddShowTimeRequest request){
+        Room room = roomRepository.findById(request.getRoomId())
+                .orElseThrow(() -> new ResourceNotFoundException("No room with that id"));
+        Movie movie = movieRepository.findById(request.getMovieId())
+                .orElseThrow(() -> new ResourceNotFoundException("No movie with that id"));
+        ShowTime showTime = ShowTime.builder()
+                .room(room)
+                .movie(movie)
+                .endAt(LocalDateTime.parse(request.getEndAt()))
+                .startAt(LocalDateTime.parse(request.getStartAt()))
+                .build();
+
         return showTimeRepository.save(showTime);
     }
     // Can only update showTime if there are not any booked ticket yet.
     public ShowTime updateShowTime(UpdateShowTimeRequest updateShowTimeRequest){
-        Room room = roomService.findById(updateShowTimeRequest.getRoomId());
-        if(roomService.isAvailableRoom(room, updateShowTimeRequest.getStartAt(), updateShowTimeRequest.getEndAt())){
-            throw new IllegalArgumentException("Room is busy");
-        }
         ShowTime showTimeToUpdate = showTimeRepository.findById(updateShowTimeRequest.getShowTimeId())
-                .orElseThrow(() -> new ResourceNotFoundException(""));
+                .orElseThrow(() -> new ResourceNotFoundException("No showtime with that id"));
+        List<Ticket> tickets = ticketRepository.findByShowTimeAndBooked(showTimeToUpdate, true);
+        if(!tickets.isEmpty()){
+            throw new IllegalArgumentException("Can not update show time if there are any booked ticket");
+
+        }
         Movie movie = movieRepository.findById(updateShowTimeRequest.getMovieId())
-                .orElseThrow(() -> new ResourceNotFoundException("No such id"));
+                .orElseThrow(() -> new ResourceNotFoundException("No such movie with that id"));
+        Room room = roomRepository.findById(updateShowTimeRequest.getRoomId())
+                .orElseThrow(() -> new ResourceNotFoundException("No such room with that id"));
         showTimeToUpdate.setRoom(room);
         showTimeToUpdate.setMovie(movie);
         showTimeToUpdate.setStartAt(updateShowTimeRequest.getStartAt());
@@ -145,17 +157,14 @@ public class ShowTimeService {
     public List<ShowTime> findByTheater(Long theaterId){
         return showTimeRepository.findByTheater(theaterId);
     }
-    //Schedule viewed by receptionist
-    public ScheduleTodayDto findByToday(Long theaterId){
-        List<ShowTime> showTimes = showTimeRepository.findByTheaterAndDay(theaterId, LocalDate.now());
+
+    public TodaySchedule findByToday(Long theaterId){
+        List<ShowTime> showTimes = showTimeRepository.findByTheaterAndDate(theaterId, LocalDate.now());
         Set<Movie> movies = new HashSet<>();
-        return new ScheduleTodayDto(movies, showTimes);
+        return new TodaySchedule(movies, showTimes);
     }
-    public List<ShowTime> findByMovieId(Long movieId){
-        return showTimeRepository.findByMovie_Id(movieId);
-    }
-    public List<ShowTime> findAvailableByMovie(Long movieId){
-        return showTimeRepository.findByMovie_IdAndStartAtAfter(movieId, LocalDateTime.now());
-    }
+
+
+
 
 }

@@ -2,15 +2,11 @@ package project.intro2se.ticketify.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import project.intro2se.ticketify.domain.Movie;
 import project.intro2se.ticketify.domain.ShowTime;
 
 import java.util.List;
-import java.util.Set;
-
-@Getter
 @AllArgsConstructor
-public class ScheduleByTheaterDto {
-    private Set<Movie> movies;
-    private List<ShowTime> availableShowTime;
+@Getter
+public class ScheduleByTheaterAndMovie {
+    private List<ShowTime> showTimes;
 }

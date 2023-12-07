@@ -3,7 +3,8 @@ import Header from '../components/customerPage/Header'
 import Content from '../components/defaultPage/Content'
 import Footer from '../components/defaultPage/Footer'
 import LogOut from '../components/customerPage/LogOut'
-function TicketManagerDashBoard(username) {
+
+function CustomerDashBoard(username) {
   return (
     <>
       <Header {...username}></Header>
@@ -14,4 +15,4 @@ function TicketManagerDashBoard(username) {
   )
 }
 
-export default TicketManagerDashBoard
+export default CustomerDashBoard
