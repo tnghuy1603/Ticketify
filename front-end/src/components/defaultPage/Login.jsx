@@ -148,7 +148,7 @@ function LoginSignup() {
                                 </div>
                                 <div className="sign-up-form">
                                     <div className="group group-login-signup">
-                                        <label htmlFor="user" className="label">Tên tên nhập</label>
+                                        <label htmlFor="user" className="label">Tên đăng nhập</label>
                                         <input id="user" onChange={(e) => setUsername(e.target.value)} type="text" className="input py-2" placeholder="Nhập tên đăng nhập" />
                                     </div>
                                     <div className="group group-login-signup">
