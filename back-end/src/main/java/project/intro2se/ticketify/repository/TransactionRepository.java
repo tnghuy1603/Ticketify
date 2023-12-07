@@ -20,8 +20,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
     List<Transaction> findAllInMonth(@Param("month") YearMonth month);
     @Query("SELECT t FROM Transaction t WHERE t.createdAt = CURRENT_DATE")
     List<Transaction> findByCurrentDate();
-    @Query("SELECT t FROM Transaction t WHERE DATE(t.createdAt) =: date")
-    List<Transaction> findByDate(LocalDate date);
+    @Query("SELECT t FROM Transaction t WHERE DATE(t.createdAt) = :date")
+    List<Transaction> findByDate(@Param("date") LocalDate date);
 
 
 }

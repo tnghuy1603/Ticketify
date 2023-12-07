@@ -24,7 +24,7 @@ public class RoomController {
         if(startAt != null && endAt != null && theaterId == null){
             return ResponseEntity.ok(roomService.findUnoccupiedRoom(startAt, endAt));
         }
-        log.info("Datetime is empty");
         return ResponseEntity.ok(roomService.findByTheater(theaterId));
     }
+
 }

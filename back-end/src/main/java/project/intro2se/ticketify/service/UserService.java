@@ -18,7 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     //Admin can only add staff or ticket manager account
-    //Role correctness is ensured by fe
+    //Role correctness is ensured by client
     public User addUser(AddUserRequest request){
         if(userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exists");

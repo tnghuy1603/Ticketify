@@ -1,7 +1,6 @@
 package project.intro2se.ticketify.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -29,9 +28,9 @@ public class ApplicationExceptionHandler {
     }
     @ExceptionHandler({RefreshTokenException.class, })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleRefreshToken(RefreshTokenException exception){
+    public ExceptionResponse handleRefreshToken(RefreshTokenException exception){
         log.info("Refresh token exception");
-        return ErrorMessage
+        return ExceptionResponse
                 .builder()
                 .message(exception.getMessage())
                 .timestamp(LocalDateTime.now())
@@ -39,20 +38,28 @@ public class ApplicationExceptionHandler {
     }
     @ExceptionHandler({BadCredentialsException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorMessage handleInvalidAccess(BadCredentialsException exception){
-        log.info("Authentication exception");
-        return ErrorMessage.builder()
+    public ExceptionResponse handleBadCredentials(BadCredentialsException exception){
+        log.info("Bad credentials exception");
+        return ExceptionResponse.builder()
                 .message(exception.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();
     }
-//    @ExceptionHandler({DisabledException.class})
+    @ExceptionHandler({DisabledException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse handleDisable(DisabledException exception){
+        log.info("Disable exception");
+        return ExceptionResponse.builder()
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorMessage handleResourceNotFound(ResourceNotFoundException exception){
+    public ExceptionResponse handleResourceNotFound(ResourceNotFoundException exception){
         log.info("Resource not found exception");
-        return ErrorMessage
+        return ExceptionResponse
                 .builder()
                 .message(exception.getMessage())
                 .timestamp(LocalDateTime.now())
@@ -62,12 +69,12 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorMessage handleInternalError(Exception exception){
+    public ExceptionResponse handleInternalError(Exception exception){
+        log.info("Common exception");
         log.info(exception.toString());
-        log.info("Internal server errors");
-        return ErrorMessage
+        return ExceptionResponse
                 .builder()
-                .message("Something went wrong, please try again")
+                .message("Internal server errors")
                 .timestamp(LocalDateTime.now())
                 .build();
     }

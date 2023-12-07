@@ -40,7 +40,6 @@ public class SecurityConfig {
                 "/tickets/**",
                 "/theaters/**",
                 "/transactions/**",
-                "payments/**",
                 "/swagger-ui/**",
                 "/v3/api-docs",
                 "/v3/api-docs/**",
@@ -50,6 +49,7 @@ public class SecurityConfig {
                 "/configuration/security",
                 "/webjars/**",
                 "/swagger-ui.html").permitAll();
+        http.authorizeHttpRequests().requestMatchers("/checkout/**").hasRole("CUSTOMER");
         http.authorizeHttpRequests().requestMatchers("/users/**").hasRole("ADMIN");
         http.authorizeHttpRequests().requestMatchers("rooms/**").hasAnyRole("ADMIN", "STAFF", "TICKET_MANAGER");
         http.authorizeHttpRequests().anyRequest().authenticated();
