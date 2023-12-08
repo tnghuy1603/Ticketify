@@ -4,10 +4,10 @@ import MovieList from "./MovieList";
 
 function Content() {
     return (
-        <main className="main">
+        <div>
             <MovieBanner />
             <MovieList />
-        </main>
+        </div>
     )
 }
 

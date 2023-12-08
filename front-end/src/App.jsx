@@ -10,7 +10,8 @@ import CustomerPage from './page/CustomerPage'
 import DefaultPage from './page/DefaultPage'
 import TicketManagerPage from './page/TicketManagerPage'
 import ReceptionistPage from './page/ReceptionistPage'
-import Login from './components/Login';
+import OrderTicket from './components/customerPage/OrderTicket'
+
 function App() {
   const getRoles = (accessToken) => {
     if (accessToken) {
@@ -34,7 +35,6 @@ function App() {
     return [];
   }
   const username = getUserName(accessToken);
-  console.log(username);
   return (
     <>
       <BrowserRouter>
@@ -45,7 +45,7 @@ function App() {
                 <PrivateRoute>
                   <CustomerPage username={username} />
                 </PrivateRoute>
-              ) : roles.find(role => role === "ROLE_RECEPTIONIST") ? (
+              ) : roles.find(role => role === "ROLE_STAFF") ? (
                 <PrivateRoute>
                   <ReceptionistPage username={username} />
                 </PrivateRoute>
@@ -53,7 +53,7 @@ function App() {
                 <PrivateRoute>
                   <AdminPage username={username} />
                 </PrivateRoute>
-              ) : roles.find(role => role === "ROLE_TICKETMANAGER") ? (
+              ) : roles.find(role => role === "ROLE_TICKET_MANAGER") ? (
                 <PrivateRoute>
                   <TicketManagerPage username={username} />
                 </PrivateRoute>
@@ -62,7 +62,11 @@ function App() {
               )
             }
           />
-          <Route path='/login' element={<Login/>}/>
+          <Route path='/order' element={
+            <PrivateRoute>
+              <OrderTicket username={username} />
+            </PrivateRoute>
+          } />
         </Routes>
       </BrowserRouter>
 

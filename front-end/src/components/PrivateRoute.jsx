@@ -1,6 +1,5 @@
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
-import { Navigate } from "react-router-dom";
 import axios from "axios";
 import useLocalStorage from "../hooks/useLocalStorage";
 
@@ -22,14 +21,22 @@ const PrivateRoute = ({ children }) => {
             setIsLoading(false);
         })
     } else {
-        return <Navigate to={'/login'} />
+        $('#btn-login').on({
+            'click': function () {
+                $('.login-modal').addClass('show');
+            }
+        });
     }
     if (isLoading) {
         return <div className="loading-indicator">Is loading ...</div>
     } else if (isValid) {
         return children
     } else {
-        return <Navigate to={'/login'} />
+        $('#btn-login').on({
+            'click': function () {
+                $('.login-modal').addClass('show');
+            }
+        });
     }
 
 }
