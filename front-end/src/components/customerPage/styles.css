@@ -1,0 +1,15 @@
+.form-group {
+    margin-bottom: 20px;
+}
+
+.input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #007bff; /* Màu sắc khi input được chọn */
+}

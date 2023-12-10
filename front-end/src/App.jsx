@@ -34,7 +34,15 @@ function App() {
     }
     return [];
   }
+  const getEmail = (accessToken) => {
+    if (accessToken) {
+      let decodedJwt = jwtDecode(accessToken);
+      return decodedJwt.sub;
+    }
+    return [];
+  }
   const username = getUserName(accessToken);
+  const email = getEmail(accessToken);
   return (
     <>
       <BrowserRouter>
@@ -43,19 +51,19 @@ function App() {
             path='/' element={
               roles.find(role => role === "ROLE_CUSTOMER") ? (
                 <PrivateRoute>
-                  <CustomerPage username={username} />
+                  <CustomerPage username={username} email={email}/>
                 </PrivateRoute>
               ) : roles.find(role => role === "ROLE_STAFF") ? (
                 <PrivateRoute>
-                  <ReceptionistPage username={username} />
+                  <ReceptionistPage username={username} email={email}/>
                 </PrivateRoute>
               ) : roles.find(role => role === "ROLE_ADMIN") ? (
                 <PrivateRoute>
-                  <AdminPage username={username} />
+                  <AdminPage username={username} email={email}/>
                 </PrivateRoute>
               ) : roles.find(role => role === "ROLE_TICKET_MANAGER") ? (
                 <PrivateRoute>
-                  <TicketManagerPage username={username} />
+                  <TicketManagerPage username={username} email={email}/>
                 </PrivateRoute>
               ) : (
                 <DefaultPage />
@@ -64,7 +72,7 @@ function App() {
           />
           <Route path='/order' element={
             <PrivateRoute>
-              <OrderTicket username={username} />
+              <OrderTicket username={username} email={email}/>
             </PrivateRoute>
           } />
         </Routes>

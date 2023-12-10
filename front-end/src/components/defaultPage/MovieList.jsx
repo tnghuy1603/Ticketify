@@ -1,18 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLessThan, faGreaterThan } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState, useRef } from "react";
+import LoadingSpinner from './Loading'
 import MovieCard from './MovieCard';
 
-function MovieList() {
+function MovieList(username) {
     const [isOnGoing, setIsOnGoing] = useState(true);
-
+    const [loading, setLoading] = useState(true);
     const handleCheckboxChange = (check) => {
         setIsOnGoing(check);
     };
-
+    const isLogin = username.username ? true : false;
     const [data, setData] = useState(null);
     const fetchData = async () => {
         try {
+            setLoading(true);
             // Địa chỉ API và tham số
             const apiUrl = 'http://localhost:8080/movies';
             let params;
@@ -45,6 +47,8 @@ function MovieList() {
             }
         } catch (error) {
             console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false); // Kết thúc loading sau khi nhận dữ liệu hoặc xảy ra lỗi
         }
     };
 
@@ -55,12 +59,27 @@ function MovieList() {
     const [detailMovie, setDetailMovie] = useState(false);
     const [movie, setMovie] = useState(null);
     const handleCardClick = (id) => {
+        setLoading(true);
         setDetailMovie(true);
         setMovie(data.filter(e => e.id === id)[0]);
+        setLoading(false);
     };
     useEffect(() => {
-        console.log(movie);
+        // console.log(movie);
     }, [detailMovie]);
+
+    const handleOrderClick = () => {
+        if (isLogin) {
+            window.location.href = '/order';
+        } else {
+            alert("Vui lòng đăng nhập trước khi thực hiện thao tác này!");
+            $('.login-modal').addClass('show');
+            $('.login-close-btn').on('click', function() {
+                $('.login-modal').removeClass('show');
+            });
+        }
+    };
+
     return (
         <div className="p-5 movie-list">
             <div className="row">
@@ -80,10 +99,16 @@ function MovieList() {
                 </div>
             </div>
 
+            {loading &&
+                <div className='d-flex justify-content-center my-5'>
+                    <LoadingSpinner />
+                </div>}
+
             {(!detailMovie && data) ? (
                 <div className="row mx-0 my-5" >
                     {data.map((item, index) => (
                         <MovieCard
+                            isLogin={isLogin}
                             index={index}
                             key={item.id}
                             poster={item.poster}
@@ -115,7 +140,7 @@ function MovieList() {
                             <div style={{ width: "100%", height: "1px", backgroundColor: 'rgb(81, 156, 247)' }}></div>
                             <div className="d-flex justify-content-center">
                                 <a href={`${movie.trailer}`} style={{ backgroundColor: 'rgb(81, 156, 247)' }} className="btn btn-lg text-light m-5">Trailer</a>
-                                <a href={`/order`} style={{ backgroundColor: 'rgb(81, 156, 247)' }} className="btn btn-lg text-light m-5">Đặt vé</a>
+                                <a onClick={handleOrderClick} style={{ backgroundColor: 'rgb(81, 156, 247)' }} className="btn btn-lg text-light m-5">Đặt vé</a>
                             </div>
                         </div>
                     </div>

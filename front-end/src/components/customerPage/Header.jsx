@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import SearchButton from './SearchButton'
 
-function HomepageHeader(username) {
+function HomepageHeader(params) {
     useEffect(() => {
         return () => {
             $('.btn-logout').on('click', function () {
@@ -9,8 +9,13 @@ function HomepageHeader(username) {
             });
             $('.close-logout').on('click', function () {
                 $('#logoutModal').modal('hide');
+            });            
+            $('.btn-changePW').on('click', function () {
+                $('#changePWModal').modal('show');
             });
-            
+            $('.close-changePW').on('click', function () {
+                $('#changePWModal').modal('hide');
+            });            
         }
     }, []);
     return (
@@ -26,21 +31,8 @@ function HomepageHeader(username) {
                             <a className="nav-link active" aria-current="page" href="/">Trang chủ</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Phim mới</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Phim đánh giá cao</a>
-                        </li>
-                        <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Thể loại
-                            </a>
-                            <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a className="dropdown-item" href="#">Action</a></li>
-                                <li><a className="dropdown-item" href="#">Another action</a></li>
-                                <li><a className="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
+                            <a className="nav-link" href="#">Lịch sử đặt vé</a>
+                        </li>                        
                     </ul>
                 </div>
                 <SearchButton />
@@ -48,7 +40,7 @@ function HomepageHeader(username) {
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                {username.username}
+                                {params.username}
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a className="dropdown-item btn-logout" href="#" >Đăng xuất</a></li>

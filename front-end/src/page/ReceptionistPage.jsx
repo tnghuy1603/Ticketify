@@ -3,12 +3,14 @@ import Header from '../components/customerPage/Header'
 import Content from '../components/defaultPage/Content'
 import Footer from '../components/defaultPage/Footer'
 import LogOut from '../components/customerPage/LogOut'
-function ReceptionistDashBoard(username) {
+import ChangePW from '../components/customerPage/ChangePW'
+function ReceptionistDashBoard(params) {
   return (
     <>
-      <Header {...username}></Header>
-      <Content></Content>
+      <Header {...params} ></Header>
+      <Content {...params} ></Content>
       <LogOut></LogOut>
+      <ChangePW {...params}></ChangePW>
       <Footer></Footer>
     </>
   )

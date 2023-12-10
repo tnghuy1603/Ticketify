@@ -2,6 +2,7 @@ import { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import useLocalStorage from "../hooks/useLocalStorage";
+import LoadingSpinner from "./defaultPage/Loading"
 
 const PrivateRoute = ({ children }) => {
     const auth = useAuth()
@@ -21,22 +22,16 @@ const PrivateRoute = ({ children }) => {
             setIsLoading(false);
         })
     } else {
-        $('#btn-login').on({
-            'click': function () {
-                $('.login-modal').addClass('show');
-            }
-        });
+        // alert('Vui lòng đăng nhập trước khi thực hiện tác vụ này!');
     }
     if (isLoading) {
-        return <div className="loading-indicator">Is loading ...</div>
+        return <div className='d-flex justify-content-center align-items-center my-5' style={{ height: '100vh' }}>
+            <LoadingSpinner />
+        </div>;
     } else if (isValid) {
         return children
     } else {
-        $('#btn-login').on({
-            'click': function () {
-                $('.login-modal').addClass('show');
-            }
-        });
+        // alert('Vui lòng đăng nhập trước khi thực hiện tác vụ này!');
     }
 
 }

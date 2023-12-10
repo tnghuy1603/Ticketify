@@ -8,9 +8,9 @@ import Footer from '../components/defaultPage/Footer'
 function HomePage() {
     return (
         <>
-            <Header></Header>
-            <Content></Content>
             <LoginSignup></LoginSignup>
+            <Header></Header>
+            <Content username={null} email={null}></Content>
             <Footer></Footer>
         </>
     )

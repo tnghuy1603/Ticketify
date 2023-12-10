@@ -31,7 +31,6 @@ function LoginSignup() {
             });
             if (response.status === 200) {
                 const data = await response.json();
-                console.log(data);
                 setIsLoginSuccess(true);
                 setLoginErrorMessage("");
                 auth.setAccessToken(data.accessToken);

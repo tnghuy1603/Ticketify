@@ -16,19 +16,6 @@ function LoginButton() {
                     $('#btn-login').css('cursor', 'pointer');
                 }
             });
-            $('#btn-signup').on({
-                'click': function() {
-                    $('.login-modal').addClass('show');
-                },
-                'mouseover': function() {
-                    $('#btn-signup').css('color', '#295EFF');
-                    $('#btn-signup').css('cursor', 'pointer');
-                },
-                'mouseout': function() {
-                    $('#btn-signup').css('color', 'black');
-                    $('#btn-signup').css('cursor', 'pointer');
-                }
-            });
             $('.login-close-btn').on('click', function() {
                 $('.login-modal').removeClass('show');
             });
@@ -40,8 +27,6 @@ function LoginButton() {
     return (
         <>
             <a id="btn-login">Đăng nhập </a>
-            <a> | </a>
-            <a id="btn-signup"> Đăng ký</a>
         </>
     )
 }
