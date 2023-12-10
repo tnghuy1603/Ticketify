@@ -333,9 +333,59 @@
 	margin:60px 0 50px 0;
 	background:rgba(255,255,255,.2);
 }
-.foot{
-	text-align:center;
+
+/* Footer section */
+
+
+footer{
+  background-color: #ECEFF1;
 }
+
+.footer-social-section{
+  background-color: #21D192;
+}
+
+.footer-company-name{
+  width: 60px; 
+  background-color: #7c4dff; 
+  height: 2px;
+}
+
+.footer-branch-container > p > a:hover{
+  color: rgb(121, 119, 119) !important;
+}
+
+.footer-branch{
+  width: 60px; 
+  background-color: #7c4dff; 
+  height: 2px;
+}
+
+.footer-router-container > p > a:hover{
+  color: rgb(121, 119, 119) !important;
+}
+
+.footer-router{
+  width: 60px;
+  background-color: #7c4dff; 
+  height: 2px;
+}
+
+.footer-information-container > p > a:hover{
+  color: rgb(121, 119, 119) !important;
+
+}
+
+.footer-information{
+  width: 60px; 
+  background-color: #7c4dff; 
+  height: 2px;
+}
+
+.footer-copyright{
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
 /* .card{
 	width: 500px;
 	left: 100px;
