@@ -39,7 +39,6 @@ public class SecurityConfig {
                 "/showtimes/**",
                 "/tickets/**",
                 "/theaters/**",
-                "/transactions/**",
                 "/swagger-ui/**",
                 "/v3/api-docs",
                 "/v3/api-docs/**",
@@ -49,6 +48,9 @@ public class SecurityConfig {
                 "/configuration/security",
                 "/webjars/**",
                 "/swagger-ui.html").permitAll();
+        http.authorizeHttpRequests().requestMatchers("transactions/history").hasRole("CUSTOMER");
+//        http.authorizeHttpRequests().requestMatchers("transaction/").hasAnyRole("ADMIN", "STAFF", "TICKET_MANAGER", "CUSTOMER");
+
         http.authorizeHttpRequests().requestMatchers("/checkout/**").hasRole("CUSTOMER");
         http.authorizeHttpRequests().requestMatchers("/users/**").hasRole("ADMIN");
         http.authorizeHttpRequests().requestMatchers("rooms/**").hasAnyRole("ADMIN", "STAFF", "TICKET_MANAGER");

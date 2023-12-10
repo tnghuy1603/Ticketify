@@ -5,10 +5,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import project.intro2se.ticketify.domain.User;
 
 import java.security.Key;
 import java.util.Date;
@@ -17,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Component
 public class JwtUtils {
     @Value("${jwt.secret-key}")
@@ -37,7 +40,11 @@ public class JwtUtils {
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
+
         extraClaims.put("roles", roles);
+        User user = (User) userDetails;
+        extraClaims.put("username", user.getDisplayName());
+
         return generateToken(extraClaims, userDetails);
     }
 
