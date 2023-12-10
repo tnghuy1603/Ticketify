@@ -97,11 +97,11 @@ function LoginSignup() {
         <div className="login-modal">
             <div className="row">
                 <div className="col-md-6 mx-auto" >
-                    <div className="login-box" style={{ backgroundColor: "#f0f0f0" }}>
+                    <div className="login-box login-modal-container" style={{ backgroundColor: "#f0f0f0" }}>
                         <button className="login-close-btn">
                             <FontAwesomeIcon icon={faXmark} />
                         </button>
-                        <div className="login-snip login-modal-container py-3">
+                        <div className="login-snip py-3">
                             <input id="tab-1" type="radio" name="tab" className="sign-in" checked={isChecked}
                                 onChange={handleCheckboxChange} /><label htmlFor="tab-1" className="tab">Đăng nhập</label>
                             <input id="tab-2" type="radio" name="tab" className="sign-up" checked={!isChecked}
@@ -147,7 +147,7 @@ function LoginSignup() {
                                 </div>
                                 <div className="sign-up-form">
                                     <div className="group group-login-signup">
-                                        <label htmlFor="user" className="label">Tên tên nhập</label>
+                                        <label htmlFor="user" className="label">Tên đăng nhập</label>
                                         <input id="user" onChange={(e) => setUsername(e.target.value)} type="text" className="input py-2" placeholder="Nhập tên đăng nhập" />
                                     </div>
                                     <div className="group group-login-signup">

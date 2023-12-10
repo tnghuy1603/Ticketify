@@ -33,8 +33,4 @@ public class ShowTime {
     @JsonManagedReference
     private Room room;
 
-
-
-
-
 }

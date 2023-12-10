@@ -242,11 +242,7 @@ public class TransactionService {
     }
 
 
-
-
-
-
-
-
-
+    public List<Transaction> findAllByUser(User user) {
+        return transactionRepository.findByUser(user);
+    }
 }
