@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -50,7 +51,8 @@ public class SecurityConfig {
                 "/swagger-ui.html").permitAll();
         http.authorizeHttpRequests().requestMatchers("transactions/history").hasRole("CUSTOMER");
 //        http.authorizeHttpRequests().requestMatchers("transaction/").hasAnyRole("ADMIN", "STAFF", "TICKET_MANAGER", "CUSTOMER");
-
+        http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, "comments").permitAll();
+        http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, "comments").hasRole("CUSTOMER");
         http.authorizeHttpRequests().requestMatchers("/checkout/**").hasRole("CUSTOMER");
         http.authorizeHttpRequests().requestMatchers("/users/**").hasRole("ADMIN");
         http.authorizeHttpRequests().requestMatchers("rooms/**").hasAnyRole("ADMIN", "STAFF", "TICKET_MANAGER");

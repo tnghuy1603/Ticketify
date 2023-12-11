@@ -1,6 +1,9 @@
 package project.intro2se.ticketify.controller;
 
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,14 +30,14 @@ public class PaypalController {
 //    }
 @PostMapping(value = "/init")
 public ResponseEntity<CreateTransactionDto> createPayment(
-        @RequestParam BigDecimal fee) throws IOException {
+        @RequestParam @NotNull BigDecimal fee) throws IOException {
     return ResponseEntity.ok(paypalService.createTransaction(fee));
 }
 
 
 @PostMapping(value = "/capture")
-public ResponseEntity<Transaction> completePayment(@RequestParam("token") String token,
-                                   @RequestBody BookingRequest request, @AuthenticationPrincipal User user) {
+public ResponseEntity<Transaction> completePayment(@RequestParam("token") @NotBlank(message = "Token must not be null") String token,
+                                                   @Valid  @RequestBody BookingRequest request, @AuthenticationPrincipal User user) {
     return ResponseEntity.ok(paypalService.completeTransaction(token, request, user));
 }
 

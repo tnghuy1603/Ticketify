@@ -1,5 +1,7 @@
 package project.intro2se.ticketify.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +20,11 @@ import java.util.List;
 public class AuthController {
     private final AuthService authService;
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest request){
+    public ResponseEntity<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest request){
         return ResponseEntity.ok(authService.signUp(request));
     }
     @PostMapping("/login")
-    public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest request){
+    public ResponseEntity<SignInResponse> signIn(@Valid @RequestBody SignInRequest request){
         return ResponseEntity.ok(authService.signIn(request));
     }
     @PostMapping("/renew-access-token")
@@ -30,7 +32,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.renewAccessToken(request));
     }
     @GetMapping("/validate")
-    public ResponseEntity<?> validateToken(@RequestParam(name = "token") String accessToken,
+    public ResponseEntity<?> validateToken(@RequestParam(name = "token") @NotBlank String accessToken,
                                            @AuthenticationPrincipal User user){
         log.info(accessToken);
         return ResponseEntity.ok(authService.validateToken(accessToken, user));
@@ -40,7 +42,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.forgotPassword(forgotPasswordRequest));
     }
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest,
                                             @AuthenticationPrincipal User user){
         return ResponseEntity.ok(authService.changePassword(changePasswordRequest, user));
     }

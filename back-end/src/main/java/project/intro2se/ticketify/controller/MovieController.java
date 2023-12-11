@@ -1,5 +1,6 @@
 package project.intro2se.ticketify.controller;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,7 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping("")
-    public ResponseEntity<List<Movie>> findMovies(@RequestParam(name = "status", required = false) String status){
+    public ResponseEntity<List<Movie>> findMovies(@RequestParam(name = "status", required = false) @NotBlank String status){
         if(status != null){
             return ResponseEntity.ok(movieService.findByStatus(status));
         } else{
