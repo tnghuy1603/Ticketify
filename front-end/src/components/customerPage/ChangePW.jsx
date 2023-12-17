@@ -15,7 +15,7 @@ function ChangePW(params) {
     const handleChangePW = async () => {
         setIsChangePWSuccess(true);
         setChangePWErrorMessage("");
-        console.log(newPW, oldPW, params.email)
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\\/-]).{8,}$/;
         if (oldPW === '' || newPW === '' || confirmPW === '') {
             setIsChangePWSuccess(false);
             setChangePWErrorMessage("Vui lòng điền đủ thông tin.");
@@ -25,6 +25,9 @@ function ChangePW(params) {
         } else if (newPW === oldPW) {
             setIsChangePWSuccess(false);
             setChangePWErrorMessage("Mật khẩu mới phải khác mật khẩu cũ.");
+        } else if (!passwordRegex.test(newPW)) {
+            setIsChangePWSuccess(false);
+            setChangePWErrorMessage("Mật khẩu ít nhất 8 kí tự (phải bao gồm chữ hoa, chữ thường, chữ số và kí tự đặt biệt).");
         } else {
             try {
                 const response = await fetch('http://localhost:8080/auth/forgot-password', {

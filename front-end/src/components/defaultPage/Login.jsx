@@ -21,28 +21,39 @@ function LoginSignup() {
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const handleSignIn = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password: pwd }),
-            });
-            if (response.status === 200) {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\\/-]).{8,}$/;
+        if (email === '' || pwd === '') {
+            setIsLoginSuccess(false);
+            setLoginErrorMessage("Vui lòng điền đủ thông tin.");
+        } else if (!passwordRegex.test(pwd)) {
+            setIsLoginSuccess(false);
+            setLoginErrorMessage("Mật khẩu ít nhất 8 kí tự (phải bao gồm chữ hoa, chữ thường, chữ số và kí tự đặt biệt)");
+        } else {
+            try {
+                const response = await fetch('http://localhost:8080/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password: pwd }),
+                });
                 const data = await response.json();
-                setIsLoginSuccess(true);
-                setLoginErrorMessage("");
-                auth.setAccessToken(data.accessToken);
-                window.location.href = '/';
-            } else {
-                setIsLoginSuccess(false);
-                setLoginErrorMessage("Email hoặc mật khẩu không hợp lệ, vui lòng kiểm tra lại.");
-            }
+                if (response.status === 200) {
+                    setIsLoginSuccess(true);
+                    setLoginErrorMessage("");
+                    auth.setAccessToken(data.accessToken);
+                    window.location.href = '/';
+                } else {
+                    console.log(data);
+                    setIsLoginSuccess(false);
+                    setLoginErrorMessage("Email hoặc mật khẩu không hợp lệ, vui lòng kiểm tra lại.");
+                }
 
-        } catch (error) {
-            console.error('Error during sign-in:', error);
+            } catch (error) {
+                console.error('Error during sign-in:', error);
+            }
         }
+
     }
     useEffect(() => {
         if (!isChecked && email !== '' && pwd !== '') {
@@ -54,12 +65,17 @@ function LoginSignup() {
     const [username, setUsername] = useState('');
     const [confirmPwd, setConfirmPwd] = useState('');
     const handleSignUp = async () => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}[\]:;<>,.?~\\\/-]).{8,}$/;
         if (emailSU === '' || pwdSU === '' || confirmPwd === '' || username === '') {
             setIsSignupSuccess(false);
             setSignupErrorMessage("Vui lòng điền đủ thông tin.");
         } else if (pwdSU !== confirmPwd) {
             setIsSignupSuccess(false);
             setSignupErrorMessage("Vui lòng xác nhận lại mật khẩu.");
+        } else if (!passwordRegex.test(pwdSU)) {
+            console.log(pwdSU, passwordRegex.test(pwdSU));
+            setIsSignupSuccess(false);
+            setSignupErrorMessage("Mật khẩu ít nhất 8 kí tự (phải bao gồm chữ hoa, chữ thường, chữ số và kí tự đặt biệt)");
         } else {
             try {
                 const response = await fetch('http://localhost:8080/auth/signup', {
@@ -70,8 +86,10 @@ function LoginSignup() {
                     body: JSON.stringify({ email: emailSU, password: pwdSU, displayName: username }),
                 });
                 const data = await response.json();
+                console.log(username, emailSU, pwdSU, data);
+
                 if (response.status === 200) {
-                    if (data.message === "Email is already in use") {
+                    if (data.password === "Email is already in use") {
                         setIsSignupSuccess(false);
                         setSignupErrorMessage("Email đã được đăng ký.");
                     } else {

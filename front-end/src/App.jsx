@@ -30,7 +30,7 @@ function App() {
   const getUserName = (accessToken) => {
     if (accessToken) {
       let decodedJwt = jwtDecode(accessToken);
-      return decodedJwt.sub;
+      return decodedJwt.username;
     }
     return [];
   }
@@ -70,7 +70,7 @@ function App() {
               )
             }
           />
-          <Route path='/order' element={
+          <Route path='/movies/:id' element={
             <PrivateRoute>
               <OrderTicket username={username} email={email}/>
             </PrivateRoute>

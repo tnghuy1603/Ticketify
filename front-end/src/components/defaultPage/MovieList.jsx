@@ -3,8 +3,10 @@ import { faLessThan, faGreaterThan } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState, useRef } from "react";
 import LoadingSpinner from './Loading'
 import MovieCard from './MovieCard';
+import { useNavigate } from 'react-router-dom';
 
 function MovieList(username) {
+    const navigate = useNavigate();
     const [isOnGoing, setIsOnGoing] = useState(true);
     const [loading, setLoading] = useState(true);
     const handleCheckboxChange = (check) => {
@@ -70,11 +72,11 @@ function MovieList(username) {
 
     const handleOrderClick = () => {
         if (isLogin) {
-            window.location.href = '/order';
+            navigate(`/movies/${movie.id}`);
         } else {
             alert("Vui lòng đăng nhập trước khi thực hiện thao tác này!");
             $('.login-modal').addClass('show');
-            $('.login-close-btn').on('click', function() {
+            $('.login-close-btn').on('click', function () {
                 $('.login-modal').removeClass('show');
             });
         }
@@ -110,12 +112,8 @@ function MovieList(username) {
                         <MovieCard
                             isLogin={isLogin}
                             index={index}
+                            movie={item}
                             key={item.id}
-                            poster={item.poster}
-                            title={item.title}
-                            cast={item.cast}
-                            director={item.director}
-                            trailerLink={item.trailer}
                             onClick={() => handleCardClick(item.id)}
                         />
                     ))}

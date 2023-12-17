@@ -20,7 +20,7 @@ function HomepageHeader(params) {
     }, []);
     return (
         <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: '#FFF1A8' }}>
-            <div className="container-fluid d-flex justify-content-center">
+            <div className="container-fluid d-flex justify-content-center align-items-center">
                 <a className="navbar-brand" href="/"><img src="/Logo.png" style={{ height: '3rem' }} alt='logo'></img></a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -35,8 +35,10 @@ function HomepageHeader(params) {
                         </li>                        
                     </ul>
                 </div>
-                <SearchButton />
-                <div className="collapse navbar-collapse" id="navbarNavDropdown">
+                <div>
+                    <SearchButton />
+                </div>
+                <div className="collapse navbar-collapse d-flex justify-content-end mx-4" id="navbarNavDropdown">
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">

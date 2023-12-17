@@ -25,9 +25,9 @@ function LoginButton() {
     
 
     return (
-        <>
+        <div className="d-flex justify-content-end w-25 px-3"> 
             <a id="btn-login">Đăng nhập </a>
-        </>
+        </div>
     )
 }
 

@@ -7,7 +7,6 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [pwd, setPwd] = useState('')
   const handleSignIn = async () => {
-    console.log(email, pwd);
     const res = await axios.post('http://localhost:8080/auth/login', { email, password: pwd }, {
       headers: {
         'Content-Type': 'application/json'
