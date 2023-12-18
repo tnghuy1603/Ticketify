@@ -24,7 +24,7 @@ const PrivateRoute = ({ children }) => {
                 setIsValid(null);
                 setIsLoading(true);
                 auth.setAccessToken('');
-                redirect('/');
+                window.location.href = '/';
             } else {
                 const data = await response.json();
                 setIsValid(data);
@@ -40,23 +40,10 @@ const PrivateRoute = ({ children }) => {
     }
 
     if (auth.accessToken) {
-        // axios.get(`http://localhost:8080/auth/validate?token=${auth.accessToken}`, {
-        //     headers: {
-        //         'Authorization': `Bearer ${auth.accessToken}`
-        //     },
-        //     params: {
-        //         accessToken: auth.accessToken
-        //     }
-        // }).then((res) => {
-        //     console.log(res);
-        //     setIsValid(res.data);
-        //     setIsLoading(false);
-        // })
         fetchData();
-
     } else {
         auth.setAccessToken('');
-        redirect('/');
+        window.location.href = '/';
     }
     if (isLoading) {
         return <div className='d-flex justify-content-center align-items-center my-5' style={{ height: '100vh' }}>
@@ -66,7 +53,7 @@ const PrivateRoute = ({ children }) => {
         return children
     } else {
         auth.setAccessToken('');
-        redirect('/');
+        window.location.href = '/';
     }
 
 }
