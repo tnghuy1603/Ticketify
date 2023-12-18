@@ -28,10 +28,11 @@ public class Ticket {
     @JoinColumn(name = "show_time_id", referencedColumnName = "id")
     @JsonManagedReference
     private ShowTime showTime;
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "transaction_id", referencedColumnName = "id")
     @JsonManagedReference
     private Transaction transaction;
+
 
 
 }
