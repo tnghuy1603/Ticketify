@@ -12,7 +12,6 @@ public class AddShowTimeRequest {
     private Long movieId;
     @NotNull
     private Long roomId;
-
     private String startAt;
     private String endAt;
 }
