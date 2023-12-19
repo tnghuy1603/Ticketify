@@ -38,7 +38,7 @@ public class OpenApiConfig {
                 .title("Ticketify API")
                 .version("1.0")
                 .contact(contact)
-                .description("This API exposes endpoints to develop ticketify front-end.").termsOfService("https://www.bezkoder.com/terms")
+                .description("This API exposes endpoints to develop front-end of ticketify application.").termsOfService("https://www.bezkoder.com/terms")
                 .license(mitLicense);
 
         return new OpenAPI().info(info).servers(List.of(devServer, prodServer));

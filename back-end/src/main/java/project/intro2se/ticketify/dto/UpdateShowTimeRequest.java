@@ -12,6 +12,7 @@ public class UpdateShowTimeRequest {
     private Long movieId;
     @NotNull(message = "Room's id must not be null")
     private Long roomId;
+
     private LocalDateTime startAt;
     private LocalDateTime endAt;
 }
