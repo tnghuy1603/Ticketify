@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import SearchButton from '../defaultPage/SearchButton'
 
 function HomepageHeader(params) {
@@ -11,13 +9,13 @@ function HomepageHeader(params) {
             });
             $('.close-logout').on('click', function () {
                 $('#logoutModal').modal('hide');
-            });
+            });            
             $('.btn-changePW').on('click', function () {
                 $('#changePWModal').modal('show');
             });
             $('.close-changePW').on('click', function () {
                 $('#changePWModal').modal('hide');
-            });
+            });            
         }
     }, []);
     return (
@@ -30,11 +28,11 @@ function HomepageHeader(params) {
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="/">Trang chủ</a>
+                            <a className="nav-link active" aria-current="page" href="/">Quản lý tài khoản</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Lịch sử đặt vé</a>
-                        </li>
+                            <a className="nav-link" href="#">Quản lý bình luận</a>
+                        </li>                        
                     </ul>
                 </div>
                 <div>
@@ -42,12 +40,11 @@ function HomepageHeader(params) {
                 </div>
                 <div className="collapse navbar-collapse d-flex justify-content-end mx-4" id="navbarNavDropdown">
                     <ul className="navbar-nav nav-bar">
-                        <li className="nav-item dropdown ps-4">
+                        <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <FontAwesomeIcon icon={faUser}/> {params.username}
+                                {params.username}
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a className="dropdown-item btn-logout" href="#" >Thông tin cá nhân</a></li>
                                 <li><a className="dropdown-item btn-logout" href="#" >Đăng xuất</a></li>
                                 <li><a className="dropdown-item btn-changePW" href="#">Đổi mật khẩu</a></li>
                             </ul>

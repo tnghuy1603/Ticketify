@@ -3,8 +3,10 @@ import { faLessThan, faGreaterThan } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState, useRef } from "react";
 import LoadingSpinner from './Loading'
 import MovieCard from './MovieCard';
+import { useNavigate } from 'react-router-dom';
 
 function MovieList(username) {
+    const navigate = useNavigate();
     const [isOnGoing, setIsOnGoing] = useState(true);
     const [loading, setLoading] = useState(true);
     const handleCheckboxChange = (check) => {
@@ -70,13 +72,7 @@ function MovieList(username) {
 
     const handleOrderClick = () => {
         if (isLogin) {
-            window.location.href = '/order';
-        } else {
-            alert("Vui lòng đăng nhập trước khi thực hiện thao tác này!");
-            $('.login-modal').addClass('show');
-            $('.login-close-btn').on('click', function() {
-                $('.login-modal').removeClass('show');
-            });
+            navigate(`/movies/${movie.id}`);
         }
     };
 
@@ -110,12 +106,8 @@ function MovieList(username) {
                         <MovieCard
                             isLogin={isLogin}
                             index={index}
+                            movie={item}
                             key={item.id}
-                            poster={item.poster}
-                            title={item.title}
-                            cast={item.cast}
-                            director={item.director}
-                            trailerLink={item.trailer}
                             onClick={() => handleCardClick(item.id)}
                         />
                     ))}
@@ -140,7 +132,33 @@ function MovieList(username) {
                             <div style={{ width: "100%", height: "1px", backgroundColor: 'rgb(81, 156, 247)' }}></div>
                             <div className="d-flex justify-content-center">
                                 <a href={`${movie.trailer}`} style={{ backgroundColor: 'rgb(81, 156, 247)' }} className="btn btn-lg text-light m-5">Trailer</a>
-                                <a onClick={handleOrderClick} style={{ backgroundColor: 'rgb(81, 156, 247)' }} className="btn btn-lg text-light m-5">Đặt vé</a>
+                                <a onClick={handleOrderClick} style={{ backgroundColor: 'rgb(81, 156, 247)' }} className="btn btn-lg text-light m-5" data-bs-toggle="modal" data-bs-target="#MovieList-modal">Đặt vé</a>
+                                {!isLogin && (<div className="modal fade" id="MovieList-modal" tabIndex="-1" aria-labelledby="exampleModalLabel">
+                                    <div className="modal-dialog">
+                                        <div className="modal-content">
+                                            <div className="modal-header">
+                                                <h1 className="modal-title fs-5" id="exampleModalLabel">Thông báo</h1>
+                                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div className="modal-body">
+                                                
+                                                Vui lòng đăng nhập trước khi thực hiện thao tác này!                                               
+                                                
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => {
+                                                    
+                                                    $('.login-modal').addClass('display');
+                                                    $('.login-close-btn').on('click', function () {
+                                                        $('.login-modal').removeClass('show');
+                                                    });
+
+                                                }}>Đăng nhập</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>)}
+
                             </div>
                         </div>
                     </div>

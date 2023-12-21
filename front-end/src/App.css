@@ -157,7 +157,7 @@
   display: none;
 }
 
-.login-modal.show{
+.login-modal.display{
   display: block;
 }
 

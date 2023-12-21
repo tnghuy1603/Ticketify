@@ -11,5 +11,62 @@
 
 .input:focus {
     outline: none;
-    border-color: #007bff; /* Màu sắc khi input được chọn */
+    border-color: #007bff;
+    /* Màu sắc khi input được chọn */
+}
+
+.seat-standard {
+    background-color: rgb(199, 199, 199);
+    width: 3rem;
+    margin: 5px;
+}
+
+.seat-couple {
+    width: 6rem;
+    margin: 10px;
+    background-color: #ec307e;
+}
+
+.seat-selecting {
+    background-color: #0c79ed;
+}
+.seat-selecting:hover {
+    background-color: #0c79ed;
+}
+
+.seat-booked:disabled {
+    background-color: #198754;
+    opacity: 1;
+    border: 1px;
+}
+
+.seat-vacant {
+    transition: transform 0.2s;
+}
+
+.seat-vacant:hover {
+    background-color: #0c79ed;
+    border-color: transparent;
+}
+
+.seat-note-standard-vacant:disabled {
+    width: 3rem;
+    background-color: rgb(199, 199, 199);
+}
+.seat-note-couple-vacant:disabled {
+    background-color: #ec307e;
+    width: 3rem;
+}
+.seat-note-standard-booked:disabled {
+    background-color: #198754;
+    width: 3rem;
+}
+.seat-note-standard-selecting:disabled {
+    width: 3rem;
+    background-color: #0c79ed;
+}
+
+.seat-note:disabled {
+    opacity: 1;
+    border: 1px;
 }

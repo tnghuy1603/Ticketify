@@ -5,7 +5,7 @@ function LoginButton() {
         return () => {
             $('#btn-login').on({
                 'click': function() {
-                    $('.login-modal').addClass('show');
+                    $('.login-modal').addClass('display');
                 },
                 'mouseover': function() {
                     $('#btn-login').css('color', '#295EFF');
@@ -17,17 +17,15 @@ function LoginButton() {
                 }
             });
             $('.login-close-btn').on('click', function() {
-                $('.login-modal').removeClass('show');
+                $('.login-modal').removeClass('display');
             });
         }
     }, []);
-    
-    
 
     return (
-        <>
+        <div className="d-flex justify-content-end w-25 px-3"> 
             <a id="btn-login">Đăng nhập </a>
-        </>
+        </div>
     )
 }
 
