@@ -35,6 +35,8 @@ public class SecurityConfig {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
         });
         http.authorizeHttpRequests().requestMatchers(
+                "topic/public",
+                "chat.sendMessage",
                 "/auth/**",
                 "/showtimes/**",
                 "/tickets/**",
@@ -48,12 +50,10 @@ public class SecurityConfig {
                 "/configuration/security",
                 "/webjars/**",
                 "/swagger-ui.html").permitAll();
-        http.authorizeHttpRequests().requestMatchers("transactions/history").hasRole("CUSTOMER");
-        http.authorizeHttpRequests().requestMatchers("transactions/confirm-booking").hasRole("CUSTOMER");
+        http.authorizeHttpRequests().requestMatchers("transactions/history", "transactions/confirm-booking").hasRole("CUSTOMER");
         http.authorizeHttpRequests().requestMatchers(   HttpMethod.GET, "movies").hasAnyRole("CUSTOMER", "ANONYMOUS");
         http.authorizeHttpRequests().requestMatchers("movies/admin/**").hasRole("ADMIN");
         http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, "movies").hasRole("ADMIN");
-//        http.authorizeHttpRequests().requestMatchers("transaction/").hasAnyRole("ADMIN", "STAFF", "TICKET_MANAGER", "CUSTOMER");
         http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, "comments").permitAll();
         http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, "comments").hasRole("CUSTOMER");
         http.authorizeHttpRequests().requestMatchers("/checkout/**").hasRole("CUSTOMER");
