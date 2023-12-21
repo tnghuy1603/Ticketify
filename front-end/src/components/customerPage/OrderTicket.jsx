@@ -24,19 +24,22 @@ function CustomerDashBoard(params) {
   const getMovie = async () => {
     try {
       // Địa chỉ API và tham số
-      const apiUrl = 'http://localhost:8080/movies';
+      const apiUrl1 = 'http://localhost:8080/movies?status=Ongoing';
+      const apiUrl2 = 'http://localhost:8080/movies?status=Upcoming';
 
       // Gọi API bằng phương thức GET
-      const response = await fetch(apiUrl);
+      const response1 = await fetch(apiUrl1);
+      const response2 = await fetch(apiUrl2);
 
       // Kiểm tra trạng thái của response
-      if (!response.ok) {
+      if (!response1.ok || !response2.ok) {
         throw new Error('Network response was not ok');
       }
       else {
         // Chuyển đổi response thành JSON
-        const result = await response.json();
-        const data = result.filter(e => e.id === parseInt(id));
+        const result1 = await response1.json();
+        const result2 = await response2.json();
+        const data = result1.concat(result2).filter(e => e.id === parseInt(id));
         // Cập nhật state với dữ liệu từ API
         setMovie(data[0]);
       }
@@ -400,7 +403,7 @@ function CustomerDashBoard(params) {
           <div className='container'>
             <button onClick={handleBack} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Quay lại</button>
             <button onClick={handleBuyFood} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Mua đồ ăn</button>
-            <button onClick={handlePayment} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Thanh toán</button>
+            <button onClick={handlePayment} className='btn btn-lg text-light fw-bold m-2' disabled={seats.length <= 0} style={{ background: 'orange' }}>Thanh toán</button>
           </div>
         </div >
 
@@ -412,41 +415,48 @@ function CustomerDashBoard(params) {
             </button>
             <div className='d-flex justify-content-start align-items-center' >
               <div className='m-3 '>Tên phim</div>
-              <div className='text-success text-start display-6 fw-bold'>{showtimeChosen.movie.title}</div>
+              <h4 className='text-success text-start fw-bold'>{showtimeChosen.movie.title}</h4>
             </div>
             <div className='d-flex justify-content-center'>
               <div >
                 <div id='time' className='d-flex justify-content-center' style={{ marginBottom: '1px' }}>
                   <div className='p-3' style={{ marginRight: '1px', backgroundColor: 'rgb(219, 137, 45)', width: '10rem' }}>
                     <div>Suất chiếu</div>
-                    <div className='display-6 fw-bold'>
+                    <h4 className='fw-bold'>
                       {format(parseISO(showtimeChosen.startAt), 'HH:mm:ss').substring(0, 5)}
-                    </div>
+                    </h4>
                   </div>
                   <div className='p-3' style={{ backgroundColor: 'rgb(219, 137, 45)', width: '20rem' }}>
                     <div>
                       Ngày chiếu
                     </div>
-                    <div className='display-6 fw-bold'>
+                    <h4 className='fw-bold'>
                       {format(parseISO(showtimeChosen.startAt), 'dd/MM/yyyy')}
-                    </div>
+                    </h4>
                   </div>
                 </div>
-                <div id='seat' className='d-flex justify-content-start '>
+                <div id='seat' className='d-flex justify-content-start'>
                   <div style={{ width: '10rem', backgroundColor: 'rgb(201, 102, 247)', marginRight: '1px' }} className='p-3 d-flex justify-content-center align-items-center'>Số ghế</div>
-                  <div style={{ width: '20rem', backgroundColor: 'rgb(201, 102, 247)' }} className='display-6 fw-bold p-3'>A12</div>
+                  <div style={{ width: '20rem', backgroundColor: 'rgb(201, 102, 247)' }} className='fw-bold p-3'>
+                    <h4>
+                      {seatNumbers}
+                    </h4>
+                  </div>
                 </div>
               </div>
               <div className='p-3 d-flex flex-column justify-content-center align-items-center' style={{ backgroundColor: 'rgb(242, 118, 143)', marginLeft: '1px', width: '15rem' }}>
                 <div>Tổng tiền</div>
-                <div className='display-6 fw-bold'>120000đ</div>
+                <h4 className='fw-bold'>{total}<u>đ</u></h4>
               </div>
             </div>
           </div>
+          <h5 className='d-flex justify-content-center align-items-center p-3' style={{ margin: '1px', background: 'rgb(81, 156, 247)' }}>
+            {showtimeChosen.room.theater.name.toUpperCase()}
+          </h5>
           <div>Choose food</div>
           <div className='container'>
             <button onClick={handleBack} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Quay lại</button>
-            <button onClick={handlePayment} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Thanh toán</button>
+            <button onClick={handlePayment} className='btn btn-lg text-light fw-bold m-2' disabled={seats.length <= 0} style={{ background: 'orange' }}>Thanh toán</button>
           </div>
         </div>
       ) : step === 'choose-payment' ? (
@@ -457,41 +467,82 @@ function CustomerDashBoard(params) {
             </button>
             <div className='d-flex justify-content-start align-items-center' >
               <div className='m-3 '>Tên phim</div>
-              <div className='text-success text-start display-6 fw-bold'>{showtimeChosen.movie.title}</div>
+              <h4 className='text-success text-start fw-bold'>{showtimeChosen.movie.title}</h4>
             </div>
             <div className='d-flex justify-content-center'>
               <div >
                 <div id='time' className='d-flex justify-content-center' style={{ marginBottom: '1px' }}>
                   <div className='p-3' style={{ marginRight: '1px', backgroundColor: 'rgb(219, 137, 45)', width: '10rem' }}>
                     <div>Suất chiếu</div>
-                    <div className='display-6 fw-bold'>
+                    <h4 className='fw-bold'>
                       {format(parseISO(showtimeChosen.startAt), 'HH:mm:ss').substring(0, 5)}
-                    </div>
+                    </h4>
                   </div>
                   <div className='p-3' style={{ backgroundColor: 'rgb(219, 137, 45)', width: '20rem' }}>
                     <div>
                       Ngày chiếu
                     </div>
-                    <div className='display-6 fw-bold'>
+                    <h4 className='fw-bold'>
                       {format(parseISO(showtimeChosen.startAt), 'dd/MM/yyyy')}
-                    </div>
+                    </h4>
                   </div>
                 </div>
-                <div id='seat' className='d-flex justify-content-start '>
+                <div id='seat' className='d-flex justify-content-start'>
                   <div style={{ width: '10rem', backgroundColor: 'rgb(201, 102, 247)', marginRight: '1px' }} className='p-3 d-flex justify-content-center align-items-center'>Số ghế</div>
-                  <div style={{ width: '20rem', backgroundColor: 'rgb(201, 102, 247)' }} className='display-6 fw-bold p-3'>A12</div>
+                  <div style={{ width: '20rem', backgroundColor: 'rgb(201, 102, 247)' }} className='fw-bold p-3'>
+                    <h4>
+                      {seatNumbers}
+                    </h4>
+                  </div>
                 </div>
               </div>
               <div className='p-3 d-flex flex-column justify-content-center align-items-center' style={{ backgroundColor: 'rgb(242, 118, 143)', marginLeft: '1px', width: '15rem' }}>
                 <div>Tổng tiền</div>
-                <div className='display-6 fw-bold'>120000đ</div>
+                <h4 className='fw-bold'>{total}<u>đ</u></h4>
               </div>
             </div>
           </div>
-          <div>choose payment</div>
+          <h5 className='d-flex justify-content-center align-items-center p-3' style={{ margin: '1px', background: 'rgb(81, 156, 247)' }}>
+            {showtimeChosen.room.theater.name.toUpperCase()}
+          </h5>
+          <div className="container mx-auto my-5">
+            <div style={{ backgroundColor: '#f5f5f5' }}
+              className="m-0 p-3 shadow border border-5 rounded-5 d-flex flex-column">
+              <h4>Cảm ơn quý khách đã đến với H3DC!</h4>
+              <h4>Xin quý khách vui lòng kiểm tra lại thông tin đặt vé</h4>
+              <div className='d-flex'>
+                <img src={movie.poster} className='col-4 m-3 p-0' alt={`${movie.id} Poster`} style={{ width: '15rem' }} />
+                <div className="col-8 d-flex flex-column justify-content-start px-5">
+                  <div className="d-flex flex-column align-items-start my-5" >
+                    <h5>Phim: {movie.title}</h5>
+                    <h5>Rạp: {theaterChosenName}</h5>
+                    <h5>Ngày chiếu: {dateChosen}</h5>
+                    <h5>Suất chiếu: {format(parseISO(showtimeChosen.startAt), 'HH:mm:ss').substring(0, 5)}</h5>
+                  </div>
+                </div>
+              </div>
+              <div className='d-flex p-2'>
+                <div className='p-2 d-flex justify-content-center align-items-center' style={{ width: '20%', backgroundColor: '#e3e3e3', margin: '1px' }}>Ghế</div>
+                <div className='d-flex flex-column' style={{ width: '80%' }}>
+                  {seats.length > 0 ? (
+                    seats.map((item) => (
+                      <div key={item.id} className='d-flex justify-content-between' style={{ backgroundColor: '#e3e3e3', margin: '1px' }}>
+                        <div className='p-2'>{item.seat.seatNumber}</div>
+                        <div className='p-2'>{item.price}</div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className='d-flex justify-content-center my-5'>
+                      <LoadingSpinner />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
           <div className='container'>
             <button onClick={handleBack} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Quay lại</button>
-            <button onClick={() => console.log("handle payment")} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Thanh toán</button>
+            <button onClick={() => console.log("handle payment")} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }} disabled={seats.length <= 0}>Thanh toán</button>
           </div>
         </div>
       ) : (
