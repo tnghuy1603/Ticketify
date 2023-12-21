@@ -32,5 +32,7 @@ public class ShowTime {
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     @JsonManagedReference
     private Room room;
+    
+
 
 }

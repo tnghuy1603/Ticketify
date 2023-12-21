@@ -2,6 +2,8 @@ package project.intro2se.ticketify.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import project.intro2se.ticketify.domain.ShowTime;
 import project.intro2se.ticketify.domain.Ticket;
@@ -25,6 +27,11 @@ public class TicketController {
                                                        @RequestParam("price")BigDecimal price){
 
         return ResponseEntity.ok(ticketService.generateTicket(showTimeId, price));
+    }
+    @MessageMapping("/select-ticket")
+    @SendTo("public/book-ticket")
+    public String testingUser(String msg){
+        return msg;
     }
 
 
