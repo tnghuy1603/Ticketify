@@ -11,6 +11,14 @@ function LoginSignup() {
         window.location.href = '/';
     }
 
+    useEffect(() => {
+        return () => {
+            $('.close-logout').on('click', function () {
+                $('#logoutModal').modal('hide');
+            });
+        }
+    }, []);
+
     return (
         <div className="modal fade" id="logoutModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">

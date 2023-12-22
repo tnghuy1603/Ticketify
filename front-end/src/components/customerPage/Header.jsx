@@ -21,7 +21,7 @@ function HomepageHeader(params) {
         }
     }, []);
     return (
-        <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: '#FFF1A8' }}>
+        <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: '#2b1a1a' }}>
             <div className="container-fluid d-flex justify-content-center align-items-center">
                 <a className="navbar-brand" href="/"><img src="/Logo.png" style={{ height: '3rem' }} alt='logo'></img></a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,10 +30,10 @@ function HomepageHeader(params) {
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="/">Trang chủ</a>
+                            <a className="nav-link text-light active" aria-current="page" href="/">Trang chủ</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Lịch sử đặt vé</a>
+                            <a className="nav-link text-light" href="#">Lịch sử đặt vé</a>
                         </li>
                     </ul>
                 </div>
@@ -43,7 +43,7 @@ function HomepageHeader(params) {
                 <div className="collapse navbar-collapse d-flex justify-content-end mx-4" id="navbarNavDropdown">
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item dropdown ps-4">
-                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a className="nav-link dropdown-toggle text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <FontAwesomeIcon icon={faUser}/> {params.username}
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">

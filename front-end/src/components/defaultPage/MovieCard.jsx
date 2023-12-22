@@ -10,9 +10,12 @@ const MovieCard = ({ isLogin, index, movie, onClick }) => {
     const handleOrderClick = () => {
         if (isLogin) {
             navigate(`/movies/${movie.id}`);
+        } else {
+            $('#requireLogin').modal('show');
+            console.log('123');
         }
     };
-    
+
     return (
         <div style={{ backgroundColor: styles[index % 4], userSelect: 'none' }} id={`${movie.id}`}
             className="movie-card col-md-6 g-2 p-3 shadow border border-5 rounded-5 d-flex justify-content-around text-light"
@@ -28,12 +31,12 @@ const MovieCard = ({ isLogin, index, movie, onClick }) => {
                 </div>
                 <div style={{ width: "100%", height: "1px", backgroundColor: styles[(index + 1) % 4] }}></div>
                 <div className="d-flex justify-content-around">
-                    <a href={`${movie.trailer}`} style={{ backgroundColor: styles[(index + 1) % 4] }} className="btn text-light">Trailer</a>
+                    <a href={`${movie.trailer}`}  onClick={(e) => {e.stopPropagation()}} style={{ backgroundColor: styles[(index + 1) % 4] }} className="btn text-light">Trailer</a>
                     <a onClick={(e) => {
                         e.stopPropagation();
                         handleOrderClick();
                     }}
-                        style={{ backgroundColor: styles[(index + 1) % 4] }} className="btn text-light" data-bs-target="#MovieCard-modal" data-bs-toggle="modal">Đặt vé</a>
+                        style={{ backgroundColor: styles[(index + 1) % 4] }} className="btn text-light">Đặt vé</a>
 
                 </div>
             </div>

@@ -10,8 +10,8 @@ function HomePage() {
         <>
             <LoginSignup></LoginSignup>
             <Header></Header>
-            <Content username={null} email={null}></Content>
             <RequireLogin></RequireLogin>
+            <Content username={null} email={null}></Content>
             <Footer></Footer>
         </>
     )

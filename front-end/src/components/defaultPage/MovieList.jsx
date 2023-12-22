@@ -73,6 +73,9 @@ function MovieList(username) {
     const handleOrderClick = () => {
         if (isLogin) {
             navigate(`/movies/${movie.id}`);
+        } else {
+            $('#requireLogin').modal('show');
+            console.log('456');
         }
     };
 
@@ -132,7 +135,7 @@ function MovieList(username) {
                             <div style={{ width: "100%", height: "1px", backgroundColor: 'rgb(81, 156, 247)' }}></div>
                             <div className="d-flex justify-content-center">
                                 <a href={`${movie.trailer}`} style={{ backgroundColor: 'rgb(81, 156, 247)' }} className="btn btn-lg text-light m-5">Trailer</a>
-                                <a onClick={handleOrderClick()} style={{ backgroundColor: 'rgb(81, 156, 247)' }} className="btn btn-lg text-light m-5"  data-bs-toggle="modal" data-bs-target="#MovieCard-modal">Đặt vé</a>
+                                <a onClick={handleOrderClick} style={{ backgroundColor: 'rgb(81, 156, 247)' }} className="btn btn-lg text-light m-5" data-bs-toggle="modal" data-bs-target="#MovieCard-modal">Đặt vé</a>
                             </div>
                         </div>
                     </div>
