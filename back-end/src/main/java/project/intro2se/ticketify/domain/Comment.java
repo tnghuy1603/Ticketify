@@ -21,6 +21,7 @@ public class Comment {
     private LocalDateTime createdAt;
     @Column(columnDefinition = "TEXT")
     private String description;
+    private double rating;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     @JsonIgnore

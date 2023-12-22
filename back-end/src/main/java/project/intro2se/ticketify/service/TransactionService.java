@@ -134,7 +134,7 @@ public class TransactionService {
         BigDecimal totalPrice = getTotalAmount(request, transaction);
         return new ConfirmBookingResponse(transaction.getTickets(), totalPrice, transaction.getFoodOrderLines());
     }
-    public Transaction saveCompletedTransaction(String transactionId, BookingRequest request, User user){
+    public Transaction saveCompletedTransaction(String transactionId, BookingRequest request, User user) throws MessagingException, IOException, WriterException {
         Transaction transaction = new Transaction();
         BigDecimal totalPrice = getTotalAmount(request, transaction);
         List<Ticket> tickets = transaction.getTickets();
@@ -145,6 +145,10 @@ public class TransactionService {
         transaction.setCreatedAt(LocalDateTime.now());
         transaction.setTotal(totalPrice);
         transaction.setUser(user);
+        byte[] qrCode = QRCodeGenerator.getQRCodeImage(new TransactionDto());
+        //Send an email with qrcode
+        mailService.sendEmailWithEmbeddedImages(user.getDisplayName(), user.getEmail(), "Confirm booking",
+                "Thank for choosing us", qrCode );
         return transactionRepository.save(transaction);
     }
 

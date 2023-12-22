@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @NoArgsConstructor
-public class CreateTransactionDto {
+public class CreateTransactionSession {
     private String status;
     private String orderId;
     private String redirectUrl;
