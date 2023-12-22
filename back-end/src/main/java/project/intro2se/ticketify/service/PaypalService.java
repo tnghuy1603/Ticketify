@@ -1,22 +1,28 @@
 package project.intro2se.ticketify.service;
 
 
+import com.google.zxing.WriterException;
 import com.paypal.core.PayPalHttpClient;
 import com.paypal.http.HttpResponse;
 import com.paypal.orders.*;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 import project.intro2se.ticketify.domain.Transaction;
 import project.intro2se.ticketify.domain.User;
 import project.intro2se.ticketify.dto.BookingRequest;
-import project.intro2se.ticketify.dto.CompleteTransactionDto;
-import project.intro2se.ticketify.dto.CreateTransactionDto;
+import project.intro2se.ticketify.dto.CreateTransactionSession;
 
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+import javax.money.MonetaryAmount;
+import javax.money.NumberValue;
+import javax.money.convert.*;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -27,11 +33,33 @@ public class PaypalService {
     private final TransactionService transactionService;
     private final PayPalHttpClient payPalHttpClient;
     @Transactional
-    public CreateTransactionDto createTransaction(BigDecimal fee) throws IOException {
+    public CreateTransactionSession createTransaction(BigDecimal fee) throws IOException {
+        MonetaryAmount feeInVnd = Money.of(fee, "VND");
 
+//        CurrencyConversion vndToUsdConvertor = MonetaryConversions.getConversion("USD");
+//        MonetaryAmount feeInUsd = feeInVnd.with(vndToUsdConvertor);
+//        CurrencyUnit usdCurrency = Monetary.getCurrency("USD");
+//        CurrencyUnit vndCurrency = Monetary.getCurrency("VND");
+//        ExchangeRateProvider exchangeRateProvider = MonetaryConversions.getExchangeRateProvider("ECB");
+//
+//        CurrencyConversion vndToUsdConvertor = exchangeRateProvider.getCurrencyConversion("USD");
+//
+//        MonetaryAmount feeInUsd = feeInVnd.with(vndToUsdConvertor);
+//
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.checkoutPaymentIntent("CAPTURE");
-        AmountWithBreakdown amountBreakdown = new AmountWithBreakdown().currencyCode("USD").value(fee.toString());
+//        log.info(feeInUsd.getNumber().toString());
+//        MonetaryAmount oneDollar = Monetary.getDefaultAmountFactory().setCurrency("USD")
+//                .setNumber(1).create();
+//        ExchangeRateProvider exchangeRateProvider = MonetaryConversions.getExchangeRateProvider();
+//
+//
+//        CurrencyConversion conversionEUR = exchangeRateProvider.getCurrencyConversion("EUR");
+//
+//
+//
+//        MonetaryAmount convertedAmountUSDtoEUR = oneDollar.with(conversionEUR);
+        AmountWithBreakdown amountBreakdown = new AmountWithBreakdown().currencyCode("USD").value(feeInVnd.getNumber().toString());
         PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest().amountWithBreakdown(amountBreakdown);
         orderRequest.purchaseUnits(List.of(purchaseUnitRequest));
         ApplicationContext applicationContext = new ApplicationContext()
@@ -49,15 +77,15 @@ public class PaypalService {
                     .orElseThrow(() ->new NoSuchElementException("Something went wrong"))
                     .href();
 
-            return new CreateTransactionDto("Success",  order.id(), redirectUrl);
+            return new CreateTransactionSession("Success",  order.id(), redirectUrl);
         } catch (IOException e) {
             log.error(e.getMessage());
-            CreateTransactionDto response =  new CreateTransactionDto();
+            CreateTransactionSession response =  new CreateTransactionSession();
             response.setStatus("error");
             return response;
         }
     }
-    public Transaction completeTransaction(String token, BookingRequest request, User user){
+    public Transaction completeTransaction(String token, BookingRequest request, User user) throws MessagingException, WriterException {
         OrdersCaptureRequest ordersCaptureRequest = new OrdersCaptureRequest(token);
         try {
             HttpResponse<Order> httpResponse = payPalHttpClient.execute(ordersCaptureRequest);

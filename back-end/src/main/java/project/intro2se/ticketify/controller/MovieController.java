@@ -34,7 +34,7 @@ public class MovieController {
     public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie){
         return ResponseEntity.ok(movieService.update(movie));
     }
-    @GetMapping("admin")
+    @GetMapping("manager")
     public ResponseEntity<List<Movie>> findAll(){
         return ResponseEntity.ok(movieService.findAll());
     }

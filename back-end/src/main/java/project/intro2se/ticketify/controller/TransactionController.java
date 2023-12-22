@@ -32,6 +32,7 @@ public class TransactionController {
             throw new RuntimeException(e);
         }
     }
+
     @PostMapping("book-at-counter")
     public ResponseEntity<Transaction> bookAtCounter(@RequestBody BookingRequest bookingRequest, @AuthenticationPrincipal User user){
         return ResponseEntity.status(201).body(transactionService.bookAtTicketCounter(bookingRequest, user));
