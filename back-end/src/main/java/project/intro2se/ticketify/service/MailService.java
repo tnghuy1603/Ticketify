@@ -25,6 +25,7 @@ public class MailService {
     private final JavaMailSender mailSender;
     @Value("${spring.mail.username}")
     private String fromUser;
+    public static final String CONFIRM_EMAIL_MSG = "Your new account has been created. Please click a link below to verify your account\n";
     @Async
     public void sendSimpleEmail(String toEmail, String subject, String body){
         SimpleMailMessage message = new SimpleMailMessage();
@@ -49,6 +50,15 @@ public class MailService {
         helper.addAttachment("tickets", image);
         mailSender.send(message);
         log.info("Email sent");
+    }
+    public static String contentOfResetPassword(String link){
+        return  "<p>Hello,</p>"
+                + "<p>You have requested to reset your password.</p>"
+                + "<p>Click the link below to change your password (the link will be expired in 30 min):</p>"
+                + "<p><a href=\"" + link + "\">Change my password</a></p>"
+                + "<br>"
+                + "<p>Ignore this email if you do remember your password, "
+                + "or you have not made the request.</p>";
     }
 
 }

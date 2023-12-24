@@ -35,20 +35,34 @@ public class AuthController {
     public ResponseEntity<?> validateToken(@RequestParam(name = "token") @NotBlank String accessToken,
                                            @AuthenticationPrincipal User user){
         log.info(accessToken);
-        return ResponseEntity.ok(authService.validateToken(accessToken, user));
+        return ResponseEntity.ok(authService.validateAccessToken(accessToken, user));
     }
-    @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest){
-        return ResponseEntity.ok(authService.forgotPassword(forgotPasswordRequest));
-    }
+
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest,
                                             @AuthenticationPrincipal User user){
         return ResponseEntity.ok(authService.changePassword(changePasswordRequest, user));
     }
+    @GetMapping("/verify-account")
+    public ResponseEntity<?> verifyAccount(@RequestParam String token){
+        return ResponseEntity.ok(authService.verifyUser(token));
+    }
     @PostMapping("/dump-user")
     public ResponseEntity<?> dumpUsers(@RequestBody List<SignUpRequest> requests){
         return ResponseEntity.ok(authService.dumpData(requests));
+    }
+    // for forgot password feature
+    @GetMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email){
+        return ResponseEntity.ok(authService.forgotPassword(email));
+    }
+    @GetMapping("/reset-password")
+    public ResponseEntity<?> validateRestToken(@RequestParam("token") String token){
+        return ResponseEntity.ok(authService.validateRestPasswordToken(token));
+    }
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> validateRestToken(@RequestBody ResetPasswordRequest request){
+        return ResponseEntity.ok(authService.resetPassword(request));
     }
 
 

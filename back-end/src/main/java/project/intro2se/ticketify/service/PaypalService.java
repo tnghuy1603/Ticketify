@@ -59,7 +59,8 @@ public class PaypalService {
 //
 //
 //        MonetaryAmount convertedAmountUSDtoEUR = oneDollar.with(conversionEUR);
-        AmountWithBreakdown amountBreakdown = new AmountWithBreakdown().currencyCode("USD").value(feeInVnd.getNumber().toString());
+        BigDecimal feeInUsd = fee.divide(BigDecimal.valueOf(23000));
+        AmountWithBreakdown amountBreakdown = new AmountWithBreakdown().currencyCode("USD").value(fee.toString());
         PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest().amountWithBreakdown(amountBreakdown);
         orderRequest.purchaseUnits(List.of(purchaseUnitRequest));
         ApplicationContext applicationContext = new ApplicationContext()

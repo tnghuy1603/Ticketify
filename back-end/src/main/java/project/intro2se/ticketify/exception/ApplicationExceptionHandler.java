@@ -45,6 +45,16 @@ public class ApplicationExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
+    @ExceptionHandler({IllegalArgumentException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse handleInvalidMethodArgument(IllegalArgumentException exception){
+        log.info("Bad credentials exception");
+        return ExceptionResponse.builder()
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
     @ExceptionHandler({DisabledException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ExceptionResponse handleDisable(DisabledException exception){
