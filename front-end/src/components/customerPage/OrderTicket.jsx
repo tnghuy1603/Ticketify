@@ -8,7 +8,7 @@ import { Form } from 'react-bootstrap';
 import LoadingSpinner from '../defaultPage/Loading'
 import { addDays, format, parseISO } from 'date-fns';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
 import './styles.css'
 
 function CustomerDashBoard(params) {
@@ -24,19 +24,22 @@ function CustomerDashBoard(params) {
   const getMovie = async () => {
     try {
       // Địa chỉ API và tham số
-      const apiUrl = 'http://localhost:8080/movies';
+      const apiUrl1 = 'http://localhost:8080/movies?status=Ongoing';
+      const apiUrl2 = 'http://localhost:8080/movies?status=Upcoming';
 
       // Gọi API bằng phương thức GET
-      const response = await fetch(apiUrl);
+      const response1 = await fetch(apiUrl1);
+      const response2 = await fetch(apiUrl2);
 
       // Kiểm tra trạng thái của response
-      if (!response.ok) {
+      if (!response1.ok || !response2.ok) {
         throw new Error('Network response was not ok');
       }
       else {
         // Chuyển đổi response thành JSON
-        const result = await response.json();
-        const data = result.filter(e => e.id === parseInt(id));
+        const result1 = await response1.json();
+        const result2 = await response2.json();
+        const data = result1.concat(result2).filter(e => e.id === parseInt(id));
         // Cập nhật state với dữ liệu từ API
         setMovie(data[0]);
       }
@@ -232,6 +235,9 @@ function CustomerDashBoard(params) {
   const [total, setTotal] = useState(0);
   const [seatNumbers, setSeatNumbers] = useState('');
 
+  const [foods, setFoods] = useState([]);
+  const [feeFoods, setfeeFoods] = useState(0);
+
   const handleSelectSeats = (ticket) => {
     const seatIndex = seats.indexOf(ticket);
     if (seatIndex === -1) {
@@ -257,8 +263,24 @@ function CustomerDashBoard(params) {
     setTotal(sum);
   }, [seats])
 
+  const [isCheckedCondition, setIsCheckedCondition] = useState(false);
+  const handleCheckCondition = () => {
+    setIsCheckedCondition(!isCheckedCondition);
+  }
 
+  const [paymentMethod, setPaymentMethod] = useState(false);
+  const handlePaymentMethod = () => {
+    setPaymentMethod(!paymentMethod);
+  }
 
+  const handleCheckoutInit = () => {
+    if (!isCheckedCondition || !paymentMethod) {
+      alert("Vui lòng chọn chấp nhận các điều khoản, điều kiện và phương thức thanh toán.");
+    } else {
+      console.log('handle payment');
+    }
+  }
+  
   return (
     <>
       <Header {...params} ></Header>
@@ -348,7 +370,7 @@ function CustomerDashBoard(params) {
               </div>
               <div className='p-3 d-flex flex-column justify-content-center align-items-center' style={{ backgroundColor: 'rgb(242, 118, 143)', marginLeft: '1px', width: '15rem' }}>
                 <div>Tổng tiền</div>
-                <h4 className='fw-bold'>{total}<u>đ</u></h4>
+                <h4 className='fw-bold'>{total} <u>đ</u></h4>
               </div>
             </div>
           </div>
@@ -400,7 +422,7 @@ function CustomerDashBoard(params) {
           <div className='container'>
             <button onClick={handleBack} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Quay lại</button>
             <button onClick={handleBuyFood} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Mua đồ ăn</button>
-            <button onClick={handlePayment} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Thanh toán</button>
+            <button onClick={handlePayment} className='btn btn-lg text-light fw-bold m-2' disabled={seats.length <= 0} style={{ background: 'orange' }}>Thanh toán</button>
           </div>
         </div >
 
@@ -412,41 +434,48 @@ function CustomerDashBoard(params) {
             </button>
             <div className='d-flex justify-content-start align-items-center' >
               <div className='m-3 '>Tên phim</div>
-              <div className='text-success text-start display-6 fw-bold'>{showtimeChosen.movie.title}</div>
+              <h4 className='text-success text-start fw-bold'>{showtimeChosen.movie.title}</h4>
             </div>
             <div className='d-flex justify-content-center'>
               <div >
                 <div id='time' className='d-flex justify-content-center' style={{ marginBottom: '1px' }}>
                   <div className='p-3' style={{ marginRight: '1px', backgroundColor: 'rgb(219, 137, 45)', width: '10rem' }}>
                     <div>Suất chiếu</div>
-                    <div className='display-6 fw-bold'>
+                    <h4 className='fw-bold'>
                       {format(parseISO(showtimeChosen.startAt), 'HH:mm:ss').substring(0, 5)}
-                    </div>
+                    </h4>
                   </div>
                   <div className='p-3' style={{ backgroundColor: 'rgb(219, 137, 45)', width: '20rem' }}>
                     <div>
                       Ngày chiếu
                     </div>
-                    <div className='display-6 fw-bold'>
+                    <h4 className='fw-bold'>
                       {format(parseISO(showtimeChosen.startAt), 'dd/MM/yyyy')}
-                    </div>
+                    </h4>
                   </div>
                 </div>
-                <div id='seat' className='d-flex justify-content-start '>
+                <div id='seat' className='d-flex justify-content-start'>
                   <div style={{ width: '10rem', backgroundColor: 'rgb(201, 102, 247)', marginRight: '1px' }} className='p-3 d-flex justify-content-center align-items-center'>Số ghế</div>
-                  <div style={{ width: '20rem', backgroundColor: 'rgb(201, 102, 247)' }} className='display-6 fw-bold p-3'>A12</div>
+                  <div style={{ width: '20rem', backgroundColor: 'rgb(201, 102, 247)' }} className='fw-bold p-3'>
+                    <h4>
+                      {seatNumbers}
+                    </h4>
+                  </div>
                 </div>
               </div>
               <div className='p-3 d-flex flex-column justify-content-center align-items-center' style={{ backgroundColor: 'rgb(242, 118, 143)', marginLeft: '1px', width: '15rem' }}>
                 <div>Tổng tiền</div>
-                <div className='display-6 fw-bold'>120000đ</div>
+                <h4 className='fw-bold'>{total} <u>đ</u></h4>
               </div>
             </div>
           </div>
+          <h5 className='d-flex justify-content-center align-items-center p-3' style={{ margin: '1px', background: 'rgb(81, 156, 247)' }}>
+            {showtimeChosen.room.theater.name.toUpperCase()}
+          </h5>
           <div>Choose food</div>
           <div className='container'>
             <button onClick={handleBack} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Quay lại</button>
-            <button onClick={handlePayment} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Thanh toán</button>
+            <button onClick={handlePayment} className='btn btn-lg text-light fw-bold m-2' disabled={seats.length <= 0} style={{ background: 'orange' }}>Thanh toán</button>
           </div>
         </div>
       ) : step === 'choose-payment' ? (
@@ -457,41 +486,205 @@ function CustomerDashBoard(params) {
             </button>
             <div className='d-flex justify-content-start align-items-center' >
               <div className='m-3 '>Tên phim</div>
-              <div className='text-success text-start display-6 fw-bold'>{showtimeChosen.movie.title}</div>
+              <h4 className='text-success text-start fw-bold'>{showtimeChosen.movie.title}</h4>
             </div>
             <div className='d-flex justify-content-center'>
               <div >
                 <div id='time' className='d-flex justify-content-center' style={{ marginBottom: '1px' }}>
                   <div className='p-3' style={{ marginRight: '1px', backgroundColor: 'rgb(219, 137, 45)', width: '10rem' }}>
                     <div>Suất chiếu</div>
-                    <div className='display-6 fw-bold'>
+                    <h4 className='fw-bold'>
                       {format(parseISO(showtimeChosen.startAt), 'HH:mm:ss').substring(0, 5)}
-                    </div>
+                    </h4>
                   </div>
                   <div className='p-3' style={{ backgroundColor: 'rgb(219, 137, 45)', width: '20rem' }}>
                     <div>
                       Ngày chiếu
                     </div>
-                    <div className='display-6 fw-bold'>
+                    <h4 className='fw-bold'>
                       {format(parseISO(showtimeChosen.startAt), 'dd/MM/yyyy')}
-                    </div>
+                    </h4>
                   </div>
                 </div>
-                <div id='seat' className='d-flex justify-content-start '>
+                <div id='seat' className='d-flex justify-content-start'>
                   <div style={{ width: '10rem', backgroundColor: 'rgb(201, 102, 247)', marginRight: '1px' }} className='p-3 d-flex justify-content-center align-items-center'>Số ghế</div>
-                  <div style={{ width: '20rem', backgroundColor: 'rgb(201, 102, 247)' }} className='display-6 fw-bold p-3'>A12</div>
+                  <div style={{ width: '20rem', backgroundColor: 'rgb(201, 102, 247)' }} className='fw-bold p-3'>
+                    <h4>
+                      {seatNumbers}
+                    </h4>
+                  </div>
                 </div>
               </div>
               <div className='p-3 d-flex flex-column justify-content-center align-items-center' style={{ backgroundColor: 'rgb(242, 118, 143)', marginLeft: '1px', width: '15rem' }}>
                 <div>Tổng tiền</div>
-                <div className='display-6 fw-bold'>120000đ</div>
+                <h4 className='fw-bold'>{total} <u>đ</u></h4>
               </div>
             </div>
           </div>
-          <div>choose payment</div>
+          <h5 className='d-flex justify-content-center align-items-center p-3' style={{ margin: '1px', background: 'rgb(81, 156, 247)' }}>
+            {showtimeChosen.room.theater.name.toUpperCase()}
+          </h5>
+          <div className="container mx-auto my-5" style={{ paddingLeft: '5rem', paddingRight: '5rem' }}>
+            <div style={{ backgroundColor: '#f5f5f5' }}
+              className="m-0 p-5 shadow border border-5 rounded-5 d-flex flex-column">
+              <h4>Cảm ơn quý khách đã đến với H3DC!</h4>
+              <h4>Xin quý khách vui lòng kiểm tra lại thông tin đặt vé</h4>
+              <div className='d-flex'>
+                <img src={movie.poster} className='col-4 m-3 p-0' alt={`${movie.id} Poster`} style={{ width: '25%' }} />
+                <div className="col-8 d-flex flex-column justify-content-start px-5">
+                  <div className="d-flex flex-column align-items-start my-5" >
+                    <h5>Phim: {movie.title}</h5>
+                    <h5>Rạp: {theaterChosenName}</h5>
+                    <h5>Phòng: {showtimeChosen.room.roomNumber}</h5>
+                    <h5>Ngày chiếu: {dateChosen}</h5>
+                    <h5>Suất chiếu: {format(parseISO(showtimeChosen.startAt), 'HH:mm:ss').substring(0, 5)}</h5>
+                  </div>
+                </div>
+              </div>
+              <div className='d-flex p-2'>
+                <div className='p-3 d-flex justify-content-center align-items-center fs-5' style={{ width: '20%', backgroundColor: '#e3e3e3', margin: '1px' }}>Ghế</div>
+                <div className='d-flex flex-column' style={{ width: '80%' }}>
+                  {seats.length > 0 ? (
+                    seats.map((item) => (
+                      <div key={item.id} className='d-flex justify-content-between' style={{ backgroundColor: '#e3e3e3', margin: '1px' }}>
+                        <div className='p-3 fs-5'>{item.seat.seatNumber}</div>
+                        <div className='p-3 fs-5'>{item.price} <u>đ</u></div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className='d-flex justify-content-center my-5'>
+                      <LoadingSpinner />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='d-flex p-2'>
+                <div className='p-3 d-flex justify-content-center align-items-center fs-5' style={{ width: '20%', backgroundColor: '#e3e3e3', margin: '1px' }}>Đồ ăn</div>
+                <div className='d-flex flex-column' style={{ width: '80%' }}>
+                  {foods.length > 0 ? (
+                    foods.map((item) => (
+                      <div key={item.id} className='d-flex justify-content-between' style={{ backgroundColor: '#e3e3e3', margin: '1px' }}>
+                        <div className='p-3 fs-5'>{item.seat.seatNumber}</div>
+                        <div className='p-3 fs-5'>{item.price} <u>đ</u></div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className='d-flex justify-content-between' style={{ backgroundColor: '#e3e3e3', margin: '1px' }}>
+                      <div className='p-3 fs-5'></div>
+                      <div className='p-3 fs-5'>0 <u>đ</u></div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='d-flex justify-content-between p-3' >
+                <div className='fw-bold fs-3'>Tổng số tiền</div>
+                <div className='fw-bold fs-3'>{total} <u>đ</u></div>
+              </div>
+              <div className='d-flex flex-column justify-content-start align-items-start p-4'>
+                <div className='fs-5'>Quý khách vui lòng nhập mã giảm giá (nếu có)</div>
+                <div>
+                  <input type='text' placeholder='Nhập mã giảm giá' className='bg-light text-black p-2 m-2' style={{ width: '10rem' }} />
+                  <button className='btn btn-primary'>Gửi</button>
+                </div>
+              </div>
+              <div className='d-flex justify-content-between p-4'>
+                <div className='fw-bold fs-3'>Số tiền giảm</div>
+                <div className='fw-bold fs-3'>0 <u>đ</u></div>
+              </div>
+              <hr />
+              <div className='d-flex justify-content-between p-4'>
+                <div className='fw-bold fs-3'>Số tiền cần thanh toán</div>
+                <div className='fw-bold fs-3'>{total} <u>đ</u></div>
+              </div>
+            </div>
+          </div>
+          <div className="container mx-auto my-5" style={{ paddingLeft: '5rem', paddingRight: '5rem' }}>
+            <div style={{ backgroundColor: '#f5f5f5' }}
+              className="m-0 p-5 shadow border border-5 rounded-5 d-flex flex-column">
+              <div className='fs-2 fw-bold mb-2'>Điều khoản chung</div>
+              <div className="overflow-auto p-4 rounded-5" style={{ maxHeight: '25rem', textAlign: 'start', border: 'solid 1px black' }}>
+                <h5>Việc bạn sử dụng website này đồng nghĩa với việc bạn đồng ý với những thỏa thuận dưới đây.</h5>
+                <h5>Nếu bạn không đồng ý, xin vui lòng không sử dụng website.</h5>
+                <div>
+                  <strong>1. Trách nhiệm của người sử dụng:</strong>
+                  <p>Khi truy cập vào trang web này, bạn đồng ý chấp nhận mọi rủi ro. H3DC và các bên đối tác khác không chịu trách nhiệm về bất kỳ tổn thất nào do những hậu quả trực tiếp, tình cờ hay gián tiếp; những thất thoát, chi phí (bao gồm chi phí pháp lý, chi phí tư vấn hoặc các khoản chi tiêu khác) có thể phát sinh trực tiếp hoặc gián tiếp do việc truy cập trang web hoặc khi tải dữ liệu về máy; những tổn hại gặp phải do virus, hành động phá hoại trực tiếp hay gián tiếp của hệ thống máy tính khác, đường dây điện thoại, phần cứng, phần mềm, lỗi chương trình, hoặc bất kì các lỗi nào khác; đường truyền dẫn của máy tính hoặc nối kết mạng bị chậm…</p>
+                </div>
+
+                <div>
+                  <strong>2. Về nội dung trên trang web:</strong>
+                  <p>Tất cả những thông tin ở đây được cung cấp cho bạn một cách trung thực như bản thân sự việc. H3DC và các bên liên quan không bảo đảm, hay có bất kỳ tuyên bố nào liên quan đến tính chính xác, tin cậy của việc sử dụng hay kết quả của việc sử dụng nội dung trên trang web này. Nột dung trên website được cung cấp vì lợi ích của cộng đồng và có tính phi thương mại. Các cá nhân và tổ chức không được phếp sử dụng nội dung trên website này với mục đích thương mại mà không có sự ưng thuận của H3DC bằng văn bản. Mặc dù H3DC luôn cố gắng cập nhật thường xuyên các nội dung tại trang web, nhưng chúng tôi không bảo đảm rằng các thông tin đó là mới nhất, chính xác hay đầy đủ. Tất cả các nội dung website có thể được thay đổi bất kỳ lúc nào.</p>
+                </div>
+                <div>
+                  <strong>3. Về bản quyền:</strong>
+                  <p>H3DC là chủ bản quyền của trang web này. Việc chỉnh sửa trang, nội dung, và sắp xếp thuộc về thẩm quyền của H3DC. Sự chỉnh sửa, thay đổi, phân phối hoặc tái sử dụng những nội dung trong trang này vì bất kì mục đích nào khác được xem như vi phạm quyền lợi hợp pháp của H3DC.</p>
+                </div>
+                <div>
+                  <strong>4. Về việc sử dụng thông tin:</strong>
+                  <p>Chúng tôi sẽ không sử dụng thông tin cá nhân của bạn trên website này nếu không được phép. Nếu bạn đồng ý cung cấp thông tin cá nhân, bạn sẽ được bảo vệ. Thông tin của bạn sẽ được sử dụng với mục đích, liên lạc với bạn để thông báo các thông tin cập nhật của H3DC như lịch chiếu phim, khuyến mại qua email hoặc bưu điện. Thông tin cá nhân của bạn sẽ không được gửi cho bất kỳ ai sử dụng ngoài trang web H3DC, ngoại trừ những mở rộng cần thiết để bạn có thể tham gia vào trang web (những nhà cung cấp dịch vụ, đối tác, các công ty quảng cáo) và yêu cầu cung cấp bởi luật pháp. Nếu chúng tôi chia sẻ thông tin cá nhân của bạn cho các nhà cung cấp dịch vụ, công ty quảng cáo, các công ty đối tác liên quan, thì chúng tôi cũng yêu cầu họ bảo vệ thông tin cá nhân của bạn như cách chúng tôi thực hiện.</p>
+                </div>
+                <div>
+                  <strong>5. Vể việc tải dữ liệu:</strong>
+                  <p>Nếu bạn tải về máy những phần mềm từ trang này, thì phần mềm và các dữ liệu tải sẽ thuộc bản quyền của H3DC và cho phép bạn sử dụng. Bạn không được sở hữu những phầm mềm đã tải và H3DC không nhượng quyền cho bạn. Bạn cũng không được phép bán, phân phối lại, hay bẻ khóa phần mềm…</p>
+                </div>
+                <div>
+                  <strong>6. Thay đổi nội dung:</strong>
+                  <p>H3DC giữ quyền thay đổi, chỉnh sửa và loại bỏ những thông tin hợp pháp vào bất kỳ thời điểm nào vì bất kỳ lý do nào.</p>
+                </div>
+                <div>
+                  <strong>7. Liên kết với các trang khác:</strong>
+                  <p>Mặc dù trang web này có thể được liên kết với những trang khác, H3DC không trực tiếp hoặc gián tiếp tán thành, tổ chức, tài trợ, đứng sau hoặc sát nhập với những trang đó, trừ phi điều này được nêu ra rõ ràng. Khi truy cập vào trang web bạn phải hiểu và chấp nhận rằng H3DC không thể kiểm soát tất cả những trang liên kết với trang H3DC và cũng không chịu trách nhiệm cho nội dung của những trang liên kết.</p>
+                </div>
+                <div>
+                  <strong>8. Đưa thông tin lên trang web:</strong>
+                  <p>Bạn không được đưa lên, hoặc chuyển tải lên trang web tất cả những hình ảnh, từ ngữ khiêu dâm, thô tục, xúc phạm, phỉ báng, bôi nhọ, đe dọa, những thông tin không hợp pháp hoặc những thông tin có thể đưa đến việc vi phạm pháp luật, trách nhiệm pháp lý. H3DC và tất cả các bên có liên quan đến việc xây dựng và quản lý trang web không chịu trách nhiệm hoặc có nghĩa vụ pháp lý đối với những phát sinh từ nội dung do bạn tải lên trang web.</p>
+                </div>
+                <div>
+                  <strong>9. Luật áp dụng:</strong>
+                  <p>Mọi hoạt động phát sinh từ trang web có thể sẽ được phân tích và đánh giá theo luật pháp Việt Nam và toà án Tp. Hồ Chí Minh. Và bạn phải đồng ý tuân theo các điều khoản riêng của các toà án này.</p>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              </div>
+              <div className='my-5 d-flex justify-content-start align-items-center'>
+                <input className='m-2' id='check_terms_condition' type='checkbox' checked={isCheckedCondition} onChange={handleCheckCondition} />
+                <label className='fw-bold fs-6' htmlFor='check_terms_condition'>Tôi đồng ý với điều khoản trên và bảo đảm mua vé xem phim này theo đúng độ tuổi quy định</label>
+              </div>
+              <div className='fs-5 my-2' style={{ textAlign: 'start' }}>Chọn hình thức thanh toán</div>
+              <div className='my-1 d-flex justify-content-start align-items-center'>
+                <input onChange={handlePaymentMethod} className='radio-button mx-3' type="checkbox" id="option1" checked={paymentMethod}></input>
+                <label htmlFor="option1">Paypal</label>
+                <br />
+              </div>
+              <img onClick={handlePaymentMethod} className='mx-5' src="https://th.bing.com/th/id/OIP.wBKSzdf1HTUgx1Ax_EecKwHaHa?rs=1&pid=ImgDetMain" style={{ width: '3rem' }} alt="logo Paypal" />
+
+            </div>
+          </div>
+
           <div className='container'>
             <button onClick={handleBack} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Quay lại</button>
-            <button onClick={() => console.log("handle payment")} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Thanh toán</button>
+            <button onClick={handleCheckoutInit} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }} disabled={seats.length <= 0}>Thanh toán</button>
           </div>
         </div>
       ) : (

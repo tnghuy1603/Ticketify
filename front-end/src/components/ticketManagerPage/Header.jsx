@@ -30,11 +30,14 @@ function HomepageHeader(params) {
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item">
-                            <a className="nav-link text-light active" aria-current="page" href="/">Quản lý tài khoản</a>
+                            <a className="nav-link text-light active" aria-current="page" href="/">Quản lý phim</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link text-light" href="#">Quản lý bình luận</a>
-                        </li>                        
+                            <a className="nav-link text-light" href="#">Xếp lịch chiếu</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link text-light" href="#">Doanh thu</a>
+                        </li>
                     </ul>
                 </div>
                 <div>

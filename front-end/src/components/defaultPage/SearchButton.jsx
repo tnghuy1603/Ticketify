@@ -29,7 +29,7 @@ const SearchButton = () => {
       <form className="d-flex" role="search">
         <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
         <button className="btn btn-outline-success" type="submit">
-          <FontAwesomeIcon icon={faMagnifyingGlass} className='search-icon' />
+          <FontAwesomeIcon icon={faMagnifyingGlass} className='search-icon text-light' />
         </button>
       </form>
     </div>

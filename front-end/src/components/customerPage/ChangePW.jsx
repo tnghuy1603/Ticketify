@@ -64,6 +64,14 @@ function ChangePW(params) {
         }
     }
 
+    useEffect(() => {
+        return () => {
+            $('.close-changePW').on('click', function () {
+                $('#changePWModal').modal('hide');
+            });
+        }
+    }, []);
+
     return (
         <div className="modal fade" id="changePWModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
