@@ -5,8 +5,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.intro2se.ticketify.domain.User;
 import project.intro2se.ticketify.dto.AddUserRequest;
-import project.intro2se.ticketify.dto.SignUpRequest;
-import project.intro2se.ticketify.dto.SignUpResponse;
 import project.intro2se.ticketify.exception.ResourceNotFoundException;
 import project.intro2se.ticketify.repository.UserRepository;
 
@@ -45,8 +43,6 @@ public class UserService {
     public List<User> getAllEnabledUser(){
         return userRepository.findAllEnabledUser();
     }
-
-
 
 
 
