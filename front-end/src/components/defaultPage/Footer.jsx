@@ -5,7 +5,7 @@ import { ReactDOM } from "react";
 
 function Footer() {
     return (
-        <div className="container-fluid my-5 footer-container pe-0 ps-0">
+        <div className="container-fluid my-1 footer-container pe-0 ps-0">
             <footer className="text-center text-lg-start text-dark">
                 <section className="d-flex justify-content-between p-4 text-white footer-social-section">
                     <div className="me-5">
