@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.intro2se.ticketify.domain.User;
+
 import project.intro2se.ticketify.dto.AddUserRequest;
 import project.intro2se.ticketify.service.UserService;
 
@@ -26,4 +27,5 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody AddUserRequest request){
         return ResponseEntity.status(201).body(userService.addUser(request));
     }
+
 }

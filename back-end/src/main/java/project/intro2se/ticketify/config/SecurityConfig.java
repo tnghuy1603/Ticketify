@@ -53,7 +53,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests().requestMatchers("transactions/history", "transactions/confirm-booking").hasRole("CUSTOMER");
         http.authorizeHttpRequests().requestMatchers(   HttpMethod.GET, "movies").hasAnyRole("CUSTOMER", "ANONYMOUS");
         http.authorizeHttpRequests().requestMatchers("movies/manager/**").hasRole("TICKET_MANAGER");
-        http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, "movies").hasRole("ADMIN");
+        http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, "movies").hasRole("TICKET_MANAGER");
         http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, "comments").permitAll();
         http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, "comments").hasRole("CUSTOMER");
         http.authorizeHttpRequests().requestMatchers("/checkout/**").hasRole("CUSTOMER");
