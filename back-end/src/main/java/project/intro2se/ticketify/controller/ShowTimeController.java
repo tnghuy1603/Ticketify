@@ -66,6 +66,10 @@ public class ShowTimeController {
         }
         return ResponseEntity.ok(showTimeService.findShowTimeByTheaterAndDate(date, theaterId));
     }
+    @DeleteMapping("/{showTimeId}")
+    public ResponseEntity<?> deleteShowTime(@PathVariable Long showTimeId){
+        return ResponseEntity.ok(showTimeService.deleteShowTime(showTimeId));
+    }
 
 
 

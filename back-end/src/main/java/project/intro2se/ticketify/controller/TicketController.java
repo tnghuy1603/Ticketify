@@ -33,6 +33,10 @@ public class TicketController {
     public String testingUser(String msg){
         return msg;
     }
+    @DeleteMapping
+    public ResponseEntity<?> deleteTicketByShowtime(@RequestParam(name = "showtime") Long showtimeId){
+        return ResponseEntity.ok(ticketService.deleteByShowtime(showtimeId));
+    }
 
 
 }

@@ -38,7 +38,6 @@ public class SecurityConfig {
                 "topic/public",
                 "chat.sendMessage",
                 "/auth/**",
-                "/showtimes/**",
                 "/tickets/**",
                 "/theaters/**",
                 "/swagger-ui/**",
@@ -50,10 +49,17 @@ public class SecurityConfig {
                 "/configuration/security",
                 "/webjars/**",
                 "/swagger-ui.html").permitAll();
+        http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, "showtimes").hasAnyRole("ADMIN", "TICKET_MANGER", "CUSTOMER", "ANONYMOUS");
+        http.authorizeHttpRequests().requestMatchers(HttpMethod.DELETE, "showtimes").hasRole("TICKET_MANAGER");
+
+
+
+        http.authorizeHttpRequests().requestMatchers(HttpMethod.DELETE, "showtimes/**").hasRole("TICKET_MANAGER");
         http.authorizeHttpRequests().requestMatchers("transactions/history", "transactions/confirm-booking").hasRole("CUSTOMER");
         http.authorizeHttpRequests().requestMatchers(   HttpMethod.GET, "movies").hasAnyRole("CUSTOMER", "ANONYMOUS");
         http.authorizeHttpRequests().requestMatchers("movies/manager/**").hasRole("TICKET_MANAGER");
         http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, "movies").hasRole("TICKET_MANAGER");
+        http.authorizeHttpRequests().requestMatchers("movies/**").hasRole("TICKET_MANAGER");
         http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, "comments").permitAll();
         http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, "comments").hasRole("CUSTOMER");
         http.authorizeHttpRequests().requestMatchers("/checkout/**").hasRole("CUSTOMER");

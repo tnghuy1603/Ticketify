@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.intro2se.ticketify.domain.Movie;
 import project.intro2se.ticketify.dto.AddMovieRequest;
+import project.intro2se.ticketify.dto.UpdateMovieRequest;
 import project.intro2se.ticketify.service.MovieService;
 
 import java.util.List;
@@ -30,20 +31,22 @@ public class MovieController {
 //        }
         return ResponseEntity.ok(movieService.findByStatus(status));
     }
-    @PutMapping("")
-    public ResponseEntity<Movie> updateMovie(@RequestBody Movie movie){
-        return ResponseEntity.ok(movieService.update(movie));
+    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Movie> updateMovie(@RequestPart(name = "poster", required = false) MultipartFile file, @RequestPart(name = "movie") UpdateMovieRequest request) throws ExecutionException, InterruptedException {
+        return ResponseEntity.ok(movieService.update(request, file));
     }
     @GetMapping("manager")
+
     public ResponseEntity<List<Movie>> findAll(){
         return ResponseEntity.ok(movieService.findAll());
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Movie> addMovie(@RequestPart(name = "movie") AddMovieRequest request, @RequestPart MultipartFile poster) throws ExecutionException, InterruptedException {
+    public ResponseEntity<Movie> addMovie(@RequestPart(name = "movie") AddMovieRequest request, @RequestPart("poster") MultipartFile poster) throws ExecutionException, InterruptedException {
 
         return ResponseEntity.ok(movieService.add(request, poster));
     }
+
 
 
 

@@ -23,6 +23,7 @@ import javax.money.NumberValue;
 import javax.money.convert.*;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -59,8 +60,10 @@ public class PaypalService {
 //
 //
 //        MonetaryAmount convertedAmountUSDtoEUR = oneDollar.with(conversionEUR);
-        BigDecimal feeInUsd = fee.divide(BigDecimal.valueOf(23000));
-        AmountWithBreakdown amountBreakdown = new AmountWithBreakdown().currencyCode("USD").value(fee.toString());
+        BigDecimal feeInUsd = fee.divide(BigDecimal.valueOf(23000), 2, RoundingMode.HALF_UP);
+//        BigDecimal rounded = feeInUsd.setScale(3, RoundingMode.HALF_UP);
+        log.info(feeInUsd.toString());
+        AmountWithBreakdown amountBreakdown = new AmountWithBreakdown().currencyCode("USD").value(feeInUsd.toString());
         PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest().amountWithBreakdown(amountBreakdown);
         orderRequest.purchaseUnits(List.of(purchaseUnitRequest));
         ApplicationContext applicationContext = new ApplicationContext()
