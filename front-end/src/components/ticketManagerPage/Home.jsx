@@ -10,9 +10,9 @@ function Home() {
             <hr className="my-4" />
             <p>Vui lòng chọn rạp trước khi thực hiện các thao tác quản lý.</p>
             <div>
-                <a href='/' className='btn btn-primary m-3'>Quản lý phim</a>
-                <a href='/' className='btn btn-primary m-3'>Xếp lịch chiếu</a>
-                <a href='/' className='btn btn-primary m-3'>Xem doanh thu</a>
+                <a href={`/manage/movie`} className='btn btn-primary m-3'>Quản lý phim</a>
+                <a href={`/manage/showtime`} className='btn btn-primary m-3'>Xếp lịch chiếu</a>
+                <a href={`/manage/profit`} className='btn btn-primary m-3'>Xem doanh thu</a>
             </div>
         </div>
     )

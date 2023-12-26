@@ -4,11 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import './styles.css'
 
-function SideBar({ theater, handleChangeTheater, handleChosen, chosen, isCollapse }) {
-    const handleChosenData = (a) => {
-        handleChosen(a);
+function SideBar({ theater, handleChangeTheater, chosen, isCollapse }) {
+    const handleChosenData = (select) => {
+        window.location.href = `/manage/${select}`;
     }
-
     return (
         <>
             <nav id="sidebar" className={`py-4 col-2 ${!isCollapse ? '' : 'collapse'}`}>

@@ -12,7 +12,6 @@ const MovieCard = ({ isLogin, index, movie, onClick }) => {
             navigate(`/movies/${movie.id}`);
         } else {
             $('#requireLogin').modal('show');
-            console.log('123');
         }
     };
 

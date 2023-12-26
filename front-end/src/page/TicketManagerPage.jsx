@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Header from '../components/ticketManagerPage/Header'
 import Content from '../components/ticketManagerPage/Content'
 import Footer from '../components/defaultPage/Footer'
@@ -6,19 +7,25 @@ import LogOut from '../components/customerPage/LogOut'
 import ChangePW from '../components/customerPage/ChangePW'
 import SideBar from '../components/ticketManagerPage/SideBar';
 import Home from '../components/ticketManagerPage/Home';
+import Movie from '../components/ticketManagerPage/Movie';
+import LoadingSpinner from '../components/defaultPage/Loading'
+
+// import Showtime from '../components/ticketManagerPage/Showtime';
+// import Profit from '../components/ticketManagerPage/Profit';
 
 function TicketManagerDashBoard(params) {
+  const { currentChosen } = useParams();
+
   const [isCollapse, setIsCollapse] = useState(false);
   const updateData = () => {
     setIsCollapse(!isCollapse);
   }
-  const [chosen, setChosen] = useState('home');
+  const [chosen, setChosen] = useState(currentChosen);
   const handleChosen = (a) => {
     setChosen(a);
   }
   const [theater, setTheater] = useState([]);
-  const [theaterChosen, setTheaterChosen] = useState(theater[0]?.id);
-  const [theaterChosenName, setTheaterChosenName] = useState(theater[0]);
+  const [theaterChosen, setTheaterChosen] = useState(null);
   const getTheater = async () => {
     try {
       // Địa chỉ API và tham số
@@ -44,7 +51,6 @@ function TicketManagerDashBoard(params) {
 
   const handleChangeTheater = (event) => {
     setTheaterChosen(event.target.value);
-    setTheaterChosenName((theater.filter(e => e.id === parseInt(event.target.value)))[0]?.name);
   };
 
   useEffect(() => {
@@ -53,7 +59,6 @@ function TicketManagerDashBoard(params) {
 
   useEffect(() => {
     setTheaterChosen(theater[0]?.id);
-    setTheaterChosenName((theater.filter(e => e.id === theater[0]?.id))[0]?.name);
   }, [theater]);
 
 
@@ -65,18 +70,26 @@ function TicketManagerDashBoard(params) {
           <SideBar
             theater={theater}
             handleChangeTheater={handleChangeTheater}
-            handleChosen={handleChosen}
             chosen={chosen}
             isCollapse={isCollapse}></SideBar>
           <div className='col p-0 d-flex flex-column justify-content-between'>
             <Header updateData={updateData} isCollapse={isCollapse} params={params} ></Header>
-            {/* <Content
-              theater={theaterChosen}
-              theaterName={theaterChosenName}
-              params={params}
-              handleChosen={handleChosen}
-              chosen={chosen} ></Content> */}
-            <Home></Home>
+            {currentChosen === 'home' ? (
+              <Home></Home>
+            ) : currentChosen === 'movie' ? (
+              <Movie></Movie>
+            ) : currentChosen === 'showtime' ? (
+              <div className="jumbotron" style={{ backgroundColor: '#f0f0f0', height: '70vh' }}>
+                lịch chiếu
+              </div>
+            ) : currentChosen === 'profit' ? (
+              <div className="jumbotron" style={{ backgroundColor: '#f0f0f0', height: '70vh' }}>
+                doanh thu
+              </div>
+            ) : (
+              <Home></Home>
+            )}
+
             <LogOut></LogOut>
             <ChangePW {...params}></ChangePW>
             <Footer></Footer>

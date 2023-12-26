@@ -51,19 +51,19 @@ function App() {
             path='/' element={
               roles.find(role => role === "ROLE_CUSTOMER") ? (
                 <PrivateRoute>
-                  <CustomerPage username={username} email={email}/>
+                  <CustomerPage username={username} email={email} />
                 </PrivateRoute>
               ) : roles.find(role => role === "ROLE_STAFF") ? (
                 <PrivateRoute>
-                  <ReceptionistPage username={username} email={email}/>
+                  <ReceptionistPage username={username} email={email} />
                 </PrivateRoute>
               ) : roles.find(role => role === "ROLE_ADMIN") ? (
                 <PrivateRoute>
-                  <AdminPage username={username} email={email}/>
+                  <AdminPage username={username} email={email} />
                 </PrivateRoute>
               ) : roles.find(role => role === "ROLE_TICKET_MANAGER") ? (
                 <PrivateRoute>
-                  <TicketManagerPage username={username} email={email}/>
+                  <TicketManagerPage username={username} email={email} />
                 </PrivateRoute>
               ) : (
                 <DefaultPage />
@@ -71,10 +71,25 @@ function App() {
             }
           />
           <Route path='/movies/:id' element={
-            <PrivateRoute>
-              <OrderTicket username={username} email={email}/>
-            </PrivateRoute>
+            roles.find(role => role === "ROLE_CUSTOMER") ? (
+              <PrivateRoute>
+                <OrderTicket username={username} email={email} />
+              </PrivateRoute>
+            ) : (
+              <DefaultPage />
+            )
           } />
+          <Route
+            path='/manage/:currentChosen' element={
+              roles.find(role => role === "ROLE_TICKET_MANAGER") ? (
+                <PrivateRoute>
+                  <TicketManagerPage username={username} email={email} />
+                </PrivateRoute>
+              ) : (
+                <DefaultPage />
+              )
+            }
+          />
         </Routes>
       </BrowserRouter>
 
