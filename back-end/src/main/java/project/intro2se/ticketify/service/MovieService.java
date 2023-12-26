@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.intro2se.ticketify.domain.Movie;
 import project.intro2se.ticketify.dto.AddMovieRequest;
+import project.intro2se.ticketify.dto.UpdateMovieRequest;
 import project.intro2se.ticketify.exception.ResourceNotFoundException;
 import project.intro2se.ticketify.repository.MovieRepository;
 
@@ -30,10 +31,29 @@ public class MovieService {
     }
 
     //ticket manager
-    public Movie update(Movie movie){
-        Movie movieToUpdate = movieRepository.findById(movie.getId()).orElseThrow();
+    public Movie update(UpdateMovieRequest request, MultipartFile file) throws ExecutionException, InterruptedException {
 
-        return movieRepository.save(movie);
+        Movie movieToUpdate = movieRepository.findById(request.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("No movie with id = "  ));
+        String posterUrl = movieToUpdate.getPoster();
+        if(file != null){
+            Map data = cloudinaryService.upload(file).get();
+            posterUrl = (String) data.get("url");
+        }
+        movieToUpdate.setPoster(posterUrl);
+        movieToUpdate.setCast(request.getCast());
+        movieToUpdate.setDuration(request.getDuration());
+        movieToUpdate.setDirector(request.getDirector());
+        movieToUpdate.setGenre(request.getGenre());
+        movieToUpdate.setOpeningDay(request.getOpeningDay());
+        movieToUpdate.setRated(request.getRated());
+        movieToUpdate.setStatus(request.getStatus());
+        movieToUpdate.setTitle(request.getTitle());
+        movieToUpdate.setLanguage(request.getLanguage());
+        movieToUpdate.setStory(request.getStory());
+        movieToUpdate.setTrailer(request.getTrailer());
+
+        return movieRepository.save(movieToUpdate);
     }
     public Movie add(AddMovieRequest request, MultipartFile file) throws ExecutionException, InterruptedException {
         Map data = cloudinaryService.upload(file).get();
@@ -42,6 +62,7 @@ public class MovieService {
 
         Movie movie = Movie.builder()
                 .cast(request.getCast())
+                .status("Upcoming")
                 .director(request.getDirector())
                 .duration(request.getDuration())
                 .openingDay(request.getOpeningDay())

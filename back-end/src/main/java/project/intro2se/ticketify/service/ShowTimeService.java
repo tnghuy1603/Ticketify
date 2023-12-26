@@ -165,7 +165,14 @@ public class ShowTimeService {
     }
 
 
-
-
-
+    public CustomResponse deleteShowTime(Long showTimeId) {
+        if(!showTimeRepository.existsById(showTimeId)){
+            throw new ResourceNotFoundException("Not found any showtime with id = " + showTimeId);
+        }
+        if(ticketRepository.existsTicketByBookedAndShowTime_Id(true, showTimeId)){
+            return new CustomResponse("Some tickets of movies are booked. Can not delete this showtime", null, LocalDateTime.now());
+        }
+        showTimeRepository.deleteById(showTimeId);
+        return new CustomResponse("Delete showtime successfully", null, LocalDateTime.now());
+    }
 }

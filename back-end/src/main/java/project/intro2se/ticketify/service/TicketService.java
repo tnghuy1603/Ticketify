@@ -1,18 +1,21 @@
 package project.intro2se.ticketify.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import project.intro2se.ticketify.domain.Room;
 import project.intro2se.ticketify.domain.Seat;
 import project.intro2se.ticketify.domain.ShowTime;
 import project.intro2se.ticketify.domain.Ticket;
+import project.intro2se.ticketify.dto.CustomResponse;
 import project.intro2se.ticketify.exception.ResourceNotFoundException;
 import project.intro2se.ticketify.repository.ShowTimeRepository;
 import project.intro2se.ticketify.repository.TicketRepository;
 import project.intro2se.ticketify.repository.TransactionRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -58,9 +61,15 @@ public class TicketService {
     }
 
 
+    public CustomResponse deleteByShowtime(Long showtimeId) {
+        if(!showTimeRepository.existsById(showtimeId)){
+            throw new ResourceNotFoundException("No showtime with id = " + showtimeId);
+        }
+        if(ticketRepository.existsTicketByBookedAndShowTime_Id(true, showtimeId)){
+            return new CustomResponse("There are some booked ticket", null, LocalDateTime.now());
+        }
 
-
-
-
-
+        ticketRepository.deleteByShowTime_Id(showtimeId);
+        return new CustomResponse("Delete successfully", null, LocalDateTime.now());
+    }
 }
