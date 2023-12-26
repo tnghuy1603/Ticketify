@@ -204,6 +204,9 @@ function Movie(params) {
         return false;
     };
 
+    const [disabledBtn, setDisabledBtn] = useState(false);
+
+
     const addMovie = async () => {
         const movie = {
             title: formData.title,
@@ -223,40 +226,41 @@ function Movie(params) {
             setMessage({ isShow: true, text: 'Vui lòng điền đầy đủ thông tin', success: false });
             setIsShowMessage(true);
         } else {
-            console.log(movie, selectedFile);
+            setDisabledBtn(true);
+            setMessage({ isShow: true, text: 'Đang thêm dữ liệu, vui lòng đợi...', success: true });
 
             const response = await postDataWithFile(movie, selectedFile);
-            console.log(response);
-            // setFormData({
-            //     id: '',
-            //     title: '',
-            //     director: '',
-            //     cast: '',
-            //     duration: '',
-            //     genre: '',
-            //     language: '',
-            //     openingDay: '',
-            //     rated: '',
-            //     status: 'Upcoming',
-            //     story: '',
-            //     poster: '',
-            //     trailer: '',
-            // });
-            // setSelectedImage(null);
-            // setSelectedFile(null);
-            // setMessage({ isShow: true, text: 'Thêm phim thành công', success: true });
-
+            getMovie();
+            setFormData({
+                id: '',
+                title: '',
+                director: '',
+                cast: '',
+                duration: '',
+                genre: '',
+                language: '',
+                openingDay: '',
+                rated: '',
+                status: 'Upcoming',
+                story: '',
+                poster: '',
+                trailer: '',
+            });
+            setSelectedImage(null);
+            setSelectedFile(null);
+            setMessage({ isShow: true, text: 'Thêm phim thành công', success: true });
+            
+            setDisabledBtn(false);
         }
     }
 
     const postDataWithFile = async (data, file) => {
         const formData = new FormData();
 
-        
         formData.append('poster', file);
         const movieBlob = new Blob([JSON.stringify(data)], { type: 'application/json' });
         formData.append('movie', movieBlob);
-        
+
         try {
             const response = await fetch('http://localhost:8080/movies', {
                 method: 'POST',
@@ -267,6 +271,7 @@ function Movie(params) {
             });
 
             if (!response.ok) {
+                setMessage({ isShow: true, text: 'Vui lòng kiểm tra lại dữ liệu phải đầy đủ ý nghĩa (Ngày khởi chiếu dạng yyyy-mm-dd)', success: false });
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const result = await response.json();
@@ -437,6 +442,8 @@ function Movie(params) {
                                             <td className="align-middle col-3" >Thời lượng</td>
                                             <td className="align-middle col-2" >
                                                 <input
+                                                    placeholder='Phút'
+                                                    type='number'
                                                     className='form-control bg-light'
                                                     name="duration"
                                                     value={formData.duration}
@@ -477,6 +484,7 @@ function Movie(params) {
                                             <td className="align-middle col-3" >Khởi chiếu</td>
                                             <td colSpan={3} className="align-middle col-2" >
                                                 <input
+                                                    type='date'
                                                     className='form-control bg-light'
                                                     name="openingDay"
                                                     value={formData.openingDay}
@@ -564,25 +572,25 @@ function Movie(params) {
                         )}
                         {action === 'edit-movie' ? (
                             <>
-                                <button className='btn btn-primary m-2' type="button" onClick={handleBack}>
+                                <button className='btn btn-primary m-2' disabled={disabledBtn} type="button" onClick={handleBack}>
                                     Quay về
                                 </button>
                                 {isEditable ? (
-                                    <button className='btn btn-primary m-2' type="button" onClick={() => { }}>
+                                    <button className='btn btn-primary m-2' disabled={disabledBtn} type="button" onClick={() => { }}>
                                         Lưu
                                     </button>
                                 ) : (
-                                    <button className='btn btn-primary m-2' type="button" onClick={handleEditToggle}>
+                                    <button className='btn btn-primary m-2' disabled={disabledBtn} type="button" onClick={handleEditToggle}>
                                         Chỉnh sửa
                                     </button>
                                 )}
                             </>
                         ) : (
                             <>
-                                <button className='btn btn-primary m-2' type="button" onClick={handleBack}>
+                                <button className='btn btn-primary m-2' disabled={disabledBtn} type="button" onClick={handleBack}>
                                     Quay về
                                 </button>
-                                <button className='btn btn-primary m-2' type="button" onClick={addMovie}>
+                                <button className='btn btn-primary m-2' disabled={disabledBtn} type="button" onClick={addMovie}>
                                     Thêm
                                 </button>
                             </>

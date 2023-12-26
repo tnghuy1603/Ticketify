@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/ticketManagerPage/Header'
-import Content from '../components/ticketManagerPage/Content'
 import Footer from '../components/defaultPage/Footer'
 import LogOut from '../components/customerPage/LogOut'
 import ChangePW from '../components/customerPage/ChangePW'
