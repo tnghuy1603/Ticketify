@@ -61,6 +61,7 @@ public class AuthService {
     }
 
     public SignInResponse signIn(SignInRequest request) {
+
         Authentication authToken = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
@@ -92,6 +93,7 @@ public class AuthService {
     public boolean validateAccessToken(String accessToken, User user){
         return jwtUtils.validateToken(accessToken, user);
     }
+
 
     public CustomResponse validateRestPasswordToken(String token){
         ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.findByToken(token)
@@ -160,6 +162,7 @@ public class AuthService {
         confirmationRepository.delete(confirmation);
         return new CustomResponse("Account verified", user, LocalDateTime.now());
     }
+
 
 
 

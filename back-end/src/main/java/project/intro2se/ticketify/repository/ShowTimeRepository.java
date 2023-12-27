@@ -30,5 +30,5 @@ public interface ShowTimeRepository extends JpaRepository<ShowTime, Long> {
     @Query("SELECT st FROM ShowTime st JOIN st.room r WHERE r.theater.id = :theaterId")
     List<ShowTime> findByTheater(@Param("theaterId") Long theaterId);
 
-
+    boolean existsShowTimeByMovie_Id(Long movieId);
 }
