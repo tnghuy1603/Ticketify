@@ -11,6 +11,9 @@ import DefaultPage from './page/DefaultPage'
 import TicketManagerPage from './page/TicketManagerPage'
 import ReceptionistPage from './page/ReceptionistPage'
 import OrderTicket from './components/customerPage/OrderTicket'
+import PaymentSuccess from './components/customerPage/PaymentSuccess';
+import PaymentFail from './components/customerPage/PaymentFail';
+import HistoryBooking from './components/customerPage/HistoryBooking';
 
 function App() {
   const getRoles = (accessToken) => {
@@ -74,6 +77,33 @@ function App() {
             roles.find(role => role === "ROLE_CUSTOMER") ? (
               <PrivateRoute>
                 <OrderTicket username={username} email={email} />
+              </PrivateRoute>
+            ) : (
+              <DefaultPage />
+            )
+          } />
+          <Route path='/payments/success' element={
+            roles.find(role => role === "ROLE_CUSTOMER") ? (
+              <PrivateRoute>
+                <PaymentSuccess username={username} email={email} />
+              </PrivateRoute>
+            ) : (
+              <DefaultPage />
+            )
+          } />
+          <Route path='/payments/cancel' element={
+            roles.find(role => role === "ROLE_CUSTOMER") ? (
+              <PrivateRoute>
+                <PaymentFail username={username} email={email} />
+              </PrivateRoute>
+            ) : (
+              <DefaultPage />
+            )
+          } />
+          <Route path='/history-booking' element={
+            roles.find(role => role === "ROLE_CUSTOMER") ? (
+              <PrivateRoute>
+                <HistoryBooking username={username} email={email} />
               </PrivateRoute>
             ) : (
               <DefaultPage />

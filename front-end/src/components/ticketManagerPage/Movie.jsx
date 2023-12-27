@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import useAuth from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faMagnifyingGlass, faAdd, faEdit, faRemove, faAngleRight, faUnsorted, faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faMagnifyingGlass, faAdd, faEdit, faTrash, faAngleRight, faUnsorted, faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from '../defaultPage/Loading'
 import { set } from 'date-fns';
 
 function Movie(params) {
-    const auth = useAuth()
+    const auth = useAuth();
     const [movies, setMovies] = useState(null);
     const [moviesDisplay, setMoviesDisplay] = useState(null);
 
@@ -162,6 +162,7 @@ function Movie(params) {
     const [isEditable, setIsEditable] = useState(false);
     const handleEditToggle = () => {
         setIsEditable(true);
+        setMessage({ isShow: false, text: '', success: false });
     };
     const handleBack = () => {
         setAction('manage-movie');
@@ -193,7 +194,6 @@ function Movie(params) {
     };
 
     const [message, setMessage] = useState({ isShow: false, text: '', success: false });
-    const [isShowMessage, setIsShowMessage] = useState(false);
 
     const isObjectEmpty = (obj) => {
         for (const key in obj) {
@@ -221,10 +221,9 @@ function Movie(params) {
             story: formData.story,
             trailer: formData.trailer,
         }
-
+        console.log(movie);
         if (isObjectEmpty(movie) || selectedImage === null || selectedImage === '') {
             setMessage({ isShow: true, text: 'Vui lòng điền đầy đủ thông tin', success: false });
-            setIsShowMessage(true);
         } else {
             setDisabledBtn(true);
             setMessage({ isShow: true, text: 'Đang thêm dữ liệu, vui lòng đợi...', success: true });
@@ -249,7 +248,7 @@ function Movie(params) {
             setSelectedImage(null);
             setSelectedFile(null);
             setMessage({ isShow: true, text: 'Thêm phim thành công', success: true });
-            
+
             setDisabledBtn(false);
         }
     }
@@ -271,7 +270,71 @@ function Movie(params) {
             });
 
             if (!response.ok) {
-                setMessage({ isShow: true, text: 'Vui lòng kiểm tra lại dữ liệu phải đầy đủ ý nghĩa (Ngày khởi chiếu dạng yyyy-mm-dd)', success: false });
+                setMessage({ isShow: true, text: 'Vui lòng kiểm tra lại dữ liệu phải đầy đủ ý nghĩa', success: false });
+                setDisabledBtn(false);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    };
+
+    const editMovie = async () => {
+        const movie = {
+            id: formData.id,
+            title: formData.title,
+            director: formData.director,
+            cast: formData.cast,
+            duration: formData.duration,
+            genre: formData.genre,
+            language: formData.language,
+            openingDay: formData.openingDay,
+            rated: formData.rated,
+            status: formData.status,
+            story: formData.story,
+            trailer: formData.trailer,
+        }
+        if (isObjectEmpty(movie) || selectedImage === null || selectedImage === '') {
+            setMessage({ isShow: true, text: 'Vui lòng điền đầy đủ thông tin', success: false });
+        } else {
+            setDisabledBtn(true);
+            setMessage({ isShow: true, text: 'Đang cập nhật dữ liệu, vui lòng đợi...', success: true });
+            
+            const response = await putDataWithFile(movie, selectedFile);
+            getMovie();
+            setFormData(response);
+            setSelectedImage(response.poster);
+            setSelectedFile(null);
+            setMessage({ isShow: true, text: 'Cập nhật phim thành công', success: true });
+            setDisabledBtn(false);
+            setIsEditable(false);
+        }
+    }
+
+    const putDataWithFile = async (data, file) => {
+        const formData = new FormData();
+
+        if (file !== null) {
+            formData.append('poster', file);
+        }
+        const movieBlob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        formData.append('movie', movieBlob);
+
+        try {
+            const response = await fetch('http://localhost:8080/movies', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${auth.accessToken}`,
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                setMessage({ isShow: true, text: 'Vui lòng kiểm tra lại dữ liệu phải đầy đủ ý nghĩa', success: false });
+                setDisabledBtn(false);
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const result = await response.json();
@@ -284,7 +347,6 @@ function Movie(params) {
 
     return (
         <>
-            <h3 className='m-2'>Vui lòng chọn rạp trước khi thực hiện các thao tác quản lý.</h3>
             <div className="p-4" style={{ backgroundColor: '#f0f0f0' }}>
                 <div className='m-3 d-flex justify-content-start align-items-center'>
                     <div>
@@ -305,7 +367,7 @@ function Movie(params) {
                             <div className='d-flex justify-content-start align-items-center'>
                                 <form className='mx-3 d-flex justify-content-start align-items-center'>
                                     <label htmlFor='filter' className='mx-2'>Tìm theo</label>
-                                    <select style={{ backgroundColor: 'white', color: 'black' }} onChange={handleFilterBy}>
+                                    <select id='filter' className='p-1 rounded-2' style={{ backgroundColor: 'white', color: 'black' }} onChange={handleFilterBy}>
                                         {listFilterBy.map((item) => (
                                             <option style={{ backgroundColor: 'white', color: 'black' }} key={item} value={item}>{item}</option>
                                         ))}
@@ -373,7 +435,7 @@ function Movie(params) {
                                                         <FontAwesomeIcon icon={faEdit} />
                                                     </button>
                                                     <button className='btn btn-sm text-danger m-2' style={{ backgroundColor: '#ffffff' }}>
-                                                        <FontAwesomeIcon icon={faRemove} />
+                                                        <FontAwesomeIcon icon={faTrash} />
                                                     </button>
                                                 </div>
 
@@ -408,7 +470,7 @@ function Movie(params) {
                                                         className='form-control bg-light'
                                                         name="id"
                                                         value={formData.id}
-                                                        disabled={!isEditable}
+                                                        disabled={true}
                                                         onChange={handleChange} required></input>
                                                 )}
 
@@ -576,7 +638,7 @@ function Movie(params) {
                                     Quay về
                                 </button>
                                 {isEditable ? (
-                                    <button className='btn btn-primary m-2' disabled={disabledBtn} type="button" onClick={() => { }}>
+                                    <button className='btn btn-primary m-2' disabled={disabledBtn} type="button" onClick={editMovie}>
                                         Lưu
                                     </button>
                                 ) : (

@@ -17,12 +17,12 @@ const MovieCard = ({ isLogin, index, movie, onClick }) => {
 
     return (
         <div style={{ backgroundColor: styles[index % 4], userSelect: 'none' }} id={`${movie.id}`}
-            className="movie-card col-md-6 g-2 p-3 shadow border border-5 rounded-5 d-flex justify-content-around text-light"
+            className="movie-card col-md-6 p-3 shadow border border-5 rounded-5 d-flex justify-content-around text-light"
             onClick={() => {
                 onClick(index)
             }}>
             <img src={movie.poster} alt={`${movie.id} Poster`} style={{ height: "20rem" }} />
-            <div className="d-flex flex-column justify-content-between" style={{ width: "10rem" }}>
+            <div className="d-flex flex-column justify-content-between" style={{ width: "15rem" }}>
                 <h5 className="mx-auto">{movie.title}</h5>
                 <div>
                     <p className="mx-auto">Đạo diễn: {movie.director}</p>

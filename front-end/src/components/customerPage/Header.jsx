@@ -33,7 +33,7 @@ function HomepageHeader(params) {
                             <a className="nav-link text-light active" aria-current="page" href="/">Trang chủ</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link text-light" href="#">Lịch sử đặt vé</a>
+                            <a className="nav-link text-light" href="/history-booking">Lịch sử đặt vé</a>
                         </li>
                     </ul>
                 </div>

@@ -10,9 +10,12 @@ import { addDays, format, parseISO } from 'date-fns';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
 import './styles.css'
+import useAuth from "../../hooks/useAuth";
 
 function CustomerDashBoard(params) {
   const { id } = useParams();
+  const auth = useAuth();
+
   const [step, setStep] = useState('choose-time');
   const [prevStep, setPrevStep] = useState(null);
   const [movie, setMovie] = useState(null);
@@ -212,6 +215,10 @@ function CustomerDashBoard(params) {
   }
 
   useEffect(() => {
+    if (step !== 'choose-payment') {
+      setIsCheckedCondition(false);
+      setPaymentMethod(false);
+    }
     if (step === 'choose-time') {
       setShowTimeChosen(null);
       setPrevStep(null);
@@ -273,14 +280,63 @@ function CustomerDashBoard(params) {
     setPaymentMethod(!paymentMethod);
   }
 
-  const handleCheckoutInit = () => {
+  const [message, setMessage] = useState({ isShow: false, text: '', status: '' });
+  const [disabledBtnPayment, setDisabledBtnPayment] = useState(false);
+
+  const handleCheckoutInit = async () => {
     if (!isCheckedCondition || !paymentMethod) {
       alert("Vui lòng chọn chấp nhận các điều khoản, điều kiện và phương thức thanh toán.");
     } else {
-      console.log('handle payment');
+      setDisabledBtnPayment(true);
+      setMessage({ isShow: true, text: 'Đang xử lý dữ liệu, vui lòng đợi...', status: 'loading' });
+      const response = await postCheckoutInit();
+      setDisabledBtnPayment(false);
+      setMessage({ isShow: false, text: '', status: '' });
+      if (response && response.status === 'Success') {
+        console.log(seats, foods);
+        let seatId = [];
+        // let foodId = [];
+        for (let i of seats) {
+          seatId.push(i.id);
+        }
+        // for (let i of foods) {
+        //   Thêm food here
+        //   {
+        //     "foodId": 0,
+        //     "quantity": 0
+        //   }
+        //   foodId.push()
+        // }
+        const item = {
+          "ticketIds": seatId,
+          "orderLineDtoList": []
+        };
+        localStorage.setItem('listItem', JSON.stringify(item));
+        window.location.href = response.redirectUrl;
+      }
     }
   }
-  
+
+  const postCheckoutInit = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/checkout/init?fee=${total}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${auth.accessToken}`,
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+
   return (
     <>
       <Header {...params} ></Header>
@@ -564,8 +620,8 @@ function CustomerDashBoard(params) {
                   {foods.length > 0 ? (
                     foods.map((item) => (
                       <div key={item.id} className='d-flex justify-content-between' style={{ backgroundColor: '#e3e3e3', margin: '1px' }}>
-                        <div className='p-3 fs-5'>{item.seat.seatNumber}</div>
-                        <div className='p-3 fs-5'>{item.price} <u>đ</u></div>
+                        {/* <div className='p-3 fs-5'>{item.seat.seatNumber}</div>
+                        <div className='p-3 fs-5'>{item.price} <u>đ</u></div> */}
                       </div>
                     ))
                   ) : (
@@ -682,9 +738,15 @@ function CustomerDashBoard(params) {
             </div>
           </div>
 
+          {message.isShow && (
+            <div className='d-flex flex-column justify-content-center align-items-center my-4'>
+              <div>{message.text}</div>
+              <LoadingSpinner />
+            </div>
+          )}
           <div className='container'>
             <button onClick={handleBack} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }}>Quay lại</button>
-            <button onClick={handleCheckoutInit} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }} disabled={seats.length <= 0}>Thanh toán</button>
+            <button onClick={handleCheckoutInit} className='btn btn-lg text-light fw-bold m-2' style={{ background: 'orange' }} disabled={seats.length <= 0 || disabledBtnPayment}>Thanh toán</button>
           </div>
         </div>
       ) : (
