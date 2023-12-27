@@ -28,11 +28,7 @@ public class TicketController {
 
         return ResponseEntity.ok(ticketService.generateTicket(showTimeId, price));
     }
-    @MessageMapping("/select-ticket")
-    @SendTo("public/book-ticket")
-    public String testingUser(String msg){
-        return msg;
-    }
+
     @DeleteMapping
     public ResponseEntity<?> deleteTicketByShowtime(@RequestParam(name = "showtime") Long showtimeId){
         return ResponseEntity.ok(ticketService.deleteByShowtime(showtimeId));

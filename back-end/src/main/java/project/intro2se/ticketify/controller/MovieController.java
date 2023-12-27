@@ -22,13 +22,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MovieController {
     private final MovieService movieService;
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<Movie>> findByStatus(@RequestParam(name = "status") @NotBlank String status){
-//        if(status != null){
-//            return ResponseEntity.ok(movieService.findByStatus(status));
-//        } else{
-//            return ResponseEntity.ok(movieService.findAll());
-//        }
         return ResponseEntity.ok(movieService.findByStatus(status));
     }
     @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -45,6 +40,10 @@ public class MovieController {
     public ResponseEntity<Movie> addMovie(@RequestPart(name = "movie") AddMovieRequest request, @RequestPart("poster") MultipartFile poster) throws ExecutionException, InterruptedException {
 
         return ResponseEntity.ok(movieService.add(request, poster));
+    }
+    @DeleteMapping("/{movieId}")
+    public ResponseEntity<?> deleteMovie(@PathVariable Long movieId){
+        return ResponseEntity.ok(movieService.deleteById(movieId));
     }
 
 

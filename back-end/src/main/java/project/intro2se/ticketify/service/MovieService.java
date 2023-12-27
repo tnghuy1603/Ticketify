@@ -2,15 +2,19 @@ package project.intro2se.ticketify.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import project.intro2se.ticketify.domain.Movie;
 import project.intro2se.ticketify.dto.AddMovieRequest;
+import project.intro2se.ticketify.dto.CustomResponse;
 import project.intro2se.ticketify.dto.UpdateMovieRequest;
 import project.intro2se.ticketify.exception.ResourceNotFoundException;
 import project.intro2se.ticketify.repository.MovieRepository;
+import project.intro2se.ticketify.repository.ShowTimeRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 public class MovieService {
     private final MovieRepository movieRepository;
     private final CloudinaryService cloudinaryService;
+    private final ShowTimeRepository showTimeRepository;
     // moviegoer
     public Movie findById(Long movieId){
         return movieRepository.findById(movieId).orElseThrow(()-> new ResourceNotFoundException("No movie with that id"));
@@ -82,4 +87,11 @@ public class MovieService {
     }
 
 
+    public CustomResponse deleteById(Long movieId) {
+        if(!showTimeRepository.existsShowTimeByMovie_Id(movieId)){
+            return new CustomResponse("There are some showtimes for this movie. Can not delete it", null, LocalDateTime.now());
+        }
+        movieRepository.deleteById(movieId);
+        return new CustomResponse("Delete success fully", null, LocalDateTime.now());
+    }
 }
