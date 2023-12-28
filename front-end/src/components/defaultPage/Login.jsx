@@ -55,11 +55,7 @@ function LoginSignup() {
         }
 
     }
-    useEffect(() => {
-        if (!isChecked && email !== '' && pwd !== '') {
-            handleSignIn();
-        }
-    }, [email, pwd]);
+
     const [emailSU, setEmailSU] = useState('');
     const [pwdSU, setPwdSU] = useState('');
     const [username, setUsername] = useState('');
@@ -86,17 +82,15 @@ function LoginSignup() {
                     body: JSON.stringify({ email: emailSU, password: pwdSU, displayName: username }),
                 });
                 const data = await response.json();
-                console.log(username, emailSU, pwdSU, data);
-
+                console.log(data);
                 if (response.status === 200) {
-                    if (data.password === "Email is already in use") {
+                    if (data.message === "Email is already in use") {
                         setIsSignupSuccess(false);
                         setSignupErrorMessage("Email đã được đăng ký.");
                     } else {
                         setIsSignupSuccess(true);
                         setSignupErrorMessage("");
-                        setEmail(emailSU);
-                        setPwd(pwdSU);
+                        alert("Đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản");
                     }
                 } else {
                     setIsSignupSuccess(false);

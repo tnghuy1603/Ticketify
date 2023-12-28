@@ -24,6 +24,12 @@ function HistoryBooking(params) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
+            data.sort((a, b) => {
+                const date1 = new Date(a.createdAt);
+                const date2 = new Date(b.createdAt);
+                return date2 - date1;
+            })
+
             setHistory(data);
         } catch (error) {
             console.error('Error:', error);
@@ -34,9 +40,6 @@ function HistoryBooking(params) {
     useEffect(() => {
         getHistory();
     }, []);
-    useEffect(() => {
-        console.log(history);
-    }, [history]);
 
     const convertTimeStringToDate = (dateTimeString) => {
         return dateTimeString.replace('T', ' ');

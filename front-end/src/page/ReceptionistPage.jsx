@@ -4,6 +4,8 @@ import Content from '../components/defaultPage/Content'
 import Footer from '../components/defaultPage/Footer'
 import LogOut from '../components/customerPage/LogOut'
 import ChangePW from '../components/customerPage/ChangePW'
+
+
 function ReceptionistDashBoard(params) {
   return (
     <>

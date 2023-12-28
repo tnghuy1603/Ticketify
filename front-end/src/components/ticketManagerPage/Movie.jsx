@@ -5,7 +5,7 @@ import { faHouse, faMagnifyingGlass, faAdd, faEdit, faTrash, faAngleRight, faUns
 import LoadingSpinner from '../defaultPage/Loading'
 import { set } from 'date-fns';
 
-function Movie(params) {
+function Movie({ setDeleteId }) {
     const auth = useAuth();
     const [movies, setMovies] = useState(null);
     const [moviesDisplay, setMoviesDisplay] = useState(null);
@@ -302,7 +302,7 @@ function Movie(params) {
         } else {
             setDisabledBtn(true);
             setMessage({ isShow: true, text: 'Đang cập nhật dữ liệu, vui lòng đợi...', success: true });
-            
+
             const response = await putDataWithFile(movie, selectedFile);
             getMovie();
             setFormData(response);
@@ -344,6 +344,11 @@ function Movie(params) {
             throw error;
         }
     };
+
+    const deleteMovie = (id) => {
+        setDeleteId(id);
+        $('#deleteMovie').modal('show');
+    }
 
     return (
         <>
@@ -389,7 +394,7 @@ function Movie(params) {
 
                         {moviesDisplay ? (
                             <table className="table table-hover table-bordered shadow" style={{ borderRadius: '10px', overflow: 'hidden' }}>
-                                <thead>
+                                <thead className="table-primary">
                                     <tr style={{ cursor: 'context-menu' }}>
                                         <th scope="col">
                                             <div onClick={() => handleSortBy('id')} className='d-flex justify-content-center align-items-center'>
@@ -434,7 +439,7 @@ function Movie(params) {
                                                     <button onClick={() => handleChangeAction('edit-movie', item.id)} className='btn btn-sm text-primary m-2' style={{ backgroundColor: '#ffffff' }}>
                                                         <FontAwesomeIcon icon={faEdit} />
                                                     </button>
-                                                    <button className='btn btn-sm text-danger m-2' style={{ backgroundColor: '#ffffff' }}>
+                                                    <button onClick={() => deleteMovie(item.id)} className='btn btn-sm text-danger m-2' style={{ backgroundColor: '#ffffff' }}>
                                                         <FontAwesomeIcon icon={faTrash} />
                                                     </button>
                                                 </div>
@@ -551,7 +556,8 @@ function Movie(params) {
                                                     name="openingDay"
                                                     value={formData.openingDay}
                                                     disabled={!isEditable}
-                                                    onChange={handleChange} required></input>
+                                                    onChange={handleChange} required
+                                                    style={{ color: 'black', background: 'linear-gradient(90deg, rgba(255,255,255,1) 88%, rgba(101, 190, 195,1) 88%, rgba(101, 190, 195,1) 100%)' }} ></input>
                                             </td>
                                         </tr>
                                         <tr>

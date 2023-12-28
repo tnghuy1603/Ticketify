@@ -9,9 +9,11 @@ import Home from '../components/ticketManagerPage/Home';
 import Movie from '../components/ticketManagerPage/Movie';
 import Showtime from '../components/ticketManagerPage/Showtime';
 import LoadingSpinner from '../components/defaultPage/Loading'
-
+import DeleteMovie from '../components/ticketManagerPage/DeleteMovie';
+import Notification from '../components/ticketManagerPage/Notification';
 // import Showtime from '../components/ticketManagerPage/Showtime';
 // import Profit from '../components/ticketManagerPage/Profit';
+import '../components/ticketManagerPage/styles.css'
 
 function TicketManagerDashBoard(params) {
   const { currentChosen } = useParams();
@@ -20,7 +22,11 @@ function TicketManagerDashBoard(params) {
   const updateData = () => {
     setIsCollapse(!isCollapse);
   }
-  
+
+  const [deleteId, setDeleteId] = useState(null);
+
+  const [notification, setNotifacation] = useState({ title: '', body: '', footer: '', status: '' });
+
   return (
     <>
 
@@ -31,10 +37,12 @@ function TicketManagerDashBoard(params) {
             isCollapse={isCollapse}></SideBar>
           <div className='col p-0 d-flex flex-column justify-content-between'>
             <Header updateData={updateData} isCollapse={isCollapse} params={params} ></Header>
+            <Notification notification={notification}></Notification>
+            <DeleteMovie setNotification={setNotifacation} deleteId={deleteId}></DeleteMovie>
             {currentChosen === 'home' ? (
               <Home></Home>
             ) : currentChosen === 'movie' ? (
-              <Movie></Movie>
+              <Movie setDeleteId={setDeleteId}></Movie>
             ) : currentChosen === 'showtime' ? (
               <Showtime></Showtime>
             ) : currentChosen === 'profit' ? (

@@ -8,7 +8,7 @@ import { Form } from 'react-bootstrap';
 import LoadingSpinner from '../defaultPage/Loading'
 import { addDays, format, parseISO } from 'date-fns';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faCheckSquare } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import './styles.css'
 import useAuth from "../../hooks/useAuth";
 
@@ -291,7 +291,7 @@ function CustomerDashBoard(params) {
       setMessage({ isShow: true, text: 'Đang xử lý dữ liệu, vui lòng đợi...', status: 'loading' });
       const response = await postCheckoutInit();
       setDisabledBtnPayment(false);
-      setMessage({ isShow: false, text: '', status: '' });
+      // setMessage({ isShow: false, text: '', status: '' });
       if (response && response.status === 'Success') {
         console.log(seats, foods);
         let seatId = [];

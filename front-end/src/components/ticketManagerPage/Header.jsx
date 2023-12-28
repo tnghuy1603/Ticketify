@@ -51,7 +51,6 @@ function HomepageHeader({ updateData, isCollapse, params }) {
                                 <FontAwesomeIcon icon={faUser} /> {params.username}
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a className="dropdown-item btn-logout" href="#" >Thông tin cá nhân</a></li>
                                 <li><a className="dropdown-item btn-logout" href="#" >Đăng xuất</a></li>
                                 <li><a className="dropdown-item btn-changePW" href="#">Đổi mật khẩu</a></li>
                             </ul>

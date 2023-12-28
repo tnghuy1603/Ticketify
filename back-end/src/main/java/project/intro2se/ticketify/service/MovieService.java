@@ -88,7 +88,7 @@ public class MovieService {
 
 
     public CustomResponse deleteById(Long movieId) {
-        if(!showTimeRepository.existsShowTimeByMovie_Id(movieId)){
+        if(showTimeRepository.existsShowTimeByMovie_Id(movieId)){
             return new CustomResponse("There are some showtimes for this movie. Can not delete it", null, LocalDateTime.now());
         }
         movieRepository.deleteById(movieId);

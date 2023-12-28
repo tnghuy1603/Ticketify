@@ -14,6 +14,7 @@ import OrderTicket from './components/customerPage/OrderTicket'
 import PaymentSuccess from './components/customerPage/PaymentSuccess';
 import PaymentFail from './components/customerPage/PaymentFail';
 import HistoryBooking from './components/customerPage/HistoryBooking';
+import VerifyAccount from './components/defaultPage/VerifyAccount';
 
 function App() {
   const getRoles = (accessToken) => {
@@ -108,6 +109,9 @@ function App() {
             ) : (
               <DefaultPage />
             )
+          } />
+          <Route path='/verify-account' element={
+            <VerifyAccount />
           } />
           <Route
             path='/manage/:currentChosen' element={

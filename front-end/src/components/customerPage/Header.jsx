@@ -44,10 +44,9 @@ function HomepageHeader(params) {
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item dropdown ps-4">
                             <a className="nav-link dropdown-toggle text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <FontAwesomeIcon icon={faUser}/> {params.username}
+                                <FontAwesomeIcon icon={faUser} /> {params.username}
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a className="dropdown-item btn-logout" href="#" >Thông tin cá nhân</a></li>
                                 <li><a className="dropdown-item btn-logout" href="#" >Đăng xuất</a></li>
                                 <li><a className="dropdown-item btn-changePW" href="#">Đổi mật khẩu</a></li>
                             </ul>
