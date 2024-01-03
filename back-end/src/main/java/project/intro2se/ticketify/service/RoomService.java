@@ -20,6 +20,7 @@ public class RoomService {
     private final ShowTimeRepository showTimeRepository;
     public boolean isAvailableRoom(Room room, LocalDateTime startAt, LocalDateTime endAt){
         List<ShowTime> showTimes = showTimeRepository.findByDateAndRoom(startAt.toLocalDate(), room.getId());
+        showTimes.addAll(showTimeRepository.findByDateAndRoom(endAt.toLocalDate(), room.getId()));
         for(ShowTime showTime: showTimes){
             if((showTime.getStartAt().isAfter(startAt) && showTime.getStartAt().isBefore(endAt) )
                     || (showTime.getEndAt().isAfter(startAt) && showTime.getEndAt().isBefore(endAt)))
