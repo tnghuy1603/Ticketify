@@ -28,9 +28,7 @@ function Footer() {
                                 <h6 className="text-uppercase fw-bold">Rạp chiếu phim</h6>
                                 <hr className="mb-4 mt-0 d-inline-block mx-auto footer-company-name"/>
                                 <p>
-                                    Here you can use rows and columns to organize your footer
-                                    content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                                    elit.
+                                    H3DC
                                 </p>
                             </div>
                             <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4 footer-branch-container">

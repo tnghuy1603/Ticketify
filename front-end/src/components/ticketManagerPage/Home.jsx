@@ -4,7 +4,7 @@ import React from 'react';
 function Home() {
 
     return (
-        <div className="jumbotron" style={{ backgroundColor: '#f0f0f0', height: '70vh' }}>
+        <div className="jumbotron" style={{ backgroundColor: '#f0f0f0', height: '70vh', paddingTop: '7rem'}}>
             <h1 className="display-4">Quản Lý Phim</h1>
             <p className="lead">Đây là trang quản lý phim của website.</p>
             <hr className="my-4" />

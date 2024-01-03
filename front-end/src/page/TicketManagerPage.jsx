@@ -8,11 +8,10 @@ import SideBar from '../components/ticketManagerPage/SideBar';
 import Home from '../components/ticketManagerPage/Home';
 import Movie from '../components/ticketManagerPage/Movie';
 import Showtime from '../components/ticketManagerPage/Showtime';
+import Profit from '../components/ticketManagerPage/Profit';
 import LoadingSpinner from '../components/defaultPage/Loading'
 import DeleteMovie from '../components/ticketManagerPage/DeleteMovie';
 import Notification from '../components/ticketManagerPage/Notification';
-// import Showtime from '../components/ticketManagerPage/Showtime';
-// import Profit from '../components/ticketManagerPage/Profit';
 import '../components/ticketManagerPage/styles.css'
 
 function TicketManagerDashBoard(params) {
@@ -35,7 +34,7 @@ function TicketManagerDashBoard(params) {
           <SideBar
             chosen={currentChosen}
             isCollapse={isCollapse}></SideBar>
-          <div className='col p-0 d-flex flex-column justify-content-between'>
+          <div className='col p-0 d-flex flex-column justify-content-between'  style={{flexShrink: '0'}}>
             <Header updateData={updateData} isCollapse={isCollapse} params={params} ></Header>
             <Notification notification={notification}></Notification>
             <DeleteMovie setNotification={setNotifacation} deleteId={deleteId}></DeleteMovie>
@@ -46,9 +45,7 @@ function TicketManagerDashBoard(params) {
             ) : currentChosen === 'showtime' ? (
               <Showtime></Showtime>
             ) : currentChosen === 'profit' ? (
-              <div className="jumbotron" style={{ backgroundColor: '#f0f0f0', height: '70vh' }}>
-                doanh thu
-              </div>
+              <Profit></Profit>
             ) : (
               <Home></Home>
             )}

@@ -56,6 +56,6 @@
 
 .showtime:hover {
     color: blue !important;
-    transform: scale(1.1);
+    transform: scale(1.05);
     border: 1px solid black !important;
 }
