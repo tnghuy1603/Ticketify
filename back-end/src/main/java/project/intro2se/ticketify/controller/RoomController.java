@@ -29,5 +29,11 @@ public class RoomController {
         }
         return ResponseEntity.ok(roomService.findAll());
     }
+    @GetMapping("/available")
+    public ResponseEntity<?> isAvailable(@RequestParam(name = "room") Long roomId,
+                                         @RequestParam(name = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startAt,
+                                         @RequestParam(name = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endAt){
+        return ResponseEntity.ok(roomService.isAvailableRoom(roomId, startAt, endAt));
+    }
 
 }

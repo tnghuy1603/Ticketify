@@ -129,6 +129,7 @@ public class TransactionService {
         return new MonthlyRevenue(yearMonth, dailyRevenues, total);
     }
 
+
     public ConfirmBookingResponse confirmBooking(BookingRequest request){
         Transaction transaction = new Transaction();
         BigDecimal totalPrice = getTotalAmount(request, transaction);
@@ -238,7 +239,7 @@ public class TransactionService {
         for(Ticket ticket: transaction.getTickets()){
             ticket.setBooked(true);
         }
-        transaction.setId("temp");
+//        transaction.setId("temp");
         transaction.setTotal(totalPrice);
         transaction.setUser(user);
         transaction.setCreatedAt(LocalDateTime.now());

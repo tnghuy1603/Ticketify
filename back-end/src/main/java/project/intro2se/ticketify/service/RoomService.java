@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.intro2se.ticketify.domain.Room;
 import project.intro2se.ticketify.domain.ShowTime;
+import project.intro2se.ticketify.dto.CustomResponse;
 import project.intro2se.ticketify.exception.ResourceNotFoundException;
 import project.intro2se.ticketify.repository.RoomRepository;
 import project.intro2se.ticketify.repository.ShowTimeRepository;
@@ -17,13 +18,14 @@ import java.util.List;
 public class RoomService {
     private final RoomRepository roomRepository;
     private final ShowTimeRepository showTimeRepository;
-    private boolean isAvailableRoom(Room room, LocalDateTime startAt, LocalDateTime endAt){
+    public boolean isAvailableRoom(Room room, LocalDateTime startAt, LocalDateTime endAt){
         List<ShowTime> showTimes = showTimeRepository.findByDateAndRoom(startAt.toLocalDate(), room.getId());
         for(ShowTime showTime: showTimes){
             if((showTime.getStartAt().isAfter(startAt) && showTime.getStartAt().isBefore(endAt) )
                     || (showTime.getEndAt().isAfter(startAt) && showTime.getEndAt().isBefore(endAt)))
             {
                 return false;
+
             }
         }
         return true;
@@ -49,4 +51,15 @@ public class RoomService {
     public List<Room> findAll() {
         return roomRepository.findAll();
     }
+    public CustomResponse isAvailableRoom(Long roomId, LocalDateTime startAt, LocalDateTime endAt){
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("No room with id = " + roomId));
+        boolean isAvailable = isAvailableRoom(room, startAt, endAt);
+        if(isAvailableRoom(room, startAt, endAt)){
+            return new CustomResponse("Room is available", room, LocalDateTime.now());
+        }
+        return new CustomResponse("Room is occupied", null, LocalDateTime.now());
+
+    }
+
+
 }
