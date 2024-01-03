@@ -33,7 +33,7 @@ function HomepageHeader(params) {
                             <a className="nav-link text-light active" aria-current="page" href="/">Trang chủ</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link text-light" href="#">Lịch sử đặt vé</a>
+                            <a className="nav-link text-light" href="/history-booking">Lịch sử đặt vé</a>
                         </li>
                     </ul>
                 </div>
@@ -44,10 +44,9 @@ function HomepageHeader(params) {
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item dropdown ps-4">
                             <a className="nav-link dropdown-toggle text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <FontAwesomeIcon icon={faUser}/> {params.username}
+                                <FontAwesomeIcon icon={faUser} /> {params.username}
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a className="dropdown-item btn-logout" href="#" >Thông tin cá nhân</a></li>
                                 <li><a className="dropdown-item btn-logout" href="#" >Đăng xuất</a></li>
                                 <li><a className="dropdown-item btn-changePW" href="#">Đổi mật khẩu</a></li>
                             </ul>

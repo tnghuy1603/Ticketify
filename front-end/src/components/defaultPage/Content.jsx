@@ -5,8 +5,10 @@ import MovieList from "./MovieList";
 function Content(username) {
     return (
         <div>
-            <MovieBanner {...username}/>
-            <MovieList {...username}/>
+            <div className="py-5" style={{background: 'rgb(102, 67, 111)'}}>
+                <MovieBanner {...username} />
+            </div>
+            <MovieList {...username} />
         </div>
     )
 }

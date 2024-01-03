@@ -1,6 +1,5 @@
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
-import axios from "axios";
 import useLocalStorage from "../hooks/useLocalStorage";
 import LoadingSpinner from "./defaultPage/Loading"
 import { redirect } from "react-router-dom";
