@@ -59,3 +59,15 @@
     transform: scale(1.05);
     border: 1px solid black !important;
 }
+
+
+.chart-container {
+    text-align: center;
+}
+
+.chart-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}

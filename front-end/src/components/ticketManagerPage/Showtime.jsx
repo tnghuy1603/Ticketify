@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faAdd, faAngleRight, faMagnifyingGlass, faEdit, faTrash, faUnsorted, faSortUp, faSortDown, faSave, faBackward } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from '../defaultPage/Loading'
 import { addDays, addMinutes, format, parseISO } from 'date-fns';
+import { da } from 'date-fns/locale';
 
 
 function Showtime() {
@@ -441,11 +442,36 @@ function Showtime() {
         return endFormatted;
     }
 
-    const checkConflict = (item) => {
+    async function checkAvailableShowtime(end) {
+        try {
+            const response = await fetch(`http://localhost:8080/rooms/available?room=${parseInt(roomChosen)}&start=${timeStartAddShowtime}&end=${end}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${auth.accessToken}`,
+                },
+            });
+
+            if (!response.ok) {
+                return false;
+            }
+            const data = await response.json();
+            if (data.message === 'Room is available') {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+
+    const checkConflict = async (item) => {
         const end = calculateEnd(timeStartAddShowtime, item.duration);
         setTimeEndAddShowtime(end);
-        const condition = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
-        if (condition === 1) {
+        const condition = await checkAvailableShowtime(end);
+        if (condition) {
             const data = {
                 movieId: item.id,
                 roomId: parseInt(roomChosen),

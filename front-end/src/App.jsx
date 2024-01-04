@@ -124,6 +124,17 @@ function App() {
               )
             }
           />
+          <Route
+            path='/admin/:currentChosen' element={
+              roles.find(role => role === "ROLE_ADMIN") ? (
+                <PrivateRoute>
+                  <AdminPage username={username} email={email} />
+                </PrivateRoute>
+              ) : (
+                <DefaultPage />
+              )
+            }
+          />
         </Routes>
       </BrowserRouter>
 
