@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
-import Header from "../components/adminPage/Header";
+import Header from "../components/ticketManagerPage/Header";
 import Home from '../components/adminPage/Home'
-import Sidebar from '../components/adminPage/Sidebar'
+import SideBar from '../components/adminPage/Sidebar'
 import ManageUser from '../components/adminPage/ManageUser'
 import ManageComment from '../components/adminPage/ManageComment'
 import Footer from '../components/defaultPage/Footer'
@@ -12,39 +12,31 @@ import '../components/adminPage/styles.css'
 
 function AdminDashBoard(params) {
   const { currentChosen } = useParams();
-  console.log(currentChosen);
-  const [dataReceived, setDataReceived] = useState('')
-  const [optionReceived, setOptionReceived] = useState('')
-  const receiveSearchHeader = (data) => {
-    setDataReceived(data);
+
+  const [isCollapse, setIsCollapse] = useState(false);
+  const updateData = () => {
+    setIsCollapse(!isCollapse);
   }
 
-  const receiveOptionHeader = (data) => {
-    setOptionReceived(data);
-  }
   return (
     <>
       <div className="container-fluid">
         <div className="row">
-          {/* <SideBar
+          <SideBar
             chosen={currentChosen}
-            isCollapse={isCollapse}></SideBar> */}
+            isCollapse={isCollapse}></SideBar>
           <div className='col p-0 d-flex flex-column justify-content-between' style={{ flexShrink: '0' }}>
-          <section id="interface">
-            {/* <Header params={params} /> */}
-            <Header onSearchHeader={receiveSearchHeader} onOptionChange={receiveOptionHeader} />
-            <Sidebar />
+            <Header updateData={updateData} isCollapse={isCollapse} params={params} ></Header>
             {currentChosen === 'home' ? (
               <Home></Home>
             ) : currentChosen === 'manage-users' ? (
-              <ManageUser dataSearch={dataReceived} dataOption={optionReceived} />
+              <ManageUser/>
             ) : currentChosen === 'manage-comments' ? (
               <ManageComment />
             ) : (
               <Home></Home>
             )}
             <Footer></Footer>
-          </section>
             <LogOut></LogOut>
             <ChangePW {...params}></ChangePW>
           </div>
