@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios"
 import useAuth from "../../hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const ManageUser = () => {
@@ -82,7 +82,7 @@ const ManageUser = () => {
                 <h2 className="i-name w-25 pe-5 mt-3">Manage Users</h2>
                 <div className="btn-add-user-wrapper">
 
-                <button type="button" className="btn-add-user btn btn-outline-secondary">Add user</button>
+                    <button type="button" className="btn-add-user btn btn-outline-secondary">Add user</button>
                 </div>
             </div>
             <div className="table-filter mb-0 pb-0">
@@ -99,6 +99,8 @@ const ManageUser = () => {
                                 <option value="displayName">Name</option>
                                 <option value="email">Email</option>
                                 <option value="role">Role</option>
+
+                                <FontAwesomeIcon icon={faCaretDown} className="ms-2 ps-0 text-black" />
                             </select>
                         </div>
                         <div className="filter-group d-flex">
@@ -106,6 +108,10 @@ const ManageUser = () => {
                             <select className="form-control" onChange={handleStatusChange}>
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
+
+
+                                <FontAwesomeIcon icon={faCaretDown} className="ms-2 ps-0 text-black" />
+
                             </select>
                         </div>
                         <span className="filter-icon-wrapper"><FontAwesomeIcon icon={faFilter} className="filter-icon" /></span>

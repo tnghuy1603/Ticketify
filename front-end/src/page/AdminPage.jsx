@@ -30,6 +30,7 @@ function AdminDashBoard(params) {
             chosen={currentChosen}
             isCollapse={isCollapse}></SideBar> */}
           <div className='col p-0 d-flex flex-column justify-content-between' style={{ flexShrink: '0' }}>
+          <section id="interface">
             {/* <Header params={params} /> */}
             <Header onSearchHeader={receiveSearchHeader} onOptionChange={receiveOptionHeader} />
             <Sidebar />
@@ -42,10 +43,10 @@ function AdminDashBoard(params) {
             ) : (
               <Home></Home>
             )}
-
+            <Footer></Footer>
+          </section>
             <LogOut></LogOut>
             <ChangePW {...params}></ChangePW>
-            <Footer></Footer>
           </div>
         </div>
       </div>

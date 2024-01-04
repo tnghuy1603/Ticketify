@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faMagnifyingGlass, faBars, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faMagnifyingGlass, faBars, faUser, faCaretDown} from "@fortawesome/free-solid-svg-icons";
 
 const Header = ({ onSearchHeader, onOptionChange }) => {
     const [search, setSearch] = useState('');
@@ -26,6 +26,7 @@ const Header = ({ onSearchHeader, onOptionChange }) => {
                     <li className="nav-item dropdown ps-4">
                         <a className="nav-link dropdown-toggle text-light" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <FontAwesomeIcon icon={faUser} className="ms-0 ps-0 text-black" />
+                            <FontAwesomeIcon icon={faCaretDown} className="ms-2 ps-0 text-black" />
                         </a>
                         <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li><a className="dropdown-item btn-logout" href="#" >Đăng xuất</a></li>
