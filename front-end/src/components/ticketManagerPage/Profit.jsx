@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { PieChart, Cell, Pie, ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import useAuth from '../../hooks/useAuth';
 import { subMonths, startOfMonth, endOfMonth, format } from 'date-fns';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDollar } from "@fortawesome/free-solid-svg-icons";
 import { da } from 'date-fns/locale';
 
 const CombinedColumnLineChart = () => {
@@ -58,7 +60,7 @@ const CombinedColumnLineChart = () => {
     return last12Months;
   }
 
-  const last12months = getLast12Months();
+  const last12months = getLast12Months().reverse();
   const [data, setData] = useState({ total: 0, arr: [] });
   let dataTemp = {
     total: 0,
@@ -70,57 +72,101 @@ const CombinedColumnLineChart = () => {
     getData(last12months);
   }, []);
 
+  const [month, setMonth] = useState(null);
+
   useEffect(() => {
-    console.log(data);
+    if (data.arr.length > 0) {
+      setMonth(data.arr[0].yearMonth);
+      setDataMonth(data.arr[0]);
+    }
   }, [data]);
 
+  const [dataMonth, setDataMonth] = useState(null);
+
+  useEffect(() => {
+    if (data.arr.length > 0) {
+      setDataMonth(data.arr.filter(e => e.yearMonth === month)[0]);
+    }
+  }, [month]);
 
   const colors = [
-    '#8884d8', '#82ca9d', '#ffc658', '#ff7f50',
-    '#5e5e5e', '#b3b3b3', '#ffcc29', '#ff7043',
-    '#a2d5f2', '#ff9999', '#66b3ff', '#99ff99'
+    '#4e79a7', '#f28e2b', '#e15759', '#76b7b2',
+    '#59a14f', '#edc948', '#b07aa1', '#ff9da7',
+    '#9c755f', '#bab0ac', '#d95f02', '#2b83ba'
   ];
+
+
 
   const calculatePercent = (value, total) => ((value / total) * 100).toFixed(2) + '%';
   return (
     <>
-      <div className="chart-container p-4" style={{ backgroundColor: '#f0f0f0' }}>
-        <div className='d-flex justify-content-around align-items-center'>
-          <div className='fs-4 m-2 p-2 bg-white shadow border border-2 rounded-5'
-            style={{ width: '300px', height: '150px' }}>
-            Tổng doanh thu
+      <div className="chart-container p-4" style={{ backgroundColor: 'beige' }}>
+        <div className='fs-4 m-2 p-5 shadow border border-2 rounded-5' style={{ backgroundColor: 'rgb(199, 235, 248)' }}>
+          <h4><FontAwesomeIcon icon={faDollar} /> Tổng doanh thu 12 tháng gần nhất</h4>
+          <div className='fw-bold text-primary'>{data.total} <u>đ</u></div>
+        </div>
+
+        <div className='m-2 p-4 shadow border border-2 rounded-5 d-flex flex-column justify-content-center align-items-center' style={{ background: 'linear-gradient(356deg, rgba(226,164,114,1) 0%, rgba(242,215,232,1) 59%)' }}>
+          <div className='fs-5 fw-bold'>CHI TIẾT DOANH THU 12 THÁNG GẦN NHẤT</div>
+          <div>
+            <ComposedChart width={950} height={400} data={data.arr} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+              <XAxis dataKey="yearMonth" stroke="black" />
+              <YAxis stroke="black" />
+              <CartesianGrid strokeDasharray="3 3" stroke="black" />
+              <Tooltip stroke="black" />
+              <Legend stroke="black" />
+              <Line type="monotone" dataKey="total" stroke="#d95f02" strokeWidth={3} />
+            </ComposedChart>
           </div>
-          <div className='m-2 p-4 bg-white shadow border border-2 rounded-5'>
-            <h4>PHẦN TRĂM DOANH THU THEO THÁNG</h4>
-            <PieChart width={400} height={400}>
+        </div>
+
+        <div className='m-2 p-4 bg-white shadow border border-2 rounded-5 d-flex flex-column justify-content-center align-items-center'>
+          <div className='fs-5 fw-bold my-2'>PHẦN TRĂM DOANH THU THEO 12 THÁNG GẦN NHẤT</div>
+          <div>
+            <PieChart width={900} height={400}>
               <Pie
                 dataKey="total"
                 data={data.arr}
-                cx={200}
+                cx={400}
                 cy={200}
-                outerRadius={80}
-                label={({ yearMonth, percent }) => `${yearMonth} - ${percent}%`}
+                outerRadius={170}
+                label={({ yearMonth, percent }) => `${yearMonth} : ${(percent * 100).toFixed(2)}%`}
               >
                 {data.arr.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                  <Cell key={`cell-${index}`} fill={colors[(index) % colors.length]} />
                 ))}
               </Pie>
               <Tooltip formatter={(value, name, props) => [`${value} (${calculatePercent(value, props.payload.total)})`, name]} />
-              <Legend />
             </PieChart>
           </div>
         </div>
-        {/* <ComposedChart width={600} height={300} data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="pv" barSize={20} fill="#8884d8" />
-          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-        </ComposedChart> */}
-      </div>
 
+        <div className='m-2 shadow border border-2 rounded-5 d-flex flex-column justify-content-center align-items-center' style={{ position: 'relative', background: 'linear-gradient(356deg, rgba(226,164,114,1) 0%, rgba(242,215,232,1) 59%)', paddingTop: '3rem' }}>
+          <div className='d-flex' style={{ position: 'absolute', top: '10px', left: '10px', zIndex: '1' }}>
+            <label style={{width: '10rem'}} className='fw-bold'>Chọn tháng</label>
+            <select className="form-control" onChange={(e) => setMonth(e.target.value)}>
+              {data.arr.length > 0 && data.arr.map((item) => {
+                return (
+                  <option key={item.yearMonth} value={`${item.yearMonth}`}>{`${item.yearMonth}`}</option>
+                )
+              })}
+            </select>
+          </div>
+          <div className='fs-5 fw-bold'>{`CHI TIẾT DOANH THU ${month ? month : ''}`}</div>
+          <div>
+            {dataMonth && (
+              <ComposedChart width={950} height={400} data={dataMonth.dailyRevenues} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <XAxis dataKey="date" stroke="black" />
+                <YAxis stroke="black" />
+                <CartesianGrid strokeDasharray="3 3" stroke="black" />
+                <Tooltip stroke="black" />
+                <Legend stroke="black" />
+                <Bar dataKey="totalRevenue" fill="#9c755f" barSize={20} />
+              </ComposedChart>
+            )}
+          </div>
+        </div>
+      </div>
     </>
   );
 };

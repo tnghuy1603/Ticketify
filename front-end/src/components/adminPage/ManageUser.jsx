@@ -9,7 +9,7 @@ const ManageUser = () => {
     const auth = useAuth();
     const [search, setSearch] = useState('');
     const [selectedOption, setSelectedOption] = useState('id');
-    const [selectedStatus, setSelectedStatus] = useState('');
+    const [selectedStatus, setSelectedStatus] = useState('active');
     const [searchPage, setSearchPage] = useState('');
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -45,7 +45,7 @@ const ManageUser = () => {
     }
 
     const handleClickNext = () => {
-        if (currentPage < getPages().length)
+        if (currentPage < numberOfPages)
             setCurrentPage(currentPage + 1);
     }
 
@@ -151,19 +151,32 @@ const ManageUser = () => {
         });
         setMessageInsertUser({ isShow: false, text: '', success: false });
         getUsers();
-        // setShowtimeData({});
-        // setShowtimeDelete({});
-        // setTimeStartAddShowtime('');
-        // setTimeEndAddShowtime('');
-        // setIsConflict(true);
-        // setMessageAddShowtime({ isShow: false, text: '', success: false, item: null });
-        // setMessageDeleteShowtime({ isShow: false, text: '', success: false });
-        // if (dateFrom !== '' && dateTo !== '') {
-        //     getCustomShowtime();
-        // } else {
-        //     getDefaultShowtime();
-        // }
     };
+
+    const [userEdit, setUserEdit] = useState({});
+    const handleLockUser = async (user) => {
+        console.log(user);
+        try {
+            const response = await fetch(`http://localhost:8080/users?user=${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${auth.accessToken}`
+                },
+                body: JSON.stringify({ locked: !user.locked }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }            
+            const data = await response.json();
+            getUsers();
+        } catch (error) {
+            console.error('Error during sign-in:', error);
+        }
+    }
+
+
     return (
         <div className="p-4" style={{ backgroundColor: '#f0f0f0' }}>
             <div className='m-3 d-flex justify-content-start align-items-center'>
@@ -203,7 +216,7 @@ const ManageUser = () => {
                                         <label>Status</label>
                                         <select className="form-control" onChange={handleStatusChange}>
                                             <option value="active">Active</option>
-                                            <option value="inactive">Lock</option>
+                                            <option value="inactive">Inactive</option>
                                         </select>
                                     </div>
                                 </div>
@@ -267,7 +280,7 @@ const ManageUser = () => {
                                             </td>
 
                                             <td className="edit">
-                                                <a className="me-3" type="button" data-bs-toggle="modal" data-bs-target="#LockModal">Lock</a>
+                                                <a onClick={() => setUserEdit(user)} className="me-3" type="button" data-bs-toggle="modal" data-bs-target="#LockModal">{user.locked ? 'Unlock' : 'Lock'}</a>
                                             </td>
                                         </tr>
                                     ))}
@@ -283,8 +296,7 @@ const ManageUser = () => {
                                 </li>
                                 {
                                     getPages().map((page, index) => (
-
-                                        <li className={`page-item m-1 ${currentPage === page || searchPage.match(page) ? "active" : ""}`} key={index}><button className="page-link bg-light text-primary" href="#" onClick={() => changeCurrentPage(page)}>{page}</button></li>
+                                        <li className={`page-item m-1 ${currentPage === page ? "active" : ""}`} key={index}><button className="page-link bg-light text-primary" href="#" onClick={() => changeCurrentPage(page)}>{page}</button></li>
                                     ))
                                 }
 
@@ -297,11 +309,10 @@ const ManageUser = () => {
                                     <input
                                         type="text"
                                         className="bg-white text-black px-2"
-                                        value={searchPage}
-                                        onInput={(e) => setSearchPage(e.target.value)}
+                                        onInput={(e) => setSearchPage(parseInt(e.target.value))}
                                         style={{ width: '3rem', height: '2.5rem', borderRadius: '10px' }}
                                     />
-                                    <button onClick={handleSearchPage} className="ms-3 btn btn-outline-primary">Search</button>
+                                    <button onClick={handleSearchPage} className="ms-3 btn btn-outline-primary">Go to page</button>
                                 </div>
 
                             </ul>
@@ -315,11 +326,11 @@ const ManageUser = () => {
                                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div className="modal-body">
-                                        Bạn có chắc muốn khóa tài khoản này?
+                                        {userEdit.locked ? 'Bạn có chắc muốn mở khóa tài khoản này?' : 'Bạn có chắc muốn khóa tài khoản này?'}
                                     </div>
                                     <div className="modal-footer">
                                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                        <button type="button" className="btn btn-primary">Khóa</button>
+                                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => handleLockUser(userEdit)}>{userEdit.locked ? 'Mở khóa' : 'Khóa'}</button>
                                     </div>
                                 </div>
                             </div>
