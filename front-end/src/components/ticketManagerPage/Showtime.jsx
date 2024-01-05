@@ -629,7 +629,6 @@ function Showtime() {
 
     return (
         <>
-            <h3 className='m-2'>Vui lòng chọn rạp trước khi thực hiện thao tác quản lý.</h3>
             <div className="p-4" style={{ backgroundColor: '#f0f0f0' }}>
                 <div className='m-3 d-flex justify-content-start align-items-center'>
                     <div>
