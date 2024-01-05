@@ -28,22 +28,6 @@ function HomepageHeader({ updateData, isCollapse, params }) {
                 <button onClick={handleCollapse} type="button" id="sidebarCollapse" className="btn btn-sidebar btn-dark" style={{ backgroundColor: "gray" }}>
                     <FontAwesomeIcon icon={isCollapse ? faBars : faTimes} />
                 </button>
-                {/* <div className="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul className="navbar-nav nav-bar">
-                        <li className="nav-item">
-                            <a className="nav-link text-light active" aria-current="page" href="/">Quản lý phim</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link text-light" href="#">Xếp lịch chiếu</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link text-light" href="#">Doanh thu</a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <SearchButton />
-                </div> */}
                 <div className="collapse navbar-collapse d-flex justify-content-end mx-4" id="navbarNavDropdown">
                     <ul className="navbar-nav nav-bar">
                         <li className="nav-item dropdown ps-4">
