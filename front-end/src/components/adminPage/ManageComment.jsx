@@ -4,48 +4,48 @@ const ManageComment = () => {
     return (
         <>
             <main>
-                <div class="header">
-                    <div class="left">
+                <div className="header">
+                    <div className="left">
                         <h3>Manage Comments</h3>
                     </div>
-                    <div class="time">
+                    <div className="time">
                         <span>March 2023 - February 2024</span>
                     </div>
                 </div>
             </main>
 
-            <div class="db-content col">
-                <div class="left">
-                    <span class="top">Total comments</span>
+            <div className="db-content col">
+                <div className="left">
+                    <span className="top">Total comments</span>
                         <h3>10.0k</h3>
 
                     <span>Growth in comments on this year</span>
                 </div>
             </div>
-            <hr class="h" />
+            <hr className="h" />
             <section id="testimonials">
-                <div class="testimonial-box-container">
-                    <div class="testimonial-box">
-                        <div class="box-top">
-                            <div class="profile">
-                                <div class="profile-img">
+                <div className="testimonial-box-container">
+                    <div className="testimonial-box">
+                        <div className="box-top">
+                            <div className="profile">
+                                <div className="profile-img">
                                     <img src="./images/avatar.jpg" />
                                 </div>
-                                <div class="name-user">
+                                <div className="name-user">
                                     <strong>Quach Duc Huy</strong>
                                     <span>@DucHuy</span>
                                     <span>28-12-2023</span>
                                 </div>
                             </div>
-                            <div class="reviews">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="far fa-star"></i>
+                            <div className="reviews">
+                                <i className="fa fa-star"></i>
+                                <i className="fa fa-star"></i>
+                                <i className="fa fa-star"></i>
+                                <i className="far fa-star"></i>
                             </div>
                         </div>
 
-                        <div class="client-comment">
+                        <div className="client-comment">
                             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam iusto iure similique quod omnis ipsum exercitationem velit eum veritatis repellat saepe delectus laborum voluptas architecto eligendi assumenda dolores, provident voluptatem!</p>
 
                         </div>
