@@ -29,9 +29,9 @@ public class UserService {
                 .build();
         return userRepository.save(user);
     }
-    public User disableUser(Long userId){
+    public User toggleUser(Long userId, boolean locked){
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user with that id"));
-        user.setLocked(true);
+        user.setLocked(locked);
         return userRepository.save(user);
     }
     public User enableUser(Long userId){
@@ -45,5 +45,10 @@ public class UserService {
     }
 
 
-
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+    public List<User> findUserByLocked(boolean locked){
+        return userRepository.findByLocked(locked);
+    }
 }
