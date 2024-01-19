@@ -7,7 +7,7 @@ import { addDays, addMinutes, format, parseISO } from 'date-fns';
 import { da } from 'date-fns/locale';
 
 
-function Showtime() {
+function Showtime({ setDeleteIdShowtime }) {
     const auth = useAuth()
 
     const colorShowtime = [
@@ -542,55 +542,34 @@ function Showtime() {
         handleChangeAction('edit-showtime');
     }
 
-    async function deleteShowtime() {
-        try {
-            const response = await fetch(`http://localhost:8080/showtimes/${showtimeDelete.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth.accessToken}`,
-                },
-            });
+    // async function deleteShowtime() {
+    //     try {
+    //         const response = await fetch(`http://localhost:8080/showtimes/${showtimeDelete.id}`, {
+    //             method: 'DELETE',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': `Bearer ${auth.accessToken}`,
+    //             },
+    //         });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            if (data.message === 'Some tickets of movies are booked. Can not delete this showtime') {
-                setMessageDeleteShowtime({ isShow: true, text: 'Đã có người đặt vé, không thể xóa!', success: false });
-            } else {
-                setMessageDeleteShowtime({ isShow: true, text: 'Xóa lịch chiếu thành công', success: true });
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
-    }
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! Status: ${response.status}`);
+    //         }
+    //         const data = await response.json();
+    //         if (data.message === 'Some tickets of movies are booked. Can not delete this showtime') {
+    //             setMessageDeleteShowtime({ isShow: true, text: 'Đã có người đặt vé, không thể xóa!', success: false });
+    //         } else {
+    //             setMessageDeleteShowtime({ isShow: true, text: 'Xóa lịch chiếu thành công', success: true });
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         throw error;
+    //     }
+    // }
 
     const deleteTicket = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/tickets?showtime=${showtimeDelete.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth.accessToken}`,
-                },
-            });
-
-            if (!response.ok) {
-                setMessageDeleteShowtime({ isShow: true, text: 'Xóa không thành công, vui lòng thử lại!', success: false });
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            if (data.message === 'There are some booked ticket') {
-                setMessageDeleteShowtime({ isShow: true, text: 'Đã có người đặt vé, không thể xóa!', success: false });
-            } else {
-                deleteShowtime();
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
+        setDeleteIdShowtime(showtimeDelete.id);
+        $('#deleteShowtime').modal('show');
     };
 
     const [chainAction, setChainAction] = useState([{ text: 'Xếp lịch chiếu', href: '/manage/showtime' }]);
