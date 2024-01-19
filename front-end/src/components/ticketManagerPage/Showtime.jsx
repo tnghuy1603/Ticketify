@@ -7,7 +7,7 @@ import { addDays, addMinutes, format, parseISO } from 'date-fns';
 import { da } from 'date-fns/locale';
 
 
-function Showtime() {
+function Showtime({ setDeleteIdShowtime }) {
     const auth = useAuth()
 
     const colorShowtime = [
@@ -178,13 +178,15 @@ function Showtime() {
     function generateDateRange(dateFrom, dateTo) {
         const startDate = new Date(dateFrom);
         const endDate = new Date(dateTo);
-        const dateList = [];
+        let dateList = [];
 
         while (startDate <= endDate) {
             dateList.push(startDate.toISOString().split('T')[0]);
             startDate.setDate(startDate.getDate() + 1);
         }
-
+        if (dateList.length > 7) {
+            dateList = dateList.slice(0, 7);
+        }
         return dateList;
     }
 
@@ -427,7 +429,6 @@ function Showtime() {
     const [messageAddShowtime, setMessageAddShowtime] = useState({ isShow: false, text: '', success: false, item: null });
     const [showtimeData, setShowtimeData] = useState({});
     const [timeStartAddShowtime, setTimeStartAddShowtime] = useState('');
-    const [timeEndAddShowtime, setTimeEndAddShowtime] = useState('');
     const [isConflict, setIsConflict] = useState(true);
 
     const addShowtime = (indexDate, item) => {
@@ -469,7 +470,6 @@ function Showtime() {
 
     const checkConflict = async (item) => {
         const end = calculateEnd(timeStartAddShowtime, item.duration);
-        setTimeEndAddShowtime(end);
         const condition = await checkAvailableShowtime(end);
         if (condition) {
             const data = {
@@ -525,7 +525,6 @@ function Showtime() {
             generateTicket(data);
             setShowtimeData({});
             setTimeStartAddShowtime('');
-            setTimeEndAddShowtime('');
             setIsConflict(true);
             setMessageAddShowtime({ isShow: false, text: '', success: false, item: null });
         } catch (error) {
@@ -543,55 +542,34 @@ function Showtime() {
         handleChangeAction('edit-showtime');
     }
 
-    async function deleteShowtime() {
-        try {
-            const response = await fetch(`http://localhost:8080/showtimes/${showtimeDelete.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth.accessToken}`,
-                },
-            });
+    // async function deleteShowtime() {
+    //     try {
+    //         const response = await fetch(`http://localhost:8080/showtimes/${showtimeDelete.id}`, {
+    //             method: 'DELETE',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': `Bearer ${auth.accessToken}`,
+    //             },
+    //         });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            if (data.message === 'Some tickets of movies are booked. Can not delete this showtime') {
-                setMessageDeleteShowtime({ isShow: true, text: 'Đã có người đặt vé, không thể xóa!', success: false });
-            } else {
-                setMessageDeleteShowtime({ isShow: true, text: 'Xóa lịch chiếu thành công', success: true });
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
-    }
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! Status: ${response.status}`);
+    //         }
+    //         const data = await response.json();
+    //         if (data.message === 'Some tickets of movies are booked. Can not delete this showtime') {
+    //             setMessageDeleteShowtime({ isShow: true, text: 'Đã có người đặt vé, không thể xóa!', success: false });
+    //         } else {
+    //             setMessageDeleteShowtime({ isShow: true, text: 'Xóa lịch chiếu thành công', success: true });
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         throw error;
+    //     }
+    // }
 
     const deleteTicket = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/tickets?showtime=${showtimeDelete.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth.accessToken}`,
-                },
-            });
-
-            if (!response.ok) {
-                setMessageDeleteShowtime({ isShow: true, text: 'Xóa không thành công, vui lòng thử lại!', success: false });
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            if (data.message === 'There are some booked ticket') {
-                setMessageDeleteShowtime({ isShow: true, text: 'Đã có người đặt vé, không thể xóa!', success: false });
-            } else {
-                deleteShowtime();
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
+        setDeleteIdShowtime(showtimeDelete.id);
+        $('#deleteShowtime').modal('show');
     };
 
     const [chainAction, setChainAction] = useState([{ text: 'Xếp lịch chiếu', href: '/manage/showtime' }]);
@@ -615,7 +593,6 @@ function Showtime() {
         setShowtimeData({});
         setShowtimeDelete({});
         setTimeStartAddShowtime('');
-        setTimeEndAddShowtime('');
         setIsConflict(true);
         setMessageAddShowtime({ isShow: false, text: '', success: false, item: null });
         setMessageDeleteShowtime({ isShow: false, text: '', success: false });
@@ -626,10 +603,26 @@ function Showtime() {
         }
     };
 
+    // Hàm so sánh ngày
+    function compareDate(date1, date2) {
+        // Chuyển đổi chuỗi ngày thành đối tượng Date
+        const datetime1 = new Date(date1);
+        const datetime2 = new Date(date2);
+        console.log(date1, date2);
+        // So sánh ngày
+        if (datetime1 < datetime2) {
+            return -1;
+        } else if (datetime1 > datetime2) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+
 
     return (
         <>
-            <h3 className='m-2'>Vui lòng chọn rạp trước khi thực hiện thao tác quản lý.</h3>
             <div className="p-4" style={{ backgroundColor: '#f0f0f0' }}>
                 <div className='m-3 d-flex justify-content-start align-items-center'>
                     <div>
@@ -733,21 +726,21 @@ function Showtime() {
                                                             <div key={index}></div>
                                                         ) : (date.length <= 0) ? (
                                                             isNewDate = false,
-                                                            <div key={item} onClick={() => addShowtime(indexDate, item)} className='p-2 fw-bold showtime rounded-2 border border-light d-flex justify-content-center align-items-center'
+                                                            <div key={item} onClick={() => { if (compareDate(displayDate[indexDate], defaultDate[0]) !== -1) addShowtime(indexDate, item) }} className={`p-2 fw-bold ${compareDate(displayDate[indexDate], defaultDate[0]) !== -1 ? 'showtime' : ''} rounded-2 border border-light d-flex justify-content-center align-items-center`}
                                                                 style={{ width: '100%', height: `${3}rem`, minWidth: '8rem', background: 'white', color: 'gray' }}>
-                                                                <FontAwesomeIcon className='mx-3' icon={faAdd} />
+                                                                {compareDate(displayDate[indexDate], defaultDate[0]) !== -1 && <FontAwesomeIcon className='mx-3' icon={faAdd} />}
                                                             </div>
                                                         ) : (i >= date.length) ? (
                                                             isNewDate = false,
-                                                            <div key={item} onClick={() => addShowtime(indexDate, item)} className='p-2 fw-bold showtime rounded-2 border border-light d-flex justify-content-center align-items-center'
+                                                            <div key={item} onClick={() => { if (compareDate(displayDate[indexDate], defaultDate[0]) !== -1) addShowtime(indexDate, item) }} className={`p-2 fw-bold ${compareDate(displayDate[indexDate], defaultDate[0]) !== -1 ? 'showtime' : ''} rounded-2 border border-light d-flex justify-content-center align-items-center`}
                                                                 style={{ width: '100%', height: `${3}rem`, minWidth: '8rem', background: 'white', color: 'gray' }}>
-                                                                <FontAwesomeIcon className='mx-3' icon={faAdd} />
+                                                                {compareDate(displayDate[indexDate], defaultDate[0]) !== -1 && <FontAwesomeIcon className='mx-3' icon={faAdd} />}
                                                             </div>
                                                         ) : (compareTimes((index < 47 ? timeList[index + 1] + '' : '24:00'), date[i].startAt + '') <= 0) ? (
                                                             isNewDate = false,
-                                                            <div key={item} onClick={() => addShowtime(indexDate, item)} className='p-2 fw-bold showtime rounded-2 border border-light d-flex justify-content-center align-items-center'
+                                                            <div key={item} onClick={() => { if (compareDate(displayDate[indexDate], defaultDate[0]) !== -1) addShowtime(indexDate, item) }} className={`p-2 fw-bold ${compareDate(displayDate[indexDate], defaultDate[0]) !== -1 ? 'showtime' : ''} rounded-2 border border-light d-flex justify-content-center align-items-center`}
                                                                 style={{ width: '100%', height: `${3}rem`, minWidth: '8rem', background: 'white', color: 'gray' }}>
-                                                                <FontAwesomeIcon className='mx-3' icon={faAdd} />
+                                                                {compareDate(displayDate[indexDate], defaultDate[0]) !== -1 && <FontAwesomeIcon className='mx-3' icon={faAdd} />}
                                                             </div>
                                                         ) : (
                                                             isNewDate = false,
@@ -963,7 +956,7 @@ function Showtime() {
                             )}
                             <div className='d-flex'>
                                 <button onClick={() => handleBack()} className='btn btn-primary mx-2'><FontAwesomeIcon className='mx-2' icon={faBackward} />  Quay về</button>
-                                <button onClick={() => deleteTicket()} className='btn btn-danger mx-2'><FontAwesomeIcon className='mx-2' icon={faTrash} />  Xóa lịch chiếu</button>
+                                <button onClick={() => deleteTicket()} className='btn btn-danger mx-2' disabled={compareDate(showtimeDelete.startAt.split('T')[0], defaultDate[0]) === -1}><FontAwesomeIcon className='mx-2' icon={faTrash} />  Xóa lịch chiếu</button>
                             </div>
                         </div>
                     </>

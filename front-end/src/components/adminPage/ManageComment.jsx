@@ -29,7 +29,7 @@ const ManageComment = () => {
                         <div className="box-top">
                             <div className="profile">
                                 <div className="profile-img">
-                                    <img src="./images/avatar.jpg" />
+                                    <img src="https://4.bp.blogspot.com/-wmrAFTC9mEk/XhF48JllnvI/AAAAAAAAAa0/TEo_xTwPyNE3uBQOzj-kyaTdHI_YAIduwCLcBGAsYHQ/s1600/Fakta-wibu-dan-otaku.jpg" style={{width: '4.5rem'}} />
                                 </div>
                                 <div className="name-user">
                                     <strong>Quach Duc Huy</strong>

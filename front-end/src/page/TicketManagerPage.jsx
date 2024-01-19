@@ -11,8 +11,9 @@ import Showtime from '../components/ticketManagerPage/Showtime';
 import Profit from '../components/ticketManagerPage/Profit';
 import LoadingSpinner from '../components/defaultPage/Loading'
 import DeleteMovie from '../components/ticketManagerPage/DeleteMovie';
+import DeleteShowtime from '../components/ticketManagerPage/DeleteShowtime';
 import Notification from '../components/ticketManagerPage/Notification';
-import '../components/ticketManagerPage/styles.css'
+import '../components/ticketManagerPage/styles.css';
 
 function TicketManagerDashBoard(params) {
   const { currentChosen } = useParams();
@@ -23,6 +24,7 @@ function TicketManagerDashBoard(params) {
   }
 
   const [deleteId, setDeleteId] = useState(null);
+  const [deleteIdShowtime, setDeleteIdShowtime] = useState(null);
 
   const [notification, setNotifacation] = useState({ title: '', body: '', footer: '', status: '' });
 
@@ -38,12 +40,13 @@ function TicketManagerDashBoard(params) {
             <Header updateData={updateData} isCollapse={isCollapse} params={params} ></Header>
             <Notification notification={notification}></Notification>
             <DeleteMovie setNotification={setNotifacation} deleteId={deleteId}></DeleteMovie>
+            <DeleteShowtime setNotification={setNotifacation} deleteId={deleteIdShowtime}></DeleteShowtime>
             {currentChosen === 'home' ? (
               <Home></Home>
             ) : currentChosen === 'movie' ? (
               <Movie setDeleteId={setDeleteId}></Movie>
             ) : currentChosen === 'showtime' ? (
-              <Showtime></Showtime>
+              <Showtime setDeleteIdShowtime={setDeleteIdShowtime}></Showtime>
             ) : currentChosen === 'profit' ? (
               <Profit></Profit>
             ) : (
