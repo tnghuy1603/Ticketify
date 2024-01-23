@@ -1,0 +1,36 @@
+version: '3'
+services:
+  back-end:
+    build: ./back-end
+    ports:
+      - "8080:8080"
+    networks:
+      - ticketify-app
+    depends_on:
+      - mysql-container
+  front-end:
+    build: ./front-end
+    ports:
+      - "5173:4173"
+    networks:
+      - ticketify-app
+    depends_on:
+      - back-end
+    
+  mysql-container:
+    image: mysql:8.0.33
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - ticketify-app
+    environment:
+      - MYSQL_ROOT_PASSWORD=HuyTNG@MYSQL2022
+      - MYSQL_DATABASE=ticketify
+    ports:
+      - "3307:3306"
+volumes:
+  db_data:
+networks:
+  ticketify-app: 
+
+  

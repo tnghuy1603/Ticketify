@@ -18,6 +18,7 @@ public class CloudinaryService {
     @Async
     public Future<Map> upload(MultipartFile file)  {
         try{
+
             Map data = this.cloudinary.uploader().upload(file.getBytes(), Map.of());
             return CompletableFuture.completedFuture(data);
         }catch (IOException io){
