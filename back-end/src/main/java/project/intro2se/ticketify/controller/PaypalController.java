@@ -1,7 +1,9 @@
 package project.intro2se.ticketify.controller;
 
 
+import com.beust.jcommander.converters.BigDecimalConverter;
 import com.google.zxing.WriterException;
+import io.jsonwebtoken.io.IOException;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -16,8 +18,8 @@ import project.intro2se.ticketify.dto.BookingRequest;
 import project.intro2se.ticketify.dto.CreateTransactionSession;
 import project.intro2se.ticketify.service.PaypalService;
 
-import java.io.IOException;
 import java.math.BigDecimal;
+
 
 @RestController
 @RequestMapping("checkout")
@@ -31,7 +33,7 @@ public class PaypalController {
 //    }
 @PostMapping(value = "/init")
 public ResponseEntity<CreateTransactionSession> createPayment(
-        @RequestParam @NotNull BigDecimal fee) throws IOException {
+        @RequestParam @NotNull BigDecimal fee) throws IOException, java.io.IOException {
     return ResponseEntity.ok(paypalService.createTransaction(fee));
 }
 

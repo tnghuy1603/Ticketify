@@ -37,31 +37,11 @@ public class PaypalService {
     public CreateTransactionSession createTransaction(BigDecimal fee) throws IOException {
         MonetaryAmount feeInVnd = Money.of(fee, "VND");
 
-//        CurrencyConversion vndToUsdConvertor = MonetaryConversions.getConversion("USD");
-//        MonetaryAmount feeInUsd = feeInVnd.with(vndToUsdConvertor);
-//        CurrencyUnit usdCurrency = Monetary.getCurrency("USD");
-//        CurrencyUnit vndCurrency = Monetary.getCurrency("VND");
-//        ExchangeRateProvider exchangeRateProvider = MonetaryConversions.getExchangeRateProvider("ECB");
-//
-//        CurrencyConversion vndToUsdConvertor = exchangeRateProvider.getCurrencyConversion("USD");
-//
-//        MonetaryAmount feeInUsd = feeInVnd.with(vndToUsdConvertor);
-//
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.checkoutPaymentIntent("CAPTURE");
-//        log.info(feeInUsd.getNumber().toString());
-//        MonetaryAmount oneDollar = Monetary.getDefaultAmountFactory().setCurrency("USD")
-//                .setNumber(1).create();
-//        ExchangeRateProvider exchangeRateProvider = MonetaryConversions.getExchangeRateProvider();
-//
-//
-//        CurrencyConversion conversionEUR = exchangeRateProvider.getCurrencyConversion("EUR");
-//
-//
-//
-//        MonetaryAmount convertedAmountUSDtoEUR = oneDollar.with(conversionEUR);
+
         BigDecimal feeInUsd = fee.divide(BigDecimal.valueOf(23000), 2, RoundingMode.HALF_UP);
-//        BigDecimal rounded = feeInUsd.setScale(3, RoundingMode.HALF_UP);
+
         log.info(feeInUsd.toString());
         AmountWithBreakdown amountBreakdown = new AmountWithBreakdown().currencyCode("USD").value(feeInUsd.toString());
         PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest().amountWithBreakdown(amountBreakdown);

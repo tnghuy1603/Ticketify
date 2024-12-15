@@ -49,7 +49,7 @@ public class JwtUtils {
     }
 
     public String generateToken(Map<String, Object> extraClaim, UserDetails userDetails){
-        SignatureAlgorithm.RS256
+        
         return Jwts
                 .builder()
                 .setClaims(extraClaim)

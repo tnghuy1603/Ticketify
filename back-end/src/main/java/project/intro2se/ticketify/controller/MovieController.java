@@ -27,7 +27,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.findByStatus(status));
     }
     @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Movie> updateMovie(@RequestPart(name = "poster", required = false) MultipartFile file, @RequestPart(name = "movie") UpdateMovieRequest request) throws ExecutionException, InterruptedException {
+            public ResponseEntity<Movie> updateMovie(@RequestPart(name = "poster", required = false) MultipartFile file, @RequestPart(name = "movie") UpdateMovieRequest request) throws ExecutionException, InterruptedException {
         return ResponseEntity.ok(movieService.update(request, file));
     }
     @GetMapping("manager")

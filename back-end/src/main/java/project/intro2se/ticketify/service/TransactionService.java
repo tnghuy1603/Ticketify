@@ -37,77 +37,7 @@ public class TransactionService {
     private final MailService mailService;
     private final FoodRepository foodRepository;
     private final FoodOrderLineRepository foodOrderLineRepository;
-//    private final PaypalService paypalService;
 
-//    private final PaypalService paypalService;
-//    public List<TransactionDto> findByUser(User user){
-//        List<Transaction> transactions =  transactionRepository.findByUser(user);
-//        return convertToDtoList(transactions, user);
-//    }
-//    public List<Transaction> findByMovie(Long movieId){
-//        return transactionRepository.findByMovieId(movieId);
-//    }
-//    public TransactionDto findById(String transactionId, User user){
-//        Transaction transaction =  transactionRepository.findById(transactionId)
-//                .orElseThrow(() -> new ResourceNotFoundException("No found any transaction with that id"));
-//        return convertToDto(transaction, user);
-//    }
-//    private TransactionDto convertToDto(Transaction transaction, User user){
-//        List<Ticket> tickets = ticketRepository.findByTransaction(transaction);
-//        StringBuilder seats = new StringBuilder();
-//        BigDecimal ticketPrice = BigDecimal.ONE;
-//        for(Ticket ticket: tickets){
-//            seats.append(ticket.getSeat().getSeatNumber()).append(", ");
-//            ticketPrice = ticketPrice.add(ticket.getPrice());
-//        }
-//        ShowTime showTime = tickets.iterator().next().getShowTime();
-//        Room room = showTime.getRoom();
-//        Movie movie = showTime.getMovie();
-//        Theater theater = room.getTheater();
-//
-//        return TransactionDto.builder()
-//                .theaterAddress(theater.getAddress())
-//                .theaterName(theater.getName())
-//                .showRoom(room.getId())
-//                .movieTitle(movie.getTitle())
-//                .startTime(showTime.getStartAt())
-//                .createdAt(transaction.getCreatedAt())
-//                .username(user.getUsername())
-//                .totalPrice(transaction.getTotal())
-//                .seats(seats.toString())
-//                .ticketPrice(ticketPrice)
-//                .foodPrice(transaction.getTotal().subtract(ticketPrice))
-//                .build();
-//    }
-//    public List<TransactionDto> convertToDtoList(List<Transaction> transactions, User user){
-//        List<TransactionDto> res = new ArrayList<>();
-//        for(Transaction transaction: transactions){
-//            res.add(convertToDto(transaction, user));
-//        }
-//        return res;
-//    }
-//    public CreateTransactionDto creatTransaction(BookingRequest request) throws IOException {
-//        Transaction transaction = new Transaction();
-//        BigDecimal totalPrice;
-//        BigDecimal ticketPrice = BigDecimal.ZERO;
-//        BigDecimal foodPrice = BigDecimal.ZERO;
-//        List<Ticket> tickets = new ArrayList<>();
-//        for(Long ticketId: request.getTicketIds()){
-//            Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(
-//                    () -> new ResourceNotFoundException("Not found tickets"));
-//            ticketPrice = ticketPrice.add(ticket.getPrice());
-//            tickets.add(ticket);
-//        }
-//        for(long orderLineId: request.getFoodOrderLineIds()){
-//            FoodOrderLine foodOrderLine = foodOrderLineRepository.findById(orderLineId).orElseThrow(
-//                    () -> new ResourceNotFoundException("Not found order line"));
-//            BigDecimal price = BigDecimal.valueOf(foodOrderLine.getQuantity())
-//                    .multiply(foodOrderLine.getFood().getPrice());
-//            foodPrice = foodPrice.add(price);
-//        }
-//        totalPrice = ticketPrice.add(foodPrice);
-//        return paypalService.createTransaction(totalPrice);
-//    }
     public DailyRevenue calculateDailyRevenue(LocalDate date){
         List<Transaction> transactions = transactionRepository.findByDate(date);
         BigDecimal revenueOfDay = BigDecimal.ZERO;
@@ -239,7 +169,6 @@ public class TransactionService {
         for(Ticket ticket: transaction.getTickets()){
             ticket.setBooked(true);
         }
-//        transaction.setId("temp");
         transaction.setTotal(totalPrice);
         transaction.setUser(user);
         transaction.setCreatedAt(LocalDateTime.now());

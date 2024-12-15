@@ -2,6 +2,7 @@ package project.intro2se.ticketify.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,7 +37,7 @@ public class ApplicationExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .build();
     }
-    @ExceptionHandler({BadCredentialsException.class})
+    @ExceptionHandler({BadCredentialsException.class, AccessDeniedException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ExceptionResponse handleBadCredentials(BadCredentialsException exception){
         log.info("Bad credentials exception");

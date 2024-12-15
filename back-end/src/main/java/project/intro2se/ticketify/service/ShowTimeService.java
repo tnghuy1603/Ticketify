@@ -33,38 +33,12 @@ public class ShowTimeService {
         List<ShowTime> showTimes = showTimeRepository.findAll();
 
         for(ShowTime showTime: showTimes){
-//            LocalDateTime startAt = showTime.getStartAt();
-//            log.info("Movie");
-//            showTime.setStartAt(startAt.truncatedTo(ChronoUnit.HOURS).plusMinutes(15 * (startAt.getMinute() / 15)));
             Movie movie = showTime.getMovie();
             int duration = movie.getDuration();
             showTime.setEndAt(showTime.getStartAt().plusMinutes(duration));
         }
         log.info("Initial size: " + showTimes.size());
 
-//        Room room = new Room();
-//        Room room1 = new Room();
-//        Movie movie = new Movie();
-//        LocalDateTime current = LocalDateTime.now();
-//        ShowTime showTime = new ShowTime();
-//        ShowTime showTime1 = new ShowTime();
-//        showTime.setStartAt(current);
-//        showTime.setRoom(room);
-//        showTime.setMovie(movie);
-//        showTime1.setStartAt(current);
-//        showTime1.setRoom(room);
-//        showTime1.setMovie(movie);
-//        log.info("2 showtime is: " +  showTime1.equals(showTime));
-//        Set<ShowTime> showTimeSet = new HashSet<>();
-//        for(ShowTime showTime2: showTimes) {
-//            addDistinct(showTimeSet, showTime2);
-//        }
-//        log.info("Size after remove duplicate" + showTimeSet.size());
-//        showTimeRepository.deleteAll();
-        //Remove invalid showtime
-
-
-//        return showTimes;
         return showTimeRepository.saveAll(showTimes);
     }
     private void addDistinct(Set<ShowTime> showTimeSet, ShowTime showTime){
@@ -81,11 +55,7 @@ public class ShowTimeService {
     }
     private boolean isOccupiedRoom(Set<ShowTime> showTimeSet, ShowTime showTime){
         for(ShowTime showTime1: showTimeSet) {
-//            if((showTime1.getStartAt().isAfter(showTime1.getStartAt()) && showTime1.getStartAt().isBefore(showTime.getEndAt()) )
-//                    || (showTime1.getEndAt().isAfter(startAt) && showTime1.getEndAt().isBefore(endAt)))
-//            {
-//                return false;
-//            }
+
         }
         return false;
     }
