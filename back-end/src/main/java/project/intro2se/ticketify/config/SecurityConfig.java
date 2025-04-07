@@ -47,6 +47,7 @@ public class SecurityConfig {
                 "/swagger-resources/**",
                 "/configuration/ui",
                 "/configuration/security",
+                "/test",
                 "/webjars/**",
                 "/swagger-ui.html").permitAll();
         http.authorizeHttpRequests().requestMatchers(HttpMethod.GET, "showtimes").hasAnyRole("ADMIN", "TICKET_MANGER", "CUSTOMER", "ANONYMOUS");

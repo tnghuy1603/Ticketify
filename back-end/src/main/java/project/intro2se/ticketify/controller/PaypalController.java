@@ -40,7 +40,7 @@ public ResponseEntity<CreateTransactionSession> createPayment(
 
 @PostMapping(value = "/capture")
 public ResponseEntity<Transaction> completePayment(@RequestParam("token") @NotBlank(message = "Token must not be null") String token,
-                                                   @Valid  @RequestBody BookingRequest request, @AuthenticationPrincipal User user) throws WriterException, MessagingException {
+                                                @Valid  @RequestBody BookingRequest request, @AuthenticationPrincipal User user) throws WriterException, MessagingException {
     return ResponseEntity.ok(paypalService.completeTransaction(token, request, user));
 }
 
